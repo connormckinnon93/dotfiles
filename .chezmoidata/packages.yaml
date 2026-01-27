@@ -6,6 +6,7 @@ packages:
     - 'chezmoi'
     - 'mise'
     - 'starship'
+    - 'zsh'
     casks:
     # MISC
     - 'google-chrome'
@@ -24,3 +25,5 @@ packages:
     - 'font-meslo-lg-nerd-font'
     vscodes:
     - 'anthropic.claude-code'
+    - 'catppuccin.catppuccin-vsc'
+    - 'catppuccin.catppuccin-vsc-icons'
