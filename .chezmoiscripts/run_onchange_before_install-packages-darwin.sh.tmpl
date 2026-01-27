@@ -1,0 +1,17 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# MacOS build version: {{ output "sw_vers" "--buildVersion" }}
+
+brew bundle --file=/dev/stdin <<EOF
+brew "chezmoi"
+
+cask "google-chrome"
+cask "visual-studio-code"
+cask "ghostty"
+cask "1password"
+cask "1password-cli"
+cask "claude-code"
+
+vscode "anthropic.claude-code"
+EOF
+{{ end -}}
