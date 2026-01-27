@@ -3,6 +3,7 @@ packages:
     brews:
     - 'git'
     - 'chezmoi'
+    - 'mise'
     casks:
     - 'google-chrome'
     - 'visual-studio-code'
