@@ -1,0 +1,7 @@
+{{- $email := promptStringOnce . "email" "Email Address" -}}
+{{- $name := promptStringOnce . "name" "Full Name" -}}
+
+
+[data]
+    email = {{ $email | quote }}
+    name = {{ $name | quote }}
