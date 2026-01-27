@@ -1,0 +1,13 @@
+# Font
+font-family = "JetBrainsMono Nerd Font"
+
+# Theme
+theme = "Catppuccin Mocha"
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Shell integration
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title

@@ -1,15 +1,26 @@
 packages:
   darwin:
     brews:
+    # MISC
     - 'git'
     - 'chezmoi'
     - 'mise'
+    - 'starship'
     casks:
+    # MISC
     - 'google-chrome'
     - 'visual-studio-code'
     - 'ghostty'
+    # PASSWORD MANAGER
     - '1password'
     - '1password-cli'
+    # AI TOOLS
     - 'claude-code'
+    - 'claude'
+    # FONTS
+    - 'font-jetbrains-mono-nerd-font'
+    - 'font-fira-code-nerd-font'
+    - 'font-hack-nerd-font'
+    - 'font-meslo-lg-nerd-font'
     vscodes:
     - 'anthropic.claude-code'
