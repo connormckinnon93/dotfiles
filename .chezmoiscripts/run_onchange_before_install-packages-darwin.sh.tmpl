@@ -3,15 +3,15 @@
 # MacOS build version: {{ output "sw_vers" "--buildVersion" }}
 
 brew bundle --file=/dev/stdin <<EOF
-brew "chezmoi"
-
-cask "google-chrome"
-cask "visual-studio-code"
-cask "ghostty"
-cask "1password"
-cask "1password-cli"
-cask "claude-code"
-
-vscode "anthropic.claude-code"
+{{ range .packages.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+{{ range .packages.darwin.vscodes -}}
+vscode {{ . | quote }}
+{{ end -}}
 EOF
+
 {{ end -}}

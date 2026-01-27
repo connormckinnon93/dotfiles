@@ -1,0 +1,14 @@
+packages:
+  darwin:
+    brews:
+    - 'git'
+    - 'chezmoi'
+    casks:
+    - 'google-chrome'
+    - 'visual-studio-code'
+    - 'ghostty'
+    - '1password'
+    - '1password-cli'
+    - 'claude-code'
+    vscodes:
+    - 'anthropic.claude-code'
