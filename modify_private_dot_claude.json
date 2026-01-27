@@ -1,0 +1,20 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $data := .chezmoi.stdin | fromJson -}}
+
+{{- /* Read secrets from 1Password */ -}}
+{{- $context7Key := onepasswordRead "op://cloudlab/context7/credential" -}}
+
+{{- /* Configure MCP servers */ -}}
+{{- $mcpServers := dict -}}
+{{- $_ := set $mcpServers "context7" (dict
+  "type" "stdio"
+  "command" "npx"
+  "args" (list "-y" "@upstash/context7-mcp" "--api-key" $context7Key)
+  "env" (dict)
+) -}}
+
+{{- /* Set managed values */ -}}
+{{- $data = $data | setValueAtPath "theme" "dark-daltonized" -}}
+{{- $data = $data | setValueAtPath "mcpServers" $mcpServers -}}
+
+{{- $data | toPrettyJson }}
