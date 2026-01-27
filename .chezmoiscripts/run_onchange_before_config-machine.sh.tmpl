@@ -1,0 +1,7 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# MacOS build version: {{ output "sw_vers" "--buildVersion" }}
+
+defaults write NSGlobalDomain com.apple.swipescrolldirection 0
+
+{{ end -}}
