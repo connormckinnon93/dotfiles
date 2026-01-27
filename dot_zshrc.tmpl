@@ -1,0 +1,47 @@
+# Zap plugin manager
+[ -f "$HOME/.local/share/zap/zap.zsh" ] && source "$HOME/.local/share/zap/zap.zsh"
+
+# Plugins (order matters)
+plug "zsh-users/zsh-completions"
+autoload -Uz compinit && compinit
+
+plug "Aloxaf/fzf-tab"
+plug "zsh-users/zsh-autosuggestions"
+plug "zsh-users/zsh-history-substring-search"
+plug "zsh-users/zsh-syntax-highlighting"
+plug "zap-zsh/supercharge"
+
+# fzf key bindings (CTRL-T, CTRL-R, ALT-C)
+command -v fzf &>/dev/null && source <(fzf --zsh)
+
+# Tool integrations
+command -v starship &>/dev/null && eval "$(starship init zsh)"
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh --cmd cd)"
+
+# Fallback to ssh-agent if 1Password socket unavailable
+if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
+    eval "$(ssh-agent -s)" > /dev/null 2>&1
+fi
+
+# Modern aliases (interactive only)
+if command -v eza &>/dev/null; then
+    alias ls="eza"
+    alias ll="eza -l"
+    alias la="eza -la"
+    alias tree="eza --tree --icons"
+fi
+command -v bat &>/dev/null && alias cat="bat"
+command -v rg &>/dev/null && alias grep="rg"
+command -v fd &>/dev/null && alias find="fd"
+command -v htop &>/dev/null && alias top="htop"
+
+# Text editors
+if command -v nvim &>/dev/null; then
+    alias vim="nvim"
+    alias vi="nvim"
+    alias nv="nvim"
+fi
+
+# AI tools
+command -v claude &>/dev/null && alias cc="claude"
