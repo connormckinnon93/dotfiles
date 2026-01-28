@@ -1,0 +1,38 @@
+# Default: auto-detect text files, normalize line endings
+* text=auto
+
+# Scripts
+*.sh     text eol=lf filter=trimwhitespace
+*.bash   text eol=lf filter=trimwhitespace
+*.zsh    text eol=lf filter=trimwhitespace
+
+# Config
+*.yml    text eol=lf filter=trimwhitespace
+*.yaml   text eol=lf filter=trimwhitespace
+*.json   text eol=lf filter=trimwhitespace
+*.toml   text eol=lf filter=trimwhitespace
+
+# Docs
+*.md     text eol=lf filter=trimwhitespace
+*.txt    text eol=lf filter=trimwhitespace
+
+# Source
+*.py     text eol=lf filter=trimwhitespace
+*.rb     text eol=lf filter=trimwhitespace
+*.js     text eol=lf filter=trimwhitespace
+*.ts     text eol=lf filter=trimwhitespace
+*.tsx    text eol=lf filter=trimwhitespace
+*.jsx    text eol=lf filter=trimwhitespace
+*.go     text eol=lf filter=trimwhitespace
+*.rs     text eol=lf filter=trimwhitespace
+*.c      text eol=lf filter=trimwhitespace
+*.h      text eol=lf filter=trimwhitespace
+
+# Binary
+*.png    binary
+*.jpg    binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
+*.tar.gz binary

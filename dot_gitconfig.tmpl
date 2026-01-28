@@ -1,5 +1,96 @@
-# This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
-	name = {{ .name }}
-	email = {{ .email }}
+    name = {{ .name }}
+    email = {{ .email }}
+{{- if eq .chezmoi.os "darwin" }}
+    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkXGzrc5NhnVFiPzYJooYvC0AKrW6QTFu6ZA7FO/PyF
+{{- end }}
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = nvim
+    pager = diff-so-fancy | less --tabs=4 -RF
+    excludesFile = ~/.gitignore
+    attributesFile = ~/.gitattributes
+    hooksPath = ~/.config/git/hooks
+    # Treat spaces before tabs and trailing whitespace as errors
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+[alias]
+
+	# View abbreviated SHA, description, and history graph of the latest 20 commits
+	lg = log --pretty=oneline -n 20 --graph --abbrev-commit
+
+	# View the current working tree status using the short format
+	st = status -s
+
+	# Show the diff between the latest commit and the current state
+	df = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+
+	# `git di $number` shows the diff between the state `$number` revisions ago and the current state
+	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+	# Pull in remote changes for the current repository and all its submodules
+	pl = !"git pull; git submodule foreach git pull origin master"
+
+	# Clone a repository including all submodules
+	cl = clone --recursive
+
+	# Commit all changes
+	ca = !git add -A && git commit -av
+
+	# View local branches
+	b = branch
+
+	# Switch to a branch, creating it if necessary
+	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+
+	# Show verbose output about tags, branches or remotes
+	tags = tag -l
+	branches = branch -a
+	remotes = remote -v
+
+[interactive]
+    diffFilter = diff-so-fancy --patch
+
+[apply]
+    whitespace = fix
+
+[filter "trimwhitespace"]
+    clean = sed 's/[[:space:]]*$//'
+    smudge = cat
+
+[pull]
+    rebase = true
+    ff = only
+
+[push]
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
+[diff]
+    colorMoved = default
+
+[merge]
+    conflictStyle = diff3
+
+[rebase]
+    autoStash = true
+
+[help]
+    autocorrect = 1
+
+{{- if eq .chezmoi.os "darwin" }}
+# 1Password SSH commit signing (macOS only)
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[commit]
+    gpgsign = true
+{{- end }}

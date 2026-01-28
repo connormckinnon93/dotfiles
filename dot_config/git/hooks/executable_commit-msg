@@ -1,0 +1,27 @@
+#!/bin/bash
+set -euo pipefail
+
+commit_msg_file="$1"
+commit_msg=$(head -n1 "$commit_msg_file")
+
+# Skip merge commits, fixups, etc.
+if [[ "$commit_msg" =~ ^(Merge|Revert|fixup!|squash!|amend!) ]]; then
+  exit 0
+fi
+
+# Conventional Commits: type(scope): message
+conventional_regex="^(feat|fix|docs|style|refactor|test|chore|build|ci|perf)(\([a-z0-9_-]+\))?: .{1,72}"
+
+if ! [[ "$commit_msg" =~ $conventional_regex ]]; then
+  echo "❌ Invalid commit message format"
+  echo ""
+  echo "Expected: type(scope): message"
+  echo "Types: feat, fix, docs, style, refactor, test, chore, build, ci, perf"
+  echo ""
+  echo "Examples:"
+  echo "  feat(auth): add login flow"
+  echo "  fix: resolve null pointer exception"
+  exit 1
+fi
+
+exit 0

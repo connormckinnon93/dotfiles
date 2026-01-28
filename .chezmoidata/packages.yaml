@@ -24,6 +24,8 @@ packages:
     - 'ghostscript'
     - 'tectonic'
     - 'htop'
+    - 'diff-so-fancy'
+    - 'gitleaks'
     casks:
     # MISC
     - 'google-chrome'

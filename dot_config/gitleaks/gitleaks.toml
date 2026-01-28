@@ -1,0 +1,32 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "anthropic-api-key"
+description = "Anthropic API Key"
+regex = '''sk-ant-[a-zA-Z0-9_-]{90,}'''
+keywords = ["sk-ant-"]
+
+[[rules]]
+id = "openai-api-key"
+description = "OpenAI API Key"
+regex = '''sk-[a-zA-Z0-9]{40,}'''
+keywords = ["sk-"]
+
+[[rules]]
+id = "1password-service-account"
+description = "1Password Service Account Token"
+regex = '''ops_[a-zA-Z0-9]{40,}'''
+keywords = ["ops_"]
+
+[[rules]]
+id = "1password-connect"
+description = "1Password Connect Token"
+regex = '''eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+'''
+keywords = ["eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9"]
+
+[allowlist]
+paths = [
+  '''gitleaks\.toml$''',
+  '''\.gitleaks\.toml$''',
+]

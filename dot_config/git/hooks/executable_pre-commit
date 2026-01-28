@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+# Secret scanning with gitleaks
+if command -v gitleaks &> /dev/null; then
+  gitleaks protect --staged --no-banner --config ~/.config/gitleaks/gitleaks.toml
+fi
