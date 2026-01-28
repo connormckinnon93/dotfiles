@@ -21,6 +21,7 @@ packages:
     - 'zsh'
     - 'neovim'
     - 'ripgrep'
+    - 'ast-grep'
     - 'fd'
     - 'fzf'
     - 'lazygit'
@@ -38,6 +39,8 @@ packages:
     - 'htop'
     - 'diff-so-fancy'
     - 'gitleaks'
+    # Build dependencies for mise-managed languages
+    - 'libyaml'  # Required for Ruby (psych extension)
     casks:
     # MISC
     - 'google-chrome'
