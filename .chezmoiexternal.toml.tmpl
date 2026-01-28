@@ -1,0 +1,6 @@
+[".local/share/zap"]
+    type = "git-repo"
+    url = "https://github.com/zap-zsh/zap.git"
+    refreshPeriod = "168h"
+    [".local/share/zap".clone]
+        args = ["--branch", "v{{ .pinned_versions.zap }}", "--single-branch", "--depth", "1"]

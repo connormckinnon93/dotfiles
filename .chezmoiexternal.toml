@@ -1,3 +1,0 @@
-[".local/share/zap"]
-    type = "git-repo"
-    url = "https://github.com/zap-zsh/zap.git"

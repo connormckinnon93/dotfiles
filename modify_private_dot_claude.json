@@ -9,7 +9,7 @@
 {{- $_ := set $mcpServers "context7" (dict
   "type" "stdio"
   "command" "npx"
-  "args" (list "-y" "@upstash/context7-mcp" "--api-key" $context7Key)
+  "args" (list "-y" (printf "@upstash/context7-mcp@%s" .pinned_versions.context7_mcp) "--api-key" $context7Key)
   "env" (dict)
 ) -}}
 

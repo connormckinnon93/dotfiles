@@ -1,3 +1,15 @@
+# Pinned versions for third-party dependencies
+# Review quarterly and update as needed
+pinned_versions:
+  # Used by modify_private_dot_claude.json
+  context7_mcp: "2.1.0"  # Last reviewed: 2026-01-28
+  # Used by .chezmoiexternal.toml.tmpl (tag without 'v' prefix)
+  zap: "1.2.3"           # Last reviewed: 2026-01-28
+  # NOTE: homebrew_install is hardcoded in .bootstrap-dependencies.sh
+  # because that script runs before chezmoi templating (as a pre-hook)
+  # Commit: 90fa3d5881cedc0d60c4a3cc5babdb867ef42e5a
+  # SHA256: 1c9db64f27d7487ecf74fe3543b96beb1f78039cc92745c3e825a9a7ccefec80
+
 packages:
   darwin:
     brews:
