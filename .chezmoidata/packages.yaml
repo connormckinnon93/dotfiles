@@ -47,7 +47,7 @@ packages:
     - 'visual-studio-code'
     - 'ghostty'
     # CONTAINERS
-    - 'docker'
+    - 'docker-desktop'
     # PASSWORD MANAGER
     - '1password'
     - '1password-cli'
