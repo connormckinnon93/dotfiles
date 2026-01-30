@@ -5,9 +5,6 @@ font-family = "JetBrainsMono Nerd Font"
 theme = "Catppuccin Mocha"
 
 # Window
-window-decoration = false
-window-padding-x = 8
-window-padding-y = 8
 confirm-close-surface = false
 
 # Cursor
@@ -27,7 +24,7 @@ clipboard-write = allow
 macos-option-as-alt = true
 
 # Keybindings
-keybind = global:cmd+grave_accent=toggle_quick_terminal
+keybind = global:cmd+backquote=toggle_quick_terminal
 
 # Split navigation (Ctrl+Shift to avoid conflict with LazyVim's Ctrl+hjkl)
 keybind = ctrl+shift+h=goto_split:left
