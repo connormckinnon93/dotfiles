@@ -1,0 +1,71 @@
+# lazygit configuration
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+
+gui:
+  # Catppuccin Mocha theme
+  theme:
+    activeBorderColor:
+      - "#cba6f7"  # mauve
+      - bold
+    inactiveBorderColor:
+      - "#6c7086"  # overlay0
+    searchingActiveBorderColor:
+      - "#f9e2af"  # yellow
+      - bold
+    optionsTextColor:
+      - "#89b4fa"  # blue
+    selectedLineBgColor:
+      - "#313244"  # surface0
+    inactiveViewSelectedLineBgColor:
+      - "#313244"  # surface0
+    cherryPickedCommitFgColor:
+      - "#94e2d5"  # teal
+    cherryPickedCommitBgColor:
+      - "#45475a"  # surface1
+    markedBaseCommitFgColor:
+      - "#89b4fa"  # blue
+    markedBaseCommitBgColor:
+      - "#f9e2af"  # yellow
+    unstagedChangesColor:
+      - "#f38ba8"  # red
+    defaultFgColor:
+      - "#cdd6f4"  # text
+
+  # Display settings
+  nerdFontsVersion: "3"
+  showRandomTip: false
+  showCommandLog: false
+  showBottomLine: false
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+
+  # Commit settings
+  commit:
+    signOff: false
+
+  # Auto-fetch in background
+  autoFetch: true
+  autoRefresh: true
+
+  # Branch sorting
+  branchLogCmd: "git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} --"
+
+# Keybindings (mostly defaults, customize as needed)
+keybinding:
+  universal:
+    quit: q
+    return: <esc>
+    togglePanel: <tab>
+    prevBlock: <left>
+    nextBlock: <right>
+    scrollUpMain: <pgup>
+    scrollDownMain: <pgdown>
+
+os:
+  editPreset: nvim
+
+# Don't prompt for confirmation on quit
+quitOnTopLevelReturn: false
