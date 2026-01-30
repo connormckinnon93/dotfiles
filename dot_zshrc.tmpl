@@ -1,3 +1,6 @@
+# Exit if non-interactive
+[[ ! -o interactive ]] && return
+
 # Zap plugin manager
 [ -f "$HOME/.local/share/zap/zap.zsh" ] && source "$HOME/.local/share/zap/zap.zsh"
 

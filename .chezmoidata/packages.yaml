@@ -63,3 +63,14 @@ packages:
     - 'anthropic.claude-code'
     - 'catppuccin.catppuccin-vsc'
     - 'catppuccin.catppuccin-vsc-icons'
+    # TypeScript/JavaScript
+    - 'dbaeumer.vscode-eslint'
+    - 'esbenp.prettier-vscode'
+    # Python
+    - 'ms-python.python'
+    - 'ms-python.vscode-pylance'
+    - 'charliermarsh.ruff'
+    # Go
+    - 'golang.go'
+    # Ruby
+    - 'shopify.ruby-lsp'
