@@ -10,7 +10,7 @@
 
 [core]
     editor = nvim
-    pager = diff-so-fancy | less --tabs=4 -RF
+    pager = delta
     excludesFile = ~/.gitignore
     attributesFile = ~/.gitattributes
     hooksPath = ~/.config/git/hooks
@@ -52,7 +52,7 @@
 	remotes = remote -v
 
 [interactive]
-    diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only
 
 [apply]
     whitespace = fix
@@ -74,8 +74,36 @@
 [diff]
     colorMoved = default
 
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    hyperlinks = true
+    hyperlinks-file-link-format = "vscode://file/{path}:{line}"
+    # Catppuccin Mocha theme
+    syntax-theme = Catppuccin Mocha
+    minus-style = syntax "#53394c"
+    minus-emph-style = syntax "#894861"
+    minus-non-emph-style = syntax "#53394c"
+    plus-style = syntax "#404f4a"
+    plus-emph-style = syntax "#4e7b62"
+    plus-non-emph-style = syntax "#404f4a"
+    map-styles = bold purple => syntax "#574466", bold cyan => syntax "#455a64"
+    zero-style = syntax
+    whitespace-error-style = "#f38ba8" reverse
+    line-numbers-minus-style = "#f38ba8"
+    line-numbers-plus-style = "#a6e3a1"
+    line-numbers-zero-style = "#6c7086"
+    line-numbers-left-style = "#6c7086"
+    line-numbers-right-style = "#6c7086"
+    blame-palette = "#1e1e2e" "#181825" "#11111b" "#313244" "#45475a"
+    merge-conflict-ours-diff-header-style = "#f9e2af" bold
+    merge-conflict-ours-diff-header-decoration-style = "#cba6f7" box
+    merge-conflict-theirs-diff-header-style = "#f9e2af" bold
+    merge-conflict-theirs-diff-header-decoration-style = "#cba6f7" box
+
 [merge]
-    conflictStyle = diff3
+    conflictStyle = zdiff3
 
 [rebase]
     autoStash = true
