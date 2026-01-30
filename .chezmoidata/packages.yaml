@@ -13,34 +13,54 @@ pinned_versions:
 packages:
   darwin:
     brews:
-    # MISC
-    - 'git'
-    - 'chezmoi'
-    - 'mise'
-    - 'starship'
-    - 'zsh'
-    - 'neovim'
-    - 'ripgrep'
-    - 'ast-grep'
-    - 'fd'
-    - 'fzf'
-    - 'lazygit'
-    - 'lazydocker'
-    - 'jq'
-    - 'yq'
-    - 'zoxide'
-    - 'bat'
-    - 'eza'
-    - 'wget'
-    - 'mermaid-cli'
-    - 'imagemagick'
-    - 'ghostscript'
-    - 'tectonic'
-    - 'htop'
-    - 'diff-so-fancy'
-    - 'gitleaks'
-    # Build dependencies for mise-managed languages
-    - 'libyaml'  # Required for Ruby (psych extension)
+    # VERSION CONTROL
+    - 'git'                # Distributed version control
+    - 'gh'                 # GitHub CLI
+    - 'lazygit'            # Terminal UI for git
+    - 'git-delta'          # Syntax-highlighting pager for git diffs
+    - 'gitleaks'           # Secret scanning for git repos
+
+    # DOTFILES & ENVIRONMENT
+    - 'chezmoi'            # Dotfiles manager
+    - 'mise'               # Polyglot runtime manager (node, python, ruby, go)
+    - 'starship'           # Cross-shell prompt
+
+    # SHELL & NAVIGATION
+    - 'zsh'                # Z shell
+    - 'zoxide'             # Smarter cd command
+    - 'fzf'                # Fuzzy finder
+
+    # EDITOR
+    - 'neovim'             # Vim-fork focused on extensibility
+
+    # SEARCH & FIND
+    - 'ripgrep'            # Fast grep replacement (rg)
+    - 'ast-grep'           # Structural code search
+    - 'fd'                 # Fast find replacement
+
+    # DATA PROCESSING
+    - 'jq'                 # JSON processor
+    - 'yq'                 # YAML/JSON/XML processor
+
+    # MODERN CLI REPLACEMENTS
+    - 'bat'                # cat with syntax highlighting
+    - 'eza'                # ls replacement with icons
+    - 'htop'               # Interactive process viewer
+
+    # CONTAINERS
+    - 'lazydocker'         # Terminal UI for Docker
+
+    # NETWORKING
+    - 'wget'               # File downloader
+
+    # DOCUMENT GENERATION
+    - 'mermaid-cli'        # Diagram generator (mmdc)
+    - 'imagemagick'        # Image manipulation
+    - 'ghostscript'        # PDF/PostScript interpreter
+    - 'tectonic'           # Modern LaTeX engine
+
+    # BUILD DEPENDENCIES
+    - 'libyaml'            # Required for Ruby psych extension
     casks:
     # MISC
     - 'google-chrome'
@@ -54,23 +74,32 @@ packages:
     # AI TOOLS
     - 'claude-code'
     - 'claude'
+    # WINDOW MANAGEMENT
+    - 'rectangle'
     # FONTS
     - 'font-jetbrains-mono-nerd-font'
     - 'font-fira-code-nerd-font'
     - 'font-hack-nerd-font'
     - 'font-meslo-lg-nerd-font'
     vscodes:
-    - 'anthropic.claude-code'
-    - 'catppuccin.catppuccin-vsc'
-    - 'catppuccin.catppuccin-vsc-icons'
-    # TypeScript/JavaScript
-    - 'dbaeumer.vscode-eslint'
-    - 'esbenp.prettier-vscode'
-    # Python
-    - 'ms-python.python'
-    - 'ms-python.vscode-pylance'
-    - 'charliermarsh.ruff'
-    # Go
-    - 'golang.go'
-    # Ruby
-    - 'shopify.ruby-lsp'
+    # AI
+    - 'anthropic.claude-code'        # Claude AI assistant
+
+    # THEME
+    - 'catppuccin.catppuccin-vsc'       # Catppuccin color theme
+    - 'catppuccin.catppuccin-vsc-icons' # Catppuccin file icons
+
+    # TYPESCRIPT / JAVASCRIPT
+    - 'dbaeumer.vscode-eslint'       # ESLint integration
+    - 'esbenp.prettier-vscode'       # Prettier formatter
+
+    # PYTHON
+    - 'ms-python.python'             # Python language support
+    - 'ms-python.vscode-pylance'     # Python language server
+    - 'charliermarsh.ruff'           # Fast Python linter/formatter
+
+    # GO
+    - 'golang.go'                    # Go language support
+
+    # RUBY
+    - 'shopify.ruby-lsp'             # Ruby language server
