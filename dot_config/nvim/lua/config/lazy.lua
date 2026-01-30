@@ -25,6 +25,9 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.go" },
     { import = "lazyvim.plugins.extras.lang.ruby" },
 
+    -- AI extras
+    { import = "lazyvim.plugins.extras.ai.claudecode" },
+
     -- import/override with your plugins
     { import = "plugins" },
   },
