@@ -11,3 +11,9 @@ cursor-style-blink = false
 # Shell integration
 shell-integration = zsh
 shell-integration-features = cursor,sudo,title
+
+# Split navigation (Ctrl+Shift to avoid conflict with LazyVim's Ctrl+hjkl)
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+j=goto_split:bottom
+keybind = ctrl+shift+k=goto_split:top
+keybind = ctrl+shift+l=goto_split:right
