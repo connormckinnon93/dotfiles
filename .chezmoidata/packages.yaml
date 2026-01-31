@@ -14,7 +14,6 @@ claude_marketplaces:
       - "superpowers"
       - "episodic-memory"
       - "elements-of-style"
-      - "double-shot-latte"
 
 # Pinned versions for third-party dependencies
 # Review quarterly and update as needed
