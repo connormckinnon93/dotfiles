@@ -1,16 +1,17 @@
-{{- /* Build enabledPlugins list from marketplace plugin entries */ -}}
-{{- $acc := dict "plugins" (list) -}}
+{{- /* Build enabledPlugins record from marketplace plugin entries */ -}}
+{{- $plugins := dict -}}
 {{- range $marketName, $market := .claude_marketplaces -}}
 {{-   range $plugin := ($market.plugins | default list) -}}
-{{-     $_ := set $acc "plugins" (append (index $acc "plugins") (dict "name" $plugin "marketplace" $marketName "enabled" true)) -}}
+{{-     $key := printf "%s@%s" $plugin $marketName -}}
+{{-     $_ := set $plugins $key true -}}
 {{-   end -}}
 {{- end -}}
 {{- $settings := dict
     "model" "opus"
+    "theme" "dark-daltonized"
     "permissions" (dict "allow" (list "mcp__context7__resolve-library-id" "mcp__context7__query-docs"))
     "alwaysThinkingEnabled" true
 -}}
-{{- $plugins := index $acc "plugins" -}}
 {{- if $plugins -}}
 {{-   $_ := set $settings "enabledPlugins" $plugins -}}
 {{- end -}}
