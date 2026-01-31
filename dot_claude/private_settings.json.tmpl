@@ -9,7 +9,7 @@
 {{- $settings := dict
     "model" "opus"
     "theme" "dark-daltonized"
-    "permissions" (dict "allow" (list "mcp__context7__resolve-library-id" "mcp__context7__query-docs"))
+    "permissions" .permissions
     "alwaysThinkingEnabled" true
 -}}
 {{- if $plugins -}}

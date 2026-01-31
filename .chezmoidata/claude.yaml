@@ -1,0 +1,13 @@
+# Claude Code configuration
+# Managed by chezmoi - edit this file, then run `chezmoi apply`
+
+# MCP tool permissions
+# Controls which MCP tools require confirmation before use
+permissions:
+  allow:
+    - "mcp__context7__resolve-library-id"
+    - "mcp__context7__query-docs"
+    - "mcp__plugin_episodic-memory_episodic-memory__search"
+    - "mcp__plugin_episodic-memory_episodic-memory__read"
+  # ask: []   # Tools that prompt for confirmation (default behavior)
+  # deny: []  # Tools that are blocked
