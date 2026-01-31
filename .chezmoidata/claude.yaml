@@ -4,6 +4,7 @@
 # MCP tool permissions
 # Controls which MCP tools require confirmation before use
 permissions:
+  defaultMode: "acceptEdits"
   allow:
     - "mcp__context7__resolve-library-id"
     - "mcp__context7__query-docs"
