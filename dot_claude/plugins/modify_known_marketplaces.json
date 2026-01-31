@@ -1,0 +1,17 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $data := dict -}}
+{{- if .chezmoi.stdin -}}
+{{-   $data = .chezmoi.stdin | fromJson -}}
+{{- end -}}
+
+{{- /* Ensure managed marketplaces are present */ -}}
+{{- range $name, $marketplace := .claude_marketplaces -}}
+{{-   $entry := dict
+        "source" (dict "source" $marketplace.source "repo" $marketplace.repo)
+        "installLocation" (printf "%s/.claude/plugins/marketplaces/%s" $.chezmoi.homeDir $name)
+        "lastUpdated" (now)
+-}}
+{{-   $_ := set $data $name $entry -}}
+{{- end -}}
+
+{{- $data | toPrettyJson }}

@@ -1,9 +1,25 @@
+# Claude Code plugin marketplaces
+# Add new marketplaces here - they'll be registered in known_marketplaces.json
+# and cloned via .chezmoiexternal.toml.tmpl
+# Add plugins under each marketplace to enable them in settings.json
+claude_marketplaces:
+  claude-plugins-official:
+    source: "github"
+    repo: "anthropics/claude-plugins-official"
+    version: "27d2b86d72da27c64585150857cee8472ad47abb"  # commit SHA, no tags available
+    plugins: []  # e.g., ["memory", "another-plugin"]
+  # Example: adding another marketplace
+  # my-custom-plugins:
+  #   source: "github"
+  #   repo: "myorg/my-plugins"
+  #   version: "v1.0.0"  # tag or commit SHA
+
 # Pinned versions for third-party dependencies
 # Review quarterly and update as needed
 pinned_versions:
   # Used by modify_private_dot_claude.json
   context7_mcp: "2.1.0"  # Last reviewed: 2026-01-28
-  # Used by .chezmoiexternal.toml.tmpl (tag without 'v' prefix)
+  # Used by .chezmoiexternal.toml.tmpl
   zap: "1.2.3"           # Last reviewed: 2026-01-28
   # NOTE: homebrew_install is hardcoded in .bootstrap-dependencies.sh
   # because that script runs before chezmoi templating (as a pre-hook)
