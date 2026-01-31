@@ -13,7 +13,7 @@ claude_marketplaces:
     plugins:
       - "superpowers"
       - "episodic-memory"
-      - "the-elements-of-style"
+      - "elements-of-style"
       - "double-shot-latte"
 
 # Pinned versions for third-party dependencies
