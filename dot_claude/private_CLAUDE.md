@@ -73,8 +73,11 @@
 
 
 ### LEARNING AND MEMORY
-- **BEFORE** starting complex tasks **ALWAYS**:
-    - search episodic memory for relevant past experiences or lessons learned
+- **BEFORE** starting **ANY** task **YOU MUST ALWAYS**:
+    - Dispatch `episodic-memory:search-conversations` agent to search for relevant past work
+    - This applies to **ALL** tasks, not just "complex" ones
+    - Skipping this step is a **FAILURE** regardless of task simplicity
+- **BEFORE** starting tasks that require codebase understanding **ALWAYS**:
     - spawn parallel agents to review the repo
     - review existing documentation
 - **AFTER** completing work **ALWAYS**:
