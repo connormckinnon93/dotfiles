@@ -6,13 +6,13 @@ claude_marketplaces:
   claude-plugins-official:
     source: "github"
     repo: "anthropics/claude-plugins-official"
-    version: "27d2b86d72da27c64585150857cee8472ad47abb"  # commit SHA, no tags available
-    plugins: []  # e.g., ["memory", "another-plugin"]
-  # Example: adding another marketplace
-  # my-custom-plugins:
-  #   source: "github"
-  #   repo: "myorg/my-plugins"
-  #   version: "v1.0.0"  # tag or commit SHA
+    plugins: []
+  superpowers-marketplace:
+    source: "github"
+    repo: "obra/superpowers-marketplace"
+    plugins:
+      - "superpowers"
+      - "episodic-memory"
 
 # Pinned versions for third-party dependencies
 # Review quarterly and update as needed
