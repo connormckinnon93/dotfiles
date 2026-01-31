@@ -67,6 +67,9 @@
 - **WHEN** debugging **YOU MUST NEVER** fix only a symptom or add a work around there are **NO EXCEPTIONS**
 - **WHEN** stuck debugging **YOU MUST ALWAYS** use the systematic-debugging skill
 
+### WRITING
+- **WHEN** writing for humans (e.g. documentation) **ALWAYS** use the elements-of-style skill
+
 
 ### LEARNING AND MEMORY
 - **BEFORE** starting complex tasks **ALWAYS**:
