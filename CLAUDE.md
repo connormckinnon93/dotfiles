@@ -1,45 +1,45 @@
 # CLAUDE.md
 
-Chezmoi-managed dotfiles for macOS development.
+Chezmoi-managed dotfiles for macOS.
 
 ## Quick Reference
 
 ```bash
-chezmoi apply              # Apply changes to home directory
-chezmoi diff               # Preview pending changes
-chezmoi edit <file>        # Edit managed file (opens source)
-chezmoi add <file>         # Add new dotfile to management
-chezmoi re-add             # Update all managed files from home
+chezmoi apply              # Apply changes to ~
+chezmoi diff               # Preview changes
+chezmoi edit <file>        # Edit source file
+chezmoi add <file>         # Add dotfile
+chezmoi re-add             # Update from ~
 ```
 
-## Repository Structure
+## Structure
 
-- **`.chezmoidata/`** - YAML data files merged into template context
-- **`.chezmoiscripts/`** - Lifecycle scripts (bootstrap, package install, macOS config)
-- **`dot_*`** - Files deployed to `~/.*` (e.g., `dot_gitconfig` → `~/.gitconfig`)
-- **`private_*`** - Files with restricted permissions
-- **`*.tmpl`** - Go templates processed by chezmoi
+- **`.chezmoidata/`** - YAML data for templates
+- **`.chezmoiscripts/`** - Bootstrap and install scripts
+- **`dot_*`** - Deploys to `~/.*` (`dot_gitconfig` → `~/.gitconfig`)
+- **`private_*`** - Restricted permissions
+- **`*.tmpl`** - Go templates
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
 | `.chezmoidata/packages.yaml` | Homebrew packages, casks, VS Code extensions |
-| `.chezmoidata/claude.yaml` | Claude Code plugin marketplaces and MCP permissions |
-| `.chezmoiexternal.toml.tmpl` | External git repos (zap, Claude plugins) |
-| `dot_zshrc.tmpl` | Shell configuration and aliases |
-| `dot_gitconfig.tmpl` | Git settings, aliases, signing config |
+| `.chezmoidata/claude.yaml` | Claude Code plugins and MCP permissions |
+| `.chezmoiexternal.toml.tmpl` | External repos (zap, Claude plugins) |
+| `dot_zshrc.tmpl` | Shell configuration |
+| `dot_gitconfig.tmpl` | Git settings and signing |
 
-## Templating
+## Templates
 
-Templates use Go template syntax with chezmoi functions:
+Go template syntax with chezmoi functions:
 
 ```go
-{{ if eq .chezmoi.os "darwin" }}     // OS conditional
+{{ if eq .chezmoi.os "darwin" }}     // OS check
 {{ .chezmoi.arch }}                   // arm64 or amd64
-{{ .email }}                          // User data from .chezmoi.toml
-{{ onepasswordRead "op://..." }}      // 1Password secrets
-{{ include "file" | sha256sum }}      // Content hashing for change detection
+{{ .email }}                          // From .chezmoi.toml
+{{ onepasswordRead "op://..." }}      // 1Password secret
+{{ include "file" | sha256sum }}      // Change detection
 ```
 
 ## Adding Packages
@@ -56,29 +56,28 @@ darwin:
     - publisher.extension
 ```
 
-## Script Naming Conventions
+## Script Prefixes
 
-- `run_before_*` - Runs before file deployment
-- `run_after_*` - Runs after file deployment
-- `run_onchange_*` - Runs only when content hash changes
-- `*_darwin.sh.tmpl` - macOS-only scripts
+- `run_before_*` - Before deployment
+- `run_after_*` - After deployment
+- `run_onchange_*` - When content changes
+- `*_darwin.sh.tmpl` - macOS only
 
-## Validation
+## Git Hooks
 
-Git hooks enforce:
-- **Pre-commit**: Gitleaks secret scanning (blocks API keys, tokens)
-- **Commit-msg**: Conventional commits format (`type(scope): message`)
+- **Pre-commit**: Gitleaks blocks secrets
+- **Commit-msg**: Enforces `type(scope): message`
 
-## Testing Changes
+## Testing
 
 ```bash
-chezmoi diff                    # See what would change
-chezmoi apply --dry-run         # Simulate apply
-chezmoi apply -v                # Apply with verbose output
+chezmoi diff                    # Preview
+chezmoi apply --dry-run         # Simulate
+chezmoi apply -v                # Verbose
 ```
 
-## Platform Notes
+## Requirements
 
-- macOS-only (Darwin) - all scripts target macOS
-- Requires 1Password CLI for secrets (`onepasswordRead` template function)
-- Uses Homebrew (arm64 path: `/opt/homebrew`, Intel: `/usr/local`)
+- macOS (all scripts target Darwin)
+- 1Password CLI (for `onepasswordRead`)
+- Homebrew (`/opt/homebrew` on arm64, `/usr/local` on Intel)

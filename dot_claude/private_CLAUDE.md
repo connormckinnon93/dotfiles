@@ -27,6 +27,7 @@
     - You are specifically brainstorming possibilities **THEN YOU MUST** use the brainstorming skill
 - **WHEN** using TodoWrite **ALWAYS** batch **ALL** todoes in **ONE** call (5-10+ todos minimum)
 - **WHEN** using Task **ALWAYS** spawn All agents in **ONE** message with full instructions
+- **WHEN** working with any libray, framework, application, or etc **ALWAYS** get the appropriate context7 documents **IMMEDIATELY** without me having to ask you
 
 ### PLANNING
 - **WHEN** designing software **ALWAYS**:
