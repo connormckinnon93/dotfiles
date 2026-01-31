@@ -24,6 +24,7 @@ permissions:
     - "Skill(superpowers:*)"
     - "Skill(episodic-memory:*)"
     - "Skill(elements-of-style:*)"
+    - "Skill(brainstorming)"
 
     # MCP tools
     - "mcp__context7__resolve-library-id"
