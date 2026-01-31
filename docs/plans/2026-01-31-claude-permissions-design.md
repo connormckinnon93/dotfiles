@@ -102,6 +102,9 @@ permissions:
     - "Bash(make build*)"
     - "Bash(tsc*)"
 
+    # Mis commands
+    - "Bash(mkdir *)"
+
   ask:
     # Git - remote/history operations
     - "Bash(git push*)"
