@@ -1,0 +1,22 @@
+# GitHub CLI configuration
+# See: https://cli.github.com/manual/gh_config
+
+# Use SSH protocol for git operations (more secure, requires SSH key setup)
+git_protocol: ssh
+
+# Enable interactive prompts
+prompt: enabled
+
+# Preferred editor (uses $EDITOR if empty)
+editor:
+
+# Pager for long output (uses $PAGER if empty)
+pager:
+
+# Web browser (uses $BROWSER if empty)
+browser:
+
+# Aliases - shortcuts for common commands
+aliases:
+  co: pr checkout
+  pv: pr view
