@@ -1,0 +1,15 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Symlink VS Code settings from XDG location to macOS location
+
+target="$HOME/.config/vscode/settings.json"
+link="$HOME/Library/Application Support/Code/User/settings.json"
+
+mkdir -p "$(dirname "$link")"
+
+# Only act if it's NOT already a symlink pointing to the right place
+if [ ! -L "$link" ] || [ "$(readlink "$link")" != "$target" ]; then
+    rm -f "$link"
+    ln -s "$target" "$link"
+fi
+{{- end -}}
