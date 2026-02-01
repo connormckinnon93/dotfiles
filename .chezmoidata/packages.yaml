@@ -32,6 +32,8 @@ pinned_versions:
 
 packages:
   darwin:
+    taps:
+      - 'slopus/tap'
     brews:
     # VERSION CONTROL
     - 'git'                # Distributed version control
@@ -81,6 +83,9 @@ packages:
 
     # BUILD DEPENDENCIES
     - 'libyaml'            # Required for Ruby psych extension
+
+    # AI TOOLS
+    - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
     casks:
     # MISC
     - 'google-chrome'
