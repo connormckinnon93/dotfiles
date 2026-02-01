@@ -12,8 +12,12 @@ claude_marketplaces:
     repo: "obra/superpowers-marketplace"
     plugins:
       - "superpowers"
-      - "episodic-memory"
       - "elements-of-style"
+  thedotmack:
+    source: "github"
+    repo: "thedotmack/claude-mem"
+    plugins:
+      - "claude-mem"
 
 # Pinned versions for third-party dependencies
 # Review quarterly and update as needed
