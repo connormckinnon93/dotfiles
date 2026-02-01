@@ -22,15 +22,16 @@ permissions:
 
     # Skills
     - "Skill(superpowers:*)"
-    - "Skill(episodic-memory:*)"
+    - "Skill(claude-mem:*)"
     - "Skill(elements-of-style:*)"
     - "Skill(brainstorming)"
 
     # MCP tools
     - "mcp__context7__resolve-library-id"
     - "mcp__context7__query-docs"
-    - "mcp__plugin_episodic-memory_episodic-memory__search"
-    - "mcp__plugin_episodic-memory_episodic-memory__read"
+    - "mcp__plugin_claude-mem_mcp-search__search"
+    - "mcp__plugin_claude-mem_mcp-search__timeline"
+    - "mcp__plugin_claude-mem_mcp-search__get_observations"
 
     # Read operations
     - "Bash(cat *)"
