@@ -6,7 +6,10 @@ claude_marketplaces:
   claude-plugins-official:
     source: "github"
     repo: "anthropics/claude-plugins-official"
-    plugins: []
+    plugins:
+      - "typescript-lsp"
+      - "pyright-lsp"
+      - "gopls-lsp"
   superpowers-marketplace:
     source: "github"
     repo: "obra/superpowers-marketplace"
