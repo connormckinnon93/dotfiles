@@ -38,6 +38,7 @@ packages:
   darwin:
     taps:
       - 'slopus/tap'
+      - 'oven-sh/bun'
     brews:
     # VERSION CONTROL
     - 'git'                # Distributed version control
@@ -55,6 +56,7 @@ packages:
     - 'zsh'                # Z shell
     - 'zoxide'             # Smarter cd command
     - 'fzf'                # Fuzzy finder
+    - 'tmux'               # Terminal multiplexer (required by claude-squad)
 
     # EDITOR
     - 'neovim'             # Vim-fork focused on extensibility
@@ -87,6 +89,9 @@ packages:
 
     # BUILD DEPENDENCIES
     - 'libyaml'            # Required for Ruby psych extension
+
+    # JAVASCRIPT RUNTIMES
+    - 'oven-sh/bun/bun'    # Fast JS runtime (required by claude-mem)
 
     # AI TOOLS
     - 'claude-squad'            # Manage parallel Claude Code agents
