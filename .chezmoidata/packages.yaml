@@ -89,6 +89,7 @@ packages:
     - 'libyaml'            # Required for Ruby psych extension
 
     # AI TOOLS
+    - 'claude-squad'            # Manage parallel Claude Code agents
     - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
     casks:
     # MISC
