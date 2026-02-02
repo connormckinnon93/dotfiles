@@ -8,8 +8,15 @@
                     - notion
 */ -}}
 {{- $first := true }}
-{{- if and (hasKey . "workspace_mcp") (hasKey .workspace_mcp "enabled") }}
-{{- range $name := .workspace_mcp.enabled }}
+{{- $enabled := list }}
+{{- if hasKey . "workspace_mcp" }}
+{{- if kindIs "map" .workspace_mcp }}
+{{- if hasKey .workspace_mcp "enabled" }}
+{{- $enabled = .workspace_mcp.enabled }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- range $name := $enabled }}
 {{- if not $first }},{{ end }}
 {{- if eq $name "slack" }}
     "slack": {
@@ -59,7 +66,6 @@
       "url": "https://mcp.clickup.com/mcp"
     }
 {{- $first = false }}
-{{- end }}
 {{- end }}
 {{- end }}
   }
