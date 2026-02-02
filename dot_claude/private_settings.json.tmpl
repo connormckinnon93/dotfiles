@@ -1,7 +1,7 @@
 {{- /* Build enabledPlugins record from marketplace plugin entries */ -}}
 {{- $plugins := dict -}}
 {{- range $marketName, $market := .claude_marketplaces -}}
-{{-   range $plugin := ($market.plugins | default list) -}}
+{{-   range $plugin := (index $market "plugins" | default list) -}}
 {{-     $key := printf "%s@%s" $plugin $marketName -}}
 {{-     $_ := set $plugins $key true -}}
 {{-   end -}}
