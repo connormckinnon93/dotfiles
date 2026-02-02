@@ -45,6 +45,23 @@ The following document skills are globally enabled and available for use:
 - **COORDINATE** parallel workstreams through clear task decomposition
 - **MERGE** outputs only after all parallel work completes
 
+## MCP Connectors (Optional)
+
+The productivity plugin can connect to external services via MCP. **Disabled by default.**
+
+| Connector | Service | Purpose |
+|-----------|---------|---------|
+| `slack` | Slack | Team messaging, channel scanning |
+| `notion` | Notion | Knowledge base, documentation |
+| `linear` | Linear | Issue/project tracking |
+| `asana` | Asana | Project/task management |
+| `atlassian` | Jira/Confluence | Issues, wiki |
+| `ms365` | Microsoft 365 | Email, calendar, Office docs |
+| `monday` | monday.com | Work management |
+| `clickup` | ClickUp | Project management |
+
+**To enable connectors:** Edit `.chezmoidata/claude.yaml` and uncomment the `workspace_mcp.enabled` list, then run `chezmoi apply`.
+
 ## Safety Boundaries
 
 - **CONFIRM** before any destructive operations (overwriting existing files, bulk deletions)

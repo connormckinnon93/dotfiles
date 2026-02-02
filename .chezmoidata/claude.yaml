@@ -193,3 +193,14 @@ workspace_permissions:
   ask: []
 
   deny: []
+
+# Workspace MCP connectors (~/Workspace/.mcp.json)
+# HTTP-based MCP servers for productivity plugin integrations
+# Disabled by default - uncomment 'enabled' list to activate connectors
+# Available: slack, notion, asana, linear, atlassian, ms365, monday, clickup
+workspace_mcp:
+  # enabled:
+  #   - slack      # Team messaging (Slack)
+  #   - notion     # Knowledge base (Notion)
+  #   - linear     # Project tracking (Linear)
+  #   - ms365      # Email, calendar, docs (Microsoft 365)
