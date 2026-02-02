@@ -1,0 +1,19 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+WORKSPACE_DIR="{{ .chezmoi.homeDir }}/Workspace"
+
+if [ ! -d "$WORKSPACE_DIR/.git" ]; then
+    echo "Initializing git repository in $WORKSPACE_DIR..."
+    cd "$WORKSPACE_DIR"
+    git init
+    git add -A
+    git commit -m "chore: initial commit
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+    echo "Git repository initialized with initial commit."
+else
+    echo "Git repository already exists in $WORKSPACE_DIR, skipping."
+fi
+{{ end -}}
