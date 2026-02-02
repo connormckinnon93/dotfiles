@@ -1,0 +1,53 @@
+{
+  "enabledPlugins": {
+{{- $first := true }}
+{{- range $marketplace, $config := .claude_marketplaces }}
+{{- if hasKey $config "workspacePlugins" }}
+{{- range $plugin := $config.workspacePlugins }}
+{{- if not $first }},{{ end }}
+    "{{ $plugin }}@{{ $marketplace }}": true
+{{- $first = false }}
+{{- end }}
+{{- end }}
+{{- end }}
+  },
+  "permissions": {
+    "allow": [
+{{- $first := true }}
+{{- /* Auto-generated skill permissions from workspacePlugins */ -}}
+{{- range $marketplace, $config := .claude_marketplaces }}
+{{- if hasKey $config "workspacePlugins" }}
+{{- if not $first }},{{ end }}
+      "Skill({{ $marketplace }}:*)"
+{{- $first = false }}
+{{- end }}
+{{- end }}
+{{- /* Explicit workspace permissions */ -}}
+{{- range $perm := .workspace_permissions.allow }}
+{{- if not $first }},{{ end }}
+      "{{ $perm }}"
+{{- $first = false }}
+{{- end }}
+    ]
+{{- if .workspace_permissions.ask }},
+    "ask": [
+{{- $first := true }}
+{{- range $perm := .workspace_permissions.ask }}
+{{- if not $first }},{{ end }}
+      "{{ $perm }}"
+{{- $first = false }}
+{{- end }}
+    ]
+{{- end }}
+{{- if .workspace_permissions.deny }},
+    "deny": [
+{{- $first := true }}
+{{- range $perm := .workspace_permissions.deny }}
+{{- if not $first }},{{ end }}
+      "{{ $perm }}"
+{{- $first = false }}
+{{- end }}
+    ]
+{{- end }}
+  }
+}

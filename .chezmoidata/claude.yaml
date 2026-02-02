@@ -20,11 +20,13 @@ permissions:
     - "Search"
     - "Update"
 
-    # Skills
+    # Skills (global)
     - "Skill(superpowers:*)"
     - "Skill(claude-mem:*)"
     - "Skill(elements-of-style:*)"
     - "Skill(brainstorming)"
+    # Note: anthropic-knowledge-work and anthropic-agent-skills permissions
+    # are defined in ~/Workspace/.claude/settings.json (workspace-scoped)
 
     # MCP tools
     - "mcp__context7__resolve-library-id"
@@ -179,3 +181,15 @@ permissions:
     - "Bash(pkill *)"
     - "Bash(shutdown*)"
     - "Bash(reboot*)"
+
+# Workspace-specific permissions (~/Workspace/.claude/settings.json)
+# These are ADDITIONAL to global permissions, applied only in the workspace
+# Skill permissions for workspacePlugins are auto-generated from packages.yaml
+workspace_permissions:
+  allow:
+    # Preview generated documents (scoped to workspace)
+    - "Bash(open ~/Workspace/*)"
+
+  ask: []
+
+  deny: []

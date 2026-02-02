@@ -21,6 +21,21 @@ claude_marketplaces:
     repo: "thedotmack/claude-mem"
     plugins:
       - "claude-mem"
+  # Workspace-only marketplaces - cloned but NOT globally enabled
+  # workspacePlugins enabled at project scope via ~/Workspace/.claude/settings.json
+  anthropic-knowledge-work:
+    source: "github"
+    repo: "anthropics/knowledge-work-plugins"
+    workspacePlugins:
+      - productivity           # Tasks, calendars, daily workflows
+  anthropic-agent-skills:
+    source: "github"
+    repo: "anthropics/skills"
+    workspacePlugins:
+      - docx                   # Word documents
+      - pdf                    # PDF manipulation
+      - pptx                   # PowerPoint presentations
+      - xlsx                   # Excel spreadsheets
 
 # Pinned versions for third-party dependencies
 # Review quarterly and update as needed
