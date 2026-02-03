@@ -75,6 +75,34 @@ chezmoi apply --dry-run         # Simulate
 chezmoi apply -v                # Verbose
 ```
 
+## Chezmoi Dotfiles
+
+This machine's dotfiles are managed by chezmoi. Claude may edit source files and preview changes but must never apply them.
+
+**Find the source directory:**
+
+```bash
+chezmoi source-path
+```
+
+**Key files to edit:**
+
+| File | Purpose |
+|------|---------|
+| `.chezmoidata/packages.yaml` | Homebrew packages, casks, VS Code extensions |
+| `.chezmoidata/claude.yaml` | Claude Code permissions and MCP config |
+| `dot_zshrc.tmpl` | Shell configuration and aliases |
+| `dot_gitconfig.tmpl` | Git settings and signing |
+
+**Workflow:**
+
+1. Find source: `chezmoi source-path`
+2. Edit files in the source directory
+3. Preview: `chezmoi diff`
+4. Stop here — a human runs `chezmoi apply`
+
+**Never run `chezmoi apply` or `chezmoi init`.**
+
 ## Requirements
 
 - macOS (all scripts target Darwin)
