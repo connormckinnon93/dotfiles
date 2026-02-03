@@ -119,11 +119,11 @@ git commit -m "feat(claude): add agent-browser bash permissions"
 ## Task 4: Create Chromium installation script
 
 **Files:**
-- Create: `.chezmoiscripts/run_onchange_after_install-agent-browser-darwin.sh.tmpl`
+- Create: `.chezmoiscripts/run_onchange_after_setup-agent-browser-chromium-darwin.sh.tmpl`
 
 **Step 1: Create the script**
 
-Create file `.chezmoiscripts/run_onchange_after_install-agent-browser-darwin.sh.tmpl`:
+Create file `.chezmoiscripts/run_onchange_after_setup-agent-browser-chromium-darwin.sh.tmpl`:
 
 ```bash
 {{- if eq .chezmoi.os "darwin" -}}
@@ -144,13 +144,13 @@ fi
 
 **Step 2: Verify template renders**
 
-Run: `chezmoi execute-template < .chezmoiscripts/run_onchange_after_install-agent-browser-darwin.sh.tmpl`
+Run: `chezmoi execute-template < .chezmoiscripts/run_onchange_after_setup-agent-browser-chromium-darwin.sh.tmpl`
 Expected: Script contents with resolved hash, no template errors
 
 **Step 3: Commit**
 
 ```bash
-git add .chezmoiscripts/run_onchange_after_install-agent-browser-darwin.sh.tmpl
+git add .chezmoiscripts/run_onchange_after_setup-agent-browser-chromium-darwin.sh.tmpl
 git commit -m "feat(chezmoi): add agent-browser chromium install script"
 ```
 

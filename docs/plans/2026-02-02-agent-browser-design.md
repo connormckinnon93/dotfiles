@@ -45,7 +45,7 @@ Permits all agent-browser commands. All subcommands are browser automation opera
 
 ### 4. Chromium Installation
 
-**File:** `.chezmoiscripts/run_onchange_after_install-agent-browser-darwin.sh.tmpl`
+**File:** `.chezmoiscripts/run_onchange_after_setup-agent-browser-chromium-darwin.sh.tmpl`
 
 Script runs after mise installs agent-browser, downloads Chromium via `agent-browser install`.
 
