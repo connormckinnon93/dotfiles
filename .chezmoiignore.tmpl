@@ -1,0 +1,11 @@
+docs/*
+README.md
+CLAUDE.md
+
+{{- if eq .profile "work" }}
+# Files skipped on work machines (add as needed)
+{{- end }}
+
+{{- if eq .profile "personal" }}
+# Files skipped on personal machines (add as needed)
+{{- end }}
