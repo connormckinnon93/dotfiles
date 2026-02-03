@@ -1,6 +1,19 @@
 # Exit if non-interactive
 [[ ! -o interactive ]] && return
 
+# Chezmoi worktree awareness
+# Auto-detects chezmoi source trees in git worktrees and injects --source
+chezmoi() {
+  local git_root
+  if git_root=$(git rev-parse --show-toplevel 2>/dev/null) \
+    && [[ -d "$git_root/.chezmoidata" ]] \
+    && [[ "$git_root" != "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi}" ]]; then
+    command chezmoi --source="$git_root" "$@"
+  else
+    command chezmoi "$@"
+  fi
+}
+
 # Zap plugin manager
 [ -f "$HOME/.local/share/zap/zap.zsh" ] && source "$HOME/.local/share/zap/zap.zsh"
 

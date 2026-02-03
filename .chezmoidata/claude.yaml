@@ -101,6 +101,15 @@ permissions:
     - "Bash(jq *)"
     - "Bash(yq *)"
 
+    # Chezmoi - read/preview operations
+    - "Bash(chezmoi source-path*)"
+    - "Bash(chezmoi diff*)"
+    - "Bash(chezmoi cat *)"
+    - "Bash(chezmoi data*)"
+    - "Bash(chezmoi managed*)"
+    - "Bash(chezmoi execute-template*)"
+    - "Bash(chezmoi apply --dry-run*)"
+
     # Subagent types
     - "Task(superpowers:code-reviewer)"
 
@@ -278,6 +287,10 @@ permissions:
     - "Bash(pkill *)"
     - "Bash(shutdown*)"
     - "Bash(reboot*)"
+
+    # Chezmoi - destructive operations (human must apply)
+    - "Bash(chezmoi apply*)"
+    - "Bash(chezmoi init*)"
 
 # Workspace-specific permissions (~/Workspace/.claude/settings.json)
 # These are ADDITIONAL to global permissions, applied only in the workspace
