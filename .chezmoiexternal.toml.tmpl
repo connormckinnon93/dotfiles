@@ -5,8 +5,8 @@
     [".local/share/zap".clone]
         args = ["--branch", "v{{ .pinned_versions.zap }}", "--single-branch", "--depth", "1"]
 
-# Claude Code plugin marketplaces (generated from claude_marketplaces in packages.yaml)
-{{ range $name, $marketplace := .claude_marketplaces -}}
+# Claude Code plugin marketplaces (generated from marketplaces in claude.yaml)
+{{ range $name, $marketplace := .marketplaces -}}
 [".claude/plugins/marketplaces/{{ $name }}"]
     type = "git-repo"
     url = "https://github.com/{{ $marketplace.repo }}.git"

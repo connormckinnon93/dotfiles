@@ -1,69 +1,16 @@
 {
   "mcpServers": {
-{{- /* Productivity plugin connectors - disabled by default
-       To enable: add connector names to workspace_mcp.enabled in .chezmoidata/claude.yaml
-       Example: workspace_mcp:
-                  enabled:
-                    - slack
-                    - notion
-*/ -}}
 {{- $first := true }}
 {{- $enabled := list }}
-{{- if hasKey . "workspace_mcp" }}
-{{- if kindIs "map" .workspace_mcp }}
 {{- if hasKey .workspace_mcp "enabled" }}
 {{- $enabled = .workspace_mcp.enabled }}
 {{- end }}
-{{- end }}
-{{- end }}
 {{- range $name := $enabled }}
+{{- if hasKey $.workspace_mcp.servers $name }}
 {{- if not $first }},{{ end }}
-{{- if eq $name "slack" }}
-    "slack": {
+    "{{ $name }}": {
       "type": "http",
-      "url": "https://mcp.slack.com/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "notion" }}
-    "notion": {
-      "type": "http",
-      "url": "https://mcp.notion.com/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "asana" }}
-    "asana": {
-      "type": "http",
-      "url": "https://mcp.asana.com/v2/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "linear" }}
-    "linear": {
-      "type": "http",
-      "url": "https://mcp.linear.app/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "atlassian" }}
-    "atlassian": {
-      "type": "http",
-      "url": "https://mcp.atlassian.com/v1/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "ms365" }}
-    "ms365": {
-      "type": "http",
-      "url": "https://microsoft365.mcp.claude.com/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "monday" }}
-    "monday": {
-      "type": "http",
-      "url": "https://mcp.monday.com/mcp"
-    }
-{{- $first = false }}
-{{- else if eq $name "clickup" }}
-    "clickup": {
-      "type": "http",
-      "url": "https://mcp.clickup.com/mcp"
+      "url": "{{ index $.workspace_mcp.servers $name }}"
     }
 {{- $first = false }}
 {{- end }}

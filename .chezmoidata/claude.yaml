@@ -1,6 +1,54 @@
 # Claude Code configuration
 # Managed by chezmoi - edit this file, then run `chezmoi apply`
 
+# Pinned versions for Claude-related dependencies
+versions:
+  context7_mcp: "2.1.0"  # Last reviewed: 2026-01-28
+
+# Claude Code plugin marketplaces
+# Add new marketplaces here - they'll be registered in known_marketplaces.json
+# and cloned via .chezmoiexternal.toml.tmpl
+# Add plugins under each marketplace to enable them in settings.json
+marketplaces:
+  claude-plugins-official:
+    source: "github"
+    repo: "anthropics/claude-plugins-official"
+    plugins:
+      # Language servers
+      - "typescript-lsp"
+      - "pyright-lsp"
+      - "gopls-lsp"
+      # Git & GitHub workflows
+      - "commit-commands"      # /commit, /commit-push-pr, /clean_gone
+      - "pr-review-toolkit"    # 6 PR review agents
+      - "code-review"          # /code-review with confidence scoring
+  superpowers-marketplace:
+    source: "github"
+    repo: "obra/superpowers-marketplace"
+    plugins:
+      - "superpowers"
+      - "elements-of-style"
+  thedotmack:
+    source: "github"
+    repo: "thedotmack/claude-mem"
+    plugins:
+      - "claude-mem"
+  # Workspace-only marketplaces - cloned but NOT globally enabled
+  # workspacePlugins enabled at project scope via ~/Workspace/.claude/settings.json
+  anthropic-knowledge-work:
+    source: "github"
+    repo: "anthropics/knowledge-work-plugins"
+    workspacePlugins:
+      - productivity           # Tasks, calendars, daily workflows
+  anthropic-agent-skills:
+    source: "github"
+    repo: "anthropics/skills"
+    workspacePlugins:
+      - docx                   # Word documents
+      - pdf                    # PDF manipulation
+      - pptx                   # PowerPoint presentations
+      - xlsx                   # Excel spreadsheets
+
 # Permissions follow a trust gradient:
 # - allow: Routine development operations - safe, reversible, low-impact
 # - ask: Operations crossing trust boundaries - network, system, packages
@@ -243,10 +291,18 @@ workspace_permissions:
 # Workspace MCP connectors (~/Workspace/.mcp.json)
 # HTTP-based MCP servers for productivity plugin integrations
 # Disabled by default - uncomment 'enabled' list to activate connectors
-# Available: slack, notion, asana, linear, atlassian, ms365, monday, clickup
 workspace_mcp:
+  servers:
+    slack: "https://mcp.slack.com/mcp"
+    notion: "https://mcp.notion.com/mcp"
+    asana: "https://mcp.asana.com/v2/mcp"
+    linear: "https://mcp.linear.app/mcp"
+    atlassian: "https://mcp.atlassian.com/v1/mcp"
+    ms365: "https://microsoft365.mcp.claude.com/mcp"
+    monday: "https://mcp.monday.com/mcp"
+    clickup: "https://mcp.clickup.com/mcp"
   # enabled:
-  #   - slack      # Team messaging (Slack)
-  #   - notion     # Knowledge base (Notion)
-  #   - linear     # Project tracking (Linear)
-  #   - ms365      # Email, calendar, docs (Microsoft 365)
+  #   - slack      # Team messaging
+  #   - notion     # Knowledge base
+  #   - linear     # Project tracking
+  #   - ms365      # Email, calendar, docs

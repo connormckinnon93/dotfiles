@@ -1,7 +1,7 @@
 {
   "enabledPlugins": {
 {{- $first := true }}
-{{- range $marketplace, $config := .claude_marketplaces }}
+{{- range $marketplace, $config := .marketplaces }}
 {{- if hasKey $config "workspacePlugins" }}
 {{- range $plugin := $config.workspacePlugins }}
 {{- if not $first }},{{ end }}
@@ -15,7 +15,7 @@
     "allow": [
 {{- $first := true }}
 {{- /* Auto-generated skill permissions from workspacePlugins */ -}}
-{{- range $marketplace, $config := .claude_marketplaces }}
+{{- range $marketplace, $config := .marketplaces }}
 {{- if hasKey $config "workspacePlugins" }}
 {{- if not $first }},{{ end }}
       "Skill({{ $marketplace }}:*)"
