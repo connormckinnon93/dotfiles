@@ -16,3 +16,9 @@
         args = ["--branch", "{{ $marketplace.version }}", "--single-branch"]
 {{ end }}
 {{ end -}}
+
+# Agent-browser skill (browser automation for AI agents)
+[".claude/skills/agent-browser/SKILL.md"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/vercel-labs/agent-browser/main/skills/agent-browser/SKILL.md"
+    refreshPeriod = "168h"
