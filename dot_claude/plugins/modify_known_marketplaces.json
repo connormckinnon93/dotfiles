@@ -5,7 +5,7 @@
 {{- end -}}
 
 {{- /* Ensure managed marketplaces are present */ -}}
-{{- range $name, $marketplace := .claude_marketplaces -}}
+{{- range $name, $marketplace := .marketplaces -}}
 {{-   $entry := dict
         "source" (dict "source" $marketplace.source "repo" $marketplace.repo)
         "installLocation" (printf "%s/.claude/plugins/marketplaces/%s" $.chezmoi.homeDir $name)
