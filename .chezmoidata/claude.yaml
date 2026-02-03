@@ -108,6 +108,9 @@ permissions:
     # Misc commands
     - "Bash(mkdir *)"
 
+    # Browser automation (agent-browser CLI)
+    - "Bash(agent-browser *)"
+
   ask:
     # Git - remote/history operations
     - "Bash(git push*)"
