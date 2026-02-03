@@ -1,12 +1,14 @@
 {{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") -}}
 {{- $email := promptStringOnce . "email" "Email Address" -}}
 {{- $name := promptStringOnce . "name" "Full Name" -}}
+{{- $signingkey := promptStringOnce . "signingkey" "SSH signing key (ssh-ed25519 ...)" -}}
 
 
 [data]
     profile = {{ $profile | quote }}
     email = {{ $email | quote }}
     name = {{ $name | quote }}
+    signingkey = {{ $signingkey | quote }}
 
 [hooks.read-source-state.pre]
     command = "{{ .chezmoi.sourceDir }}/.chezmoiscripts/.bootstrap-dependencies.sh"

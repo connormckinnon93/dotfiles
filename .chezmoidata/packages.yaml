@@ -12,7 +12,6 @@ packages:
   darwin:
     common:
       taps:
-        - 'slopus/tap'
         - 'oven-sh/bun'
       brews:
         # VERSION CONTROL
@@ -114,7 +113,8 @@ packages:
         - 'shopify.ruby-lsp'             # Ruby language server
 
     personal:
-      taps: []
+      taps:
+        - 'slopus/tap'
       brews:
         - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
       casks: []

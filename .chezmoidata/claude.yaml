@@ -12,7 +12,7 @@ versions:
 marketplaces:
   claude-plugins-official:
     source: "github"
-    repo: "anthropics/claude-plugins-official"
+    repo: "anthropics/claude-plugins-official"  # First-party, no tags. Reviewed: 2026-02-03
     plugins:
       # Language servers
       - "typescript-lsp"
@@ -25,24 +25,26 @@ marketplaces:
   superpowers-marketplace:
     source: "github"
     repo: "obra/superpowers-marketplace"
+    version: "v1.0.12"  # Reviewed: 2026-02-03
     plugins:
       - "superpowers"
       - "elements-of-style"
   thedotmack:
     source: "github"
     repo: "thedotmack/claude-mem"
+    version: "v9.0.12"  # Reviewed: 2026-02-03
     plugins:
       - "claude-mem"
   # Workspace-only marketplaces - cloned but NOT globally enabled
   # workspacePlugins enabled at project scope via ~/Workspace/.claude/settings.json
   anthropic-knowledge-work:
     source: "github"
-    repo: "anthropics/knowledge-work-plugins"
+    repo: "anthropics/knowledge-work-plugins"  # First-party, no tags. Reviewed: 2026-02-03
     workspacePlugins:
       - productivity           # Tasks, calendars, daily workflows
   anthropic-agent-skills:
     source: "github"
-    repo: "anthropics/skills"
+    repo: "anthropics/skills"  # First-party, no tags. Reviewed: 2026-02-03
     workspacePlugins:
       - docx                   # Word documents
       - pdf                    # PDF manipulation
@@ -140,6 +142,16 @@ permissions:
     - "Bash(gh issue list*)"
     - "Bash(gh issue status*)"
     - "Bash(gh repo view*)"
+
+    # GitHub API - read-only patterns (GET by default, used by PR review agents)
+    - "Bash(gh api repos/*/pulls*)"
+    - "Bash(gh api repos/*/issues*)"
+    - "Bash(gh api repos/*/commits*)"
+    - "Bash(gh api repos/*/compare*)"
+    - "Bash(gh api repos/*/contents*)"
+    - "Bash(gh api repos/*/branches*)"
+    - "Bash(gh api repos/*/tags*)"
+    - "Bash(gh api repos/*/releases*)"
 
     # Testing - all languages
     - "Bash(npm test*)"
