@@ -1,9 +1,7 @@
 [user]
     name = {{ .name }}
     email = {{ .email }}
-{{- if eq .chezmoi.os "darwin" }}
     signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHkXGzrc5NhnVFiPzYJooYvC0AKrW6QTFu6ZA7FO/PyF
-{{- end }}
 
 [init]
     defaultBranch = main
@@ -109,8 +107,7 @@
 [help]
     autocorrect = 1
 
-{{- if eq .chezmoi.os "darwin" }}
-# 1Password SSH commit signing (macOS only)
+# 1Password SSH commit signing
 [gpg]
     format = ssh
 
@@ -119,4 +116,3 @@
 
 [commit]
     gpgsign = true
-{{- end }}

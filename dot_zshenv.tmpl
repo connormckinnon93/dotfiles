@@ -1,13 +1,5 @@
-# Homebrew
-{{ if eq .chezmoi.os "darwin" -}}
-{{ if eq .chezmoi.arch "arm64" -}}
+# Homebrew (Apple Silicon only)
 eval "$(/opt/homebrew/bin/brew shellenv)"
-{{ else -}}
-eval "$(/usr/local/bin/brew shellenv)"
-{{ end -}}
-{{ else if eq .chezmoi.os "linux" -}}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{ end -}}
 
 # Environment
 export EDITOR="nvim"
@@ -30,6 +22,4 @@ export MISE_DATA_DIR="$HOME/.local/share/mise"
 export MISE_CONFIG_DIR="$HOME/.config/mise"
 
 # 1Password SSH agent
-{{ if eq .chezmoi.os "darwin" -}}
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-{{ end -}}

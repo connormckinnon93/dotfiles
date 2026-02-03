@@ -35,8 +35,7 @@ chezmoi re-add             # Update from ~
 Go template syntax with chezmoi functions:
 
 ```go
-{{ if eq .chezmoi.os "darwin" }}     // OS check
-{{ .chezmoi.arch }}                   // arm64 or amd64
+{{ .chezmoi.homeDir }}                // User's home directory
 {{ .email }}                          // From .chezmoi.toml
 {{ onepasswordRead "op://..." }}      // 1Password secret
 {{ include "file" | sha256sum }}      // Change detection
@@ -80,4 +79,4 @@ chezmoi apply -v                # Verbose
 
 - macOS (all scripts target Darwin)
 - 1Password CLI (for `onepasswordRead`)
-- Homebrew (`/opt/homebrew` on arm64, `/usr/local` on Intel)
+- Homebrew (`/opt/homebrew` - Apple Silicon only)

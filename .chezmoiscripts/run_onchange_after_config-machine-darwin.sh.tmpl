@@ -1,4 +1,3 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 # MacOS build version: {{ output "sw_vers" "--buildVersion" }}
 
@@ -137,5 +136,3 @@ for app in "Dock" "Finder" "SystemUIServer"; do
 done
 
 echo "macOS defaults configured. Some changes require a logout/restart to take effect."
-
-{{ end -}}
