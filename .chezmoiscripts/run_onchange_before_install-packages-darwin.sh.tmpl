@@ -1,18 +1,33 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 # MacOS build version: {{ output "sw_vers" "--buildVersion" }}
+# Profile: {{ .profile }}
 
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.darwin.taps -}}
+{{- $common := .packages.darwin.common }}
+{{- $profilePkgs := index .packages.darwin .profile }}
+{{ range $common.taps -}}
 tap {{ . | quote }}
 {{ end -}}
-{{ range .packages.darwin.brews -}}
+{{ range $profilePkgs.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range $common.brews -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range .packages.darwin.casks -}}
+{{ range $profilePkgs.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range $common.casks -}}
 cask {{ . | quote }}
 {{ end -}}
-{{ range .packages.darwin.vscodes -}}
+{{ range $profilePkgs.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+{{ range $common.vscodes -}}
+vscode {{ . | quote }}
+{{ end -}}
+{{ range $profilePkgs.vscodes -}}
 vscode {{ . | quote }}
 {{ end -}}
 EOF
