@@ -49,18 +49,33 @@ permissions:
     - "Bash(which *)"
     - "Bash(type *)"
 
-    # Git - local operations
+    # Git - local operations (safe, reversible)
     - "Bash(git status*)"
     - "Bash(git log*)"
     - "Bash(git diff*)"
     - "Bash(git show*)"
-    - "Bash(git branch*)"
+    - "Bash(git branch)"          # List branches only
+    - "Bash(git branch -a*)"      # List all branches
+    - "Bash(git branch -v*)"      # List with verbose info
+    - "Bash(git branch --list*)"  # List with pattern
     - "Bash(git add *)"
     - "Bash(git commit *)"
     - "Bash(git checkout *)"
     - "Bash(git switch *)"
     - "Bash(git stash*)"
     - "Bash(git fetch*)"
+    - "Bash(git worktree list*)"  # List worktrees (read-only)
+
+    # GitHub CLI - read operations (low risk, used by PR review skills)
+    - "Bash(gh pr view*)"
+    - "Bash(gh pr list*)"
+    - "Bash(gh pr diff*)"
+    - "Bash(gh pr checks*)"
+    - "Bash(gh pr status*)"
+    - "Bash(gh issue view*)"
+    - "Bash(gh issue list*)"
+    - "Bash(gh issue status*)"
+    - "Bash(gh repo view*)"
 
     # Testing - all languages
     - "Bash(npm test*)"
@@ -115,12 +130,36 @@ permissions:
     - "Bash(git merge *)"
     - "Bash(git rebase *)"
 
+    # Git - local but potentially destructive
+    - "Bash(git branch -d *)"      # Delete merged branch
+    - "Bash(git branch -D *)"      # Force delete branch
+    - "Bash(git branch -m *)"      # Rename branch
+    - "Bash(git branch --delete*)" # Delete branch (long form)
+    - "Bash(git worktree add *)"   # Create worktree
+    - "Bash(git worktree remove*)" # Remove worktree
+    - "Bash(git worktree prune*)"  # Clean up worktree metadata
+
+    # GitHub CLI - API and write operations
+    - "Bash(gh api *)"            # API calls (read or write)
+    - "Bash(gh pr create*)"
+    - "Bash(gh pr merge*)"
+    - "Bash(gh pr close*)"
+    - "Bash(gh pr comment*)"
+    - "Bash(gh pr review*)"
+    - "Bash(gh pr edit*)"
+    - "Bash(gh issue create*)"
+    - "Bash(gh issue close*)"
+    - "Bash(gh issue comment*)"
+    - "Bash(gh issue edit*)"
+    - "Bash(gh repo create*)"
+    - "Bash(gh repo fork*)"
+    - "Bash(gh release create*)"
+
     # Network operations
     - "Bash(curl *)"
     - "Bash(wget *)"
     - "Bash(npm publish*)"
     - "Bash(docker push*)"
-    - "Bash(gh *)"
 
     # Package installation - JS
     - "Bash(npm install*)"
