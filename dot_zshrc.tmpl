@@ -22,6 +22,11 @@ command -v starship &>/dev/null && eval "$(starship init zsh)"
 command -v mise &>/dev/null && eval "$(mise activate zsh)"
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh --cmd cd)"
 
+# Bun (global packages and completions)
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL/bin" ]] && export PATH="$BUN_INSTALL/bin:$PATH"
+[[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
+
 # Fallback to ssh-agent if 1Password socket unavailable
 if [[ ! -S "$SSH_AUTH_SOCK" ]]; then
     eval "$(ssh-agent -s)" > /dev/null 2>&1
