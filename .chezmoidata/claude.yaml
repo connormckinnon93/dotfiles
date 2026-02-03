@@ -49,6 +49,13 @@ permissions:
     - "Bash(which *)"
     - "Bash(type *)"
 
+    # Data processing (read-only)
+    - "Bash(jq *)"
+    - "Bash(yq *)"
+
+    # Subagent types
+    - "Task(superpowers:code-reviewer)"
+
     # Git - local operations
     - "Bash(git status*)"
     - "Bash(git log*)"
