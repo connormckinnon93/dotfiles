@@ -1,0 +1,14 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+
+# Install Chromium for agent-browser after mise installs the CLI
+if command -v agent-browser &> /dev/null; then
+    echo "Installing Chromium for agent-browser..."
+    agent-browser install
+else
+    echo "agent-browser not found in PATH, skipping Chromium install"
+    echo "Run 'mise install' then 'agent-browser install' manually"
+fi
+
+{{ end -}}
