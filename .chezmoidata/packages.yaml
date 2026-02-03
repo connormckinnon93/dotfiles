@@ -51,105 +51,118 @@ pinned_versions:
 
 packages:
   darwin:
-    taps:
-      - 'slopus/tap'
-      - 'oven-sh/bun'
-    brews:
-    # VERSION CONTROL
-    - 'git'                # Distributed version control
-    - 'gh'                 # GitHub CLI
-    - 'lazygit'            # Terminal UI for git
-    - 'git-delta'          # Syntax-highlighting pager for git diffs
-    - 'gitleaks'           # Secret scanning for git repos
+    common:
+      taps:
+        - 'slopus/tap'
+        - 'oven-sh/bun'
+      brews:
+        # VERSION CONTROL
+        - 'git'                # Distributed version control
+        - 'gh'                 # GitHub CLI
+        - 'lazygit'            # Terminal UI for git
+        - 'git-delta'          # Syntax-highlighting pager for git diffs
+        - 'gitleaks'           # Secret scanning for git repos
 
-    # DOTFILES & ENVIRONMENT
-    - 'chezmoi'            # Dotfiles manager
-    - 'mise'               # Polyglot runtime manager (node, python, ruby, go)
-    - 'starship'           # Cross-shell prompt
+        # DOTFILES & ENVIRONMENT
+        - 'chezmoi'            # Dotfiles manager
+        - 'mise'               # Polyglot runtime manager (node, python, ruby, go)
+        - 'starship'           # Cross-shell prompt
 
-    # SHELL & NAVIGATION
-    - 'zsh'                # Z shell
-    - 'zoxide'             # Smarter cd command
-    - 'fzf'                # Fuzzy finder
-    - 'tmux'               # Terminal multiplexer (required by claude-squad)
+        # SHELL & NAVIGATION
+        - 'zsh'                # Z shell
+        - 'zoxide'             # Smarter cd command
+        - 'fzf'                # Fuzzy finder
+        - 'tmux'               # Terminal multiplexer (required by claude-squad)
 
-    # EDITOR
-    - 'neovim'             # Vim-fork focused on extensibility
+        # EDITOR
+        - 'neovim'             # Vim-fork focused on extensibility
 
-    # SEARCH & FIND
-    - 'ripgrep'            # Fast grep replacement (rg)
-    - 'ast-grep'           # Structural code search
-    - 'fd'                 # Fast find replacement
+        # SEARCH & FIND
+        - 'ripgrep'            # Fast grep replacement (rg)
+        - 'ast-grep'           # Structural code search
+        - 'fd'                 # Fast find replacement
 
-    # DATA PROCESSING
-    - 'jq'                 # JSON processor
-    - 'yq'                 # YAML/JSON/XML processor
+        # DATA PROCESSING
+        - 'jq'                 # JSON processor
+        - 'yq'                 # YAML/JSON/XML processor
 
-    # MODERN CLI REPLACEMENTS
-    - 'bat'                # cat with syntax highlighting
-    - 'eza'                # ls replacement with icons
-    - 'htop'               # Interactive process viewer
+        # MODERN CLI REPLACEMENTS
+        - 'bat'                # cat with syntax highlighting
+        - 'eza'                # ls replacement with icons
+        - 'htop'               # Interactive process viewer
 
-    # CONTAINERS
-    - 'lazydocker'         # Terminal UI for Docker
+        # CONTAINERS
+        - 'lazydocker'         # Terminal UI for Docker
 
-    # NETWORKING
-    - 'wget'               # File downloader
+        # NETWORKING
+        - 'wget'               # File downloader
 
-    # DOCUMENT GENERATION
-    - 'mermaid-cli'        # Diagram generator (mmdc)
-    - 'imagemagick'        # Image manipulation
-    - 'ghostscript'        # PDF/PostScript interpreter
-    - 'tectonic'           # Modern LaTeX engine
+        # DOCUMENT GENERATION
+        - 'mermaid-cli'        # Diagram generator (mmdc)
+        - 'imagemagick'        # Image manipulation
+        - 'ghostscript'        # PDF/PostScript interpreter
+        - 'tectonic'           # Modern LaTeX engine
 
-    # BUILD DEPENDENCIES
-    - 'libyaml'            # Required for Ruby psych extension
+        # BUILD DEPENDENCIES
+        - 'libyaml'            # Required for Ruby psych extension
 
-    # JAVASCRIPT RUNTIMES
-    - 'oven-sh/bun/bun'    # Fast JS runtime (required by claude-mem)
+        # JAVASCRIPT RUNTIMES
+        - 'oven-sh/bun/bun'    # Fast JS runtime (required by claude-mem)
 
-    # AI TOOLS
-    - 'claude-squad'            # Manage parallel Claude Code agents
-    - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
-    casks:
-    # MISC
-    - 'google-chrome'
-    - 'visual-studio-code'
-    - 'ghostty'
-    # CONTAINERS
-    - 'docker-desktop'
-    # PASSWORD MANAGER
-    - '1password'
-    - '1password-cli'
-    # AI TOOLS
-    - 'claude-code'
-    - 'claude'
-    # WINDOW MANAGEMENT
-    - 'rectangle'
-    # FONTS
-    - 'font-jetbrains-mono-nerd-font'
-    - 'font-fira-code-nerd-font'
-    - 'font-hack-nerd-font'
-    - 'font-meslo-lg-nerd-font'
-    vscodes:
-    # AI
-    - 'anthropic.claude-code'        # Claude AI assistant
+        # AI TOOLS
+        - 'claude-squad'       # Manage parallel Claude Code agents
+      casks:
+        # MISC
+        - 'google-chrome'
+        - 'visual-studio-code'
+        - 'ghostty'
+        # CONTAINERS
+        - 'docker-desktop'
+        # PASSWORD MANAGER
+        - '1password'
+        - '1password-cli'
+        # AI TOOLS
+        - 'claude-code'
+        - 'claude'
+        # WINDOW MANAGEMENT
+        - 'rectangle'
+        # FONTS
+        - 'font-jetbrains-mono-nerd-font'
+        - 'font-fira-code-nerd-font'
+        - 'font-hack-nerd-font'
+        - 'font-meslo-lg-nerd-font'
+      vscodes:
+        # AI
+        - 'anthropic.claude-code'        # Claude AI assistant
 
-    # THEME
-    - 'catppuccin.catppuccin-vsc'       # Catppuccin color theme
-    - 'catppuccin.catppuccin-vsc-icons' # Catppuccin file icons
+        # THEME
+        - 'catppuccin.catppuccin-vsc'       # Catppuccin color theme
+        - 'catppuccin.catppuccin-vsc-icons' # Catppuccin file icons
 
-    # TYPESCRIPT / JAVASCRIPT
-    - 'dbaeumer.vscode-eslint'       # ESLint integration
-    - 'esbenp.prettier-vscode'       # Prettier formatter
+        # TYPESCRIPT / JAVASCRIPT
+        - 'dbaeumer.vscode-eslint'       # ESLint integration
+        - 'esbenp.prettier-vscode'       # Prettier formatter
 
-    # PYTHON
-    - 'ms-python.python'             # Python language support
-    - 'ms-python.vscode-pylance'     # Python language server
-    - 'charliermarsh.ruff'           # Fast Python linter/formatter
+        # PYTHON
+        - 'ms-python.python'             # Python language support
+        - 'ms-python.vscode-pylance'     # Python language server
+        - 'charliermarsh.ruff'           # Fast Python linter/formatter
 
-    # GO
-    - 'golang.go'                    # Go language support
+        # GO
+        - 'golang.go'                    # Go language support
 
-    # RUBY
-    - 'shopify.ruby-lsp'             # Ruby language server
+        # RUBY
+        - 'shopify.ruby-lsp'             # Ruby language server
+
+    personal:
+      taps: []
+      brews:
+        - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
+      casks: []
+      vscodes: []
+
+    work:
+      taps: []
+      brews: []
+      casks: []
+      vscodes: []
