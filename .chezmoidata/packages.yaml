@@ -7,9 +7,14 @@ claude_marketplaces:
     source: "github"
     repo: "anthropics/claude-plugins-official"
     plugins:
+      # Language servers
       - "typescript-lsp"
       - "pyright-lsp"
       - "gopls-lsp"
+      # Git & GitHub workflows
+      - "commit-commands"      # /commit, /commit-push-pr, /clean_gone
+      - "pr-review-toolkit"    # 6 PR review agents
+      - "code-review"          # /code-review with confidence scoring
   superpowers-marketplace:
     source: "github"
     repo: "obra/superpowers-marketplace"
