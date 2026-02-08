@@ -65,7 +65,7 @@ packages:
         - 'libyaml'            # Required for Ruby psych extension
 
         # JAVASCRIPT RUNTIMES
-        - 'oven-sh/bun/bun'    # Fast JS runtime (required by claude-mem)
+        - 'oven-sh/bun/bun'    # Fast JS runtime
 
         # AI TOOLS
         - 'claude-squad'       # Manage parallel Claude Code agents
