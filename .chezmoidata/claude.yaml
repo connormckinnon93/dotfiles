@@ -1,6 +1,46 @@
 # Claude Code configuration
 # Managed by chezmoi - edit this file, then run `chezmoi apply`
 
+# Pinned versions for Claude-related dependencies
+versions:
+  context7_mcp: "2.1.0"  # Last reviewed: 2026-01-28
+
+# Claude Code plugin marketplaces
+# Add new marketplaces here - they'll be registered in known_marketplaces.json
+# and cloned via .chezmoiexternal.toml.tmpl
+# Add plugins under each marketplace to enable them in settings.json
+marketplaces:
+  claude-plugins-official:
+    source: "github"
+    repo: "anthropics/claude-plugins-official"  # First-party, no tags. Reviewed: 2026-02-03
+    plugins:
+      # Language servers
+      - "typescript-lsp"
+      - "pyright-lsp"
+      - "gopls-lsp"
+  superpowers-marketplace:
+    source: "github"
+    repo: "obra/superpowers-marketplace"
+    version: "v1.0.12"  # Reviewed: 2026-02-03
+    plugins:
+      - "superpowers"
+      - "elements-of-style"
+  # Workspace-only marketplaces - cloned but NOT globally enabled
+  # workspacePlugins enabled at project scope via ~/Workspace/.claude/settings.json
+  anthropic-knowledge-work:
+    source: "github"
+    repo: "anthropics/knowledge-work-plugins"  # First-party, no tags. Reviewed: 2026-02-03
+    workspacePlugins:
+      - productivity           # Tasks, calendars, daily workflows
+  anthropic-agent-skills:
+    source: "github"
+    repo: "anthropics/skills"  # First-party, no tags. Reviewed: 2026-02-03
+    workspacePlugins:
+      - docx                   # Word documents
+      - pdf                    # PDF manipulation
+      - pptx                   # PowerPoint presentations
+      - xlsx                   # Excel spreadsheets
+
 # Permissions follow a trust gradient:
 # - allow: Routine development operations - safe, reversible, low-impact
 # - ask: Operations crossing trust boundaries - network, system, packages
@@ -22,7 +62,6 @@ permissions:
 
     # Skills (global)
     - "Skill(superpowers:*)"
-    - "Skill(claude-mem:*)"
     - "Skill(elements-of-style:*)"
     - "Skill(brainstorming)"
     # Note: anthropic-knowledge-work and anthropic-agent-skills permissions
@@ -31,9 +70,6 @@ permissions:
     # MCP tools
     - "mcp__context7__resolve-library-id"
     - "mcp__context7__query-docs"
-    - "mcp__plugin_claude-mem_mcp-search__search"
-    - "mcp__plugin_claude-mem_mcp-search__timeline"
-    - "mcp__plugin_claude-mem_mcp-search__get_observations"
 
     # Read operations
     - "Bash(cat *)"
@@ -49,18 +85,74 @@ permissions:
     - "Bash(which *)"
     - "Bash(type *)"
 
-    # Git - local operations
+    # Data processing (read-only)
+    - "Bash(jq *)"
+    - "Bash(yq *)"
+
+    # Chezmoi - read/preview operations
+    - "Bash(chezmoi source-path*)"
+    - "Bash(chezmoi diff*)"
+    - "Bash(chezmoi cat *)"
+    - "Bash(chezmoi data*)"
+    - "Bash(chezmoi managed*)"
+    - "Bash(chezmoi execute-template*)"
+    - "Bash(chezmoi apply --dry-run*)"
+
+    # Subagent types
+    - "Task(superpowers:code-reviewer)"
+
+    # Git - local operations (safe, reversible)
     - "Bash(git status*)"
+    - "Bash(git -C * status*)"
     - "Bash(git log*)"
+    - "Bash(git -C * log*)"
     - "Bash(git diff*)"
+    - "Bash(git -C * diff*)"
     - "Bash(git show*)"
-    - "Bash(git branch*)"
+    - "Bash(git -C * show*)"
+    - "Bash(git branch)"          # List branches only
+    - "Bash(git -C * branch)"
+    - "Bash(git branch -a*)"      # List all branches
+    - "Bash(git -C * branch -a*)"
+    - "Bash(git branch -v*)"      # List with verbose info
+    - "Bash(git -C * branch -v*)"
+    - "Bash(git branch --list*)"  # List with pattern
+    - "Bash(git -C * branch --list*)"
     - "Bash(git add *)"
+    - "Bash(git -C * add *)"
     - "Bash(git commit *)"
+    - "Bash(git -C * commit *)"
     - "Bash(git checkout *)"
+    - "Bash(git -C * checkout *)"
     - "Bash(git switch *)"
+    - "Bash(git -C * switch *)"
     - "Bash(git stash*)"
+    - "Bash(git -C * stash*)"
     - "Bash(git fetch*)"
+    - "Bash(git -C * fetch*)"
+    - "Bash(git worktree list*)"  # List worktrees (read-only)
+    - "Bash(git -C * worktree list*)"
+
+    # GitHub CLI - read operations (low risk, used by PR review skills)
+    - "Bash(gh pr view*)"
+    - "Bash(gh pr list*)"
+    - "Bash(gh pr diff*)"
+    - "Bash(gh pr checks*)"
+    - "Bash(gh pr status*)"
+    - "Bash(gh issue view*)"
+    - "Bash(gh issue list*)"
+    - "Bash(gh issue status*)"
+    - "Bash(gh repo view*)"
+
+    # GitHub API - read-only patterns (GET by default, used by PR review agents)
+    - "Bash(gh api repos/*/pulls*)"
+    - "Bash(gh api repos/*/issues*)"
+    - "Bash(gh api repos/*/commits*)"
+    - "Bash(gh api repos/*/compare*)"
+    - "Bash(gh api repos/*/contents*)"
+    - "Bash(gh api repos/*/branches*)"
+    - "Bash(gh api repos/*/tags*)"
+    - "Bash(gh api repos/*/releases*)"
 
     # Testing - all languages
     - "Bash(npm test*)"
@@ -114,16 +206,51 @@ permissions:
   ask:
     # Git - remote/history operations
     - "Bash(git push*)"
+    - "Bash(git -C * push*)"
     - "Bash(git pull*)"
+    - "Bash(git -C * pull*)"
     - "Bash(git merge *)"
+    - "Bash(git -C * merge *)"
     - "Bash(git rebase *)"
+    - "Bash(git -C * rebase *)"
+
+    # Git - local but potentially destructive
+    - "Bash(git branch -d *)"      # Delete merged branch
+    - "Bash(git -C * branch -d *)"
+    - "Bash(git branch -D *)"      # Force delete branch
+    - "Bash(git -C * branch -D *)"
+    - "Bash(git branch -m *)"      # Rename branch
+    - "Bash(git -C * branch -m *)"
+    - "Bash(git branch --delete*)" # Delete branch (long form)
+    - "Bash(git -C * branch --delete*)"
+    - "Bash(git worktree add *)"   # Create worktree
+    - "Bash(git -C * worktree add *)"
+    - "Bash(git worktree remove*)" # Remove worktree
+    - "Bash(git -C * worktree remove*)"
+    - "Bash(git worktree prune*)"  # Clean up worktree metadata
+    - "Bash(git -C * worktree prune*)"
+
+    # GitHub CLI - API and write operations
+    - "Bash(gh api *)"            # API calls (read or write)
+    - "Bash(gh pr create*)"
+    - "Bash(gh pr merge*)"
+    - "Bash(gh pr close*)"
+    - "Bash(gh pr comment*)"
+    - "Bash(gh pr review*)"
+    - "Bash(gh pr edit*)"
+    - "Bash(gh issue create*)"
+    - "Bash(gh issue close*)"
+    - "Bash(gh issue comment*)"
+    - "Bash(gh issue edit*)"
+    - "Bash(gh repo create*)"
+    - "Bash(gh repo fork*)"
+    - "Bash(gh release create*)"
 
     # Network operations
     - "Bash(curl *)"
     - "Bash(wget *)"
     - "Bash(npm publish*)"
     - "Bash(docker push*)"
-    - "Bash(gh *)"
 
     # Package installation - JS
     - "Bash(npm install*)"
@@ -173,17 +300,27 @@ permissions:
 
     # Git - history destruction
     - "Bash(git reset --hard*)"
+    - "Bash(git -C * reset --hard*)"
     - "Bash(git clean -f*)"
+    - "Bash(git -C * clean -f*)"
     - "Bash(git push --force*)"
+    - "Bash(git -C * push --force*)"
     - "Bash(git push -f *)"
+    - "Bash(git -C * push -f *)"
     - "Bash(git checkout -- .)"
+    - "Bash(git -C * checkout -- .)"
     - "Bash(git restore .)"
+    - "Bash(git -C * restore .)"
 
     # Dangerous system commands
     - "Bash(killall *)"
     - "Bash(pkill *)"
     - "Bash(shutdown*)"
     - "Bash(reboot*)"
+
+    # Chezmoi - destructive operations (human must apply)
+    - "Bash(chezmoi apply*)"
+    - "Bash(chezmoi init*)"
 
 # Workspace-specific permissions (~/Workspace/.claude/settings.json)
 # These are ADDITIONAL to global permissions, applied only in the workspace
@@ -200,10 +337,18 @@ workspace_permissions:
 # Workspace MCP connectors (~/Workspace/.mcp.json)
 # HTTP-based MCP servers for productivity plugin integrations
 # Disabled by default - uncomment 'enabled' list to activate connectors
-# Available: slack, notion, asana, linear, atlassian, ms365, monday, clickup
 workspace_mcp:
+  servers:
+    slack: "https://mcp.slack.com/mcp"
+    notion: "https://mcp.notion.com/mcp"
+    asana: "https://mcp.asana.com/v2/mcp"
+    linear: "https://mcp.linear.app/mcp"
+    atlassian: "https://mcp.atlassian.com/v1/mcp"
+    ms365: "https://microsoft365.mcp.claude.com/mcp"
+    monday: "https://mcp.monday.com/mcp"
+    clickup: "https://mcp.clickup.com/mcp"
   # enabled:
-  #   - slack      # Team messaging (Slack)
-  #   - notion     # Knowledge base (Notion)
-  #   - linear     # Project tracking (Linear)
-  #   - ms365      # Email, calendar, docs (Microsoft 365)
+  #   - slack      # Team messaging
+  #   - notion     # Knowledge base
+  #   - linear     # Project tracking
+  #   - ms365      # Email, calendar, docs

@@ -1,6 +1,6 @@
 {{- /* Build enabledPlugins record from marketplace plugin entries */ -}}
 {{- $plugins := dict -}}
-{{- range $marketName, $market := .claude_marketplaces -}}
+{{- range $marketName, $market := .marketplaces -}}
 {{-   range $plugin := (index $market "plugins" | default list) -}}
 {{-     $key := printf "%s@%s" $plugin $marketName -}}
 {{-     $_ := set $plugins $key true -}}
@@ -10,7 +10,11 @@
     "model" "opus"
     "theme" "dark-daltonized"
     "permissions" .permissions
-    "alwaysThinkingEnabled" true
+    "fastMode" true
+    "effortLevel" "high"
+    "showTurnDuration" true
+    "teammateMode" "tmux"
+    "env" (dict "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" "1")
 -}}
 {{- if $plugins -}}
 {{-   $_ := set $settings "enabledPlugins" $plugins -}}

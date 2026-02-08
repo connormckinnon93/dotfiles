@@ -5,8 +5,8 @@
     [".local/share/zap".clone]
         args = ["--branch", "v{{ .pinned_versions.zap }}", "--single-branch", "--depth", "1"]
 
-# Claude Code plugin marketplaces (generated from claude_marketplaces in packages.yaml)
-{{ range $name, $marketplace := .claude_marketplaces -}}
+# Claude Code plugin marketplaces (generated from marketplaces in claude.yaml)
+{{ range $name, $marketplace := .marketplaces -}}
 [".claude/plugins/marketplaces/{{ $name }}"]
     type = "git-repo"
     url = "https://github.com/{{ $marketplace.repo }}.git"
@@ -18,7 +18,8 @@
 {{ end -}}
 
 # Agent-browser skill (browser automation for AI agents)
+# Pinned to v0.9.0 - Reviewed: 2026-02-03
 [".claude/skills/agent-browser/SKILL.md"]
     type = "file"
-    url = "https://raw.githubusercontent.com/vercel-labs/agent-browser/main/skills/agent-browser/SKILL.md"
+    url = "https://raw.githubusercontent.com/vercel-labs/agent-browser/v0.9.0/skills/agent-browser/SKILL.md"
     refreshPeriod = "168h"

@@ -81,6 +81,21 @@ git go    # Checkout or create branch
 
 **MCP:** Context7 (documentation lookup)
 
+## Working with Worktrees
+
+A shell wrapper detects when you are inside a git worktree of this repository and passes `--source` to chezmoi automatically. No special flags are needed:
+
+```bash
+cd ~/.claude-squad/worktrees/cm/some-branch
+chezmoi diff    # reads from the worktree, not ~/.local/share/chezmoi
+```
+
+To override manually:
+
+```bash
+chezmoi --source=/path/to/worktree diff
+```
+
 ## Structure
 
 ```
