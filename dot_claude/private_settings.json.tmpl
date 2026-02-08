@@ -10,7 +10,11 @@
     "model" "opus"
     "theme" "dark-daltonized"
     "permissions" .permissions
-    "alwaysThinkingEnabled" true
+    "fastMode" true
+    "effortLevel" "high"
+    "showTurnDuration" true
+    "teammateMode" "tmux"
+    "env" (dict "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" "1")
 -}}
 {{- if $plugins -}}
 {{-   $_ := set $settings "enabledPlugins" $plugins -}}
