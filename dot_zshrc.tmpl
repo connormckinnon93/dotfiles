@@ -67,3 +67,6 @@ fi
 # AI tools
 command -v claude &>/dev/null && alias cc="claude"
 command -v claude-squad &>/dev/null && alias cs="claude-squad"
+
+# Machine-local overrides (not managed by chezmoi)
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

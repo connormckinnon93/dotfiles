@@ -11,4 +11,4 @@ go = "1.25.7"
 "go:golang.org/x/tools/gopls" = "0.21.0"
 
 # AI Agent Tools (pinned 2026-02-09)
-"npm:agent-browser" = "0.9.0"
+"npm:agent-browser" = "0.8.10"

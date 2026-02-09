@@ -20,6 +20,7 @@ packages:
         - 'lazygit'            # Terminal UI for git
         - 'git-delta'          # Syntax-highlighting pager for git diffs
         - 'gitleaks'           # Secret scanning for git repos
+        - 'gnupg'              # GPG encryption and signing
 
         # DOTFILES & ENVIRONMENT
         - 'chezmoi'            # Dotfiles manager
@@ -74,8 +75,6 @@ packages:
         - 'google-chrome'
         - 'visual-studio-code'
         - 'ghostty'
-        # CONTAINERS
-        - 'docker-desktop'
         # PASSWORD MANAGER
         - '1password'
         - '1password-cli'
@@ -117,7 +116,8 @@ packages:
         - 'slopus/tap'
       brews:
         - 'slopus/tap/happy-coder'  # Mobile access to Claude Code
-      casks: []
+      casks:
+        - 'docker-desktop'     # Container runtime
       vscodes: []
 
     work:
