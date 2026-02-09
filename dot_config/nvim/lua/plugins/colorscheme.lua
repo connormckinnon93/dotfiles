@@ -1,7 +1,8 @@
 return {
-  "catppuccin/nvim",
-  lazy = true,
-  name = "catppuccin",
+  {
+    "catppuccin/nvim",
+    lazy = true,
+    name = "catppuccin",
   opts = {
     lsp_styles = {
       underlines = {
@@ -47,6 +48,12 @@ return {
           opts.highlights = require("catppuccin.special.bufferline").get_theme()
         end
       end,
+    },
+  },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "catppuccin",
     },
   },
 }

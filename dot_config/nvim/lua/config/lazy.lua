@@ -38,7 +38,7 @@ require("lazy").setup({
     -- Use stable releases when available for better reproducibility
     version = "*", -- use latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "catpuccin", "habamax" } },
+  install = { colorscheme = { "catppuccin", "habamax" } },
   checker = {
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
