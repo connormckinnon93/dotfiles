@@ -7,14 +7,14 @@
 {{-   end -}}
 {{- end -}}
 {{- $settings := dict
-    "model" "opus"
+    "model" "opus[1m]"
     "theme" "dark-daltonized"
     "permissions" .permissions
     "fastMode" true
     "effortLevel" "high"
     "showTurnDuration" true
     "teammateMode" "tmux"
-    "env" (dict "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" "1")
+    "env" (dict "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS" "1" "CLAUDE_CODE_DISABLE_AUTO_MEMORY" "0" "CLAUDE_CODE_SUBAGENT_MODEL" "opus")
 -}}
 {{- if $plugins -}}
 {{-   $_ := set $settings "enabledPlugins" $plugins -}}
