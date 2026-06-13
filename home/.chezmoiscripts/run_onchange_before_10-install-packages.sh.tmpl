@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Install Homebrew packages. Re-runs whenever the rendered package list below
+# changes. The NN prefix (10-) fixes run order so later setup scripts can be
+# sequenced deterministically (20-, 30-, ...) as this grows.
+#
+set -eufo pipefail
+
+{{ if eq .chezmoi.os "darwin" -}}
+{{- $brews := list -}}
+{{- $casks := list
+      "ghostty" -}}
+
+command -v brew >/dev/null 2>&1 || exit 0
+
+brew bundle --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
+{{ end -}}
