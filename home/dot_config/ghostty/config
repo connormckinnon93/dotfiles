@@ -17,8 +17,10 @@ cursor-style-blink = false
 mouse-hide-while-typing = true
 
 # Shell integration
+# ssh-env/ssh-terminfo propagate Ghostty's terminfo to remote hosts so colors
+# and keys work over SSH (otherwise TERM=xterm-ghostty is unknown remotely).
 shell-integration = zsh
-shell-integration-features = cursor,sudo,title
+shell-integration-features = cursor,sudo,title,ssh-env,ssh-terminfo
 
 # Clipboard
 clipboard-read = allow
