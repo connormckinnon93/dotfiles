@@ -10,6 +10,9 @@
 # Let fzf-tab own the completion menu (don't enable zsh's built-in menu).
 zstyle ':completion:*' menu no
 
+# Case-insensitive, then partial-word, completion matching.
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
 # Group results under their descriptions so fzf-tab can show headers.
 zstyle ':completion:*:descriptions' format '[%d]'
 
