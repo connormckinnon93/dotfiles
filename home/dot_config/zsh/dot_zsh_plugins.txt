@@ -18,10 +18,5 @@ fdellwing/zsh-bat
 # and before syntax highlighting.
 zsh-users/zsh-autosuggestions
 
-# Syntax highlighting. Must be sourced after autosuggestions and before
-# history-substring-search.
+# Syntax highlighting. Sourced last among the ZLE widgets.
 zdharma-continuum/fast-syntax-highlighting
-
-# History substring search (prefix + Up/Down). Must be sourced last, after
-# syntax highlighting. Keybindings live in .zshrc.d/history-substring-search.zsh.
-zsh-users/zsh-history-substring-search

@@ -8,6 +8,7 @@ set -eufo pipefail
 
 {{ if eq .chezmoi.os "darwin" -}}
 {{- $brews := list
+      "atuin"
       "bat"
       "carapace"
       "eza"
