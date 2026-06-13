@@ -32,6 +32,32 @@
     executable = true
     refreshPeriod = "168h"
 
+# tinty - base16/base24 theme manager (Rust target triples). Note: tinty has
+# no aarch64 musl build, so the rust-target template (musl) only resolves on
+# arm64 *Linux* to a missing asset; darwin/x86_64 are fine.
+[".local/bin/tinty"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "tinted-theming/tinty" (printf "tinty-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "tinty"
+    executable = true
+    refreshPeriod = "168h"
+
+# tinty's template + scheme repos, pre-cloned into its data dir so it needs no
+# `tinty install` step and they auto-update like the binary.
+[".local/share/tinted-theming/tinty/repos/tinted-shell"]
+    type = "git-repo"
+    url = "https://github.com/tinted-theming/tinted-shell.git"
+    refreshPeriod = "168h"
+    clone.args = ["--depth=1"]
+    pull.args = ["--ff-only"]
+
+[".local/share/tinted-theming/tinty/repos/schemes"]
+    type = "git-repo"
+    url = "https://github.com/tinted-theming/schemes.git"
+    refreshPeriod = "168h"
+    clone.args = ["--depth=1"]
+    pull.args = ["--ff-only"]
+
 # JetBrainsMono Nerd Font (Mono variant: single-width glyphs for terminals).
 # Individual .ttf files pulled directly, so no 128MB family-zip download.
 {{- $fontDir := "Library/Fonts" }}
