@@ -13,6 +13,7 @@
     opSshSign = {{ index (dict "darwin" "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" "linux" "/opt/1Password/op-ssh-sign") .chezmoi.os | quote }}
     ghOS = {{ index (dict "darwin" "macOS" "linux" "linux") .chezmoi.os | quote }}
     ghExt = {{ index (dict "darwin" "zip" "linux" "tar.gz") .chezmoi.os | quote }}
+    onePasswordAgent = {{ index (dict "darwin" "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" "linux" "~/.1password/agent.sock") .chezmoi.os | quote }}
 
 # Install Homebrew before chezmoi reads the source state, so brew-dependent
 # templates/scripts can rely on it being present.

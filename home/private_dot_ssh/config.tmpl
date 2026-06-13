@@ -1,0 +1,9 @@
+# Managed by chezmoi.
+HashKnownHosts no
+
+Host *
+  # Authenticate via 1Password's SSH agent (key lives in 1Password, not on disk).
+  IdentityAgent "{{ .onePasswordAgent }}"
+
+Host github.com
+  User git
