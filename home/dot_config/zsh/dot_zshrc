@@ -11,6 +11,11 @@ autoload -Uz $ZFUNCDIR/*(.:t)
 # Set any zstyles you might use for configuration.
 [[ ! -f ${ZDOTDIR:-$HOME}/.zstyles ]] || source ${ZDOTDIR:-$HOME}/.zstyles
 
+# Load plugins with antidote (cloned into $ZDOTDIR/.antidote by chezmoiexternal).
+# Reads ${ZDOTDIR:-$HOME}/.zsh_plugins.txt and caches a static bundle.
+source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
+antidote load
+
 # Source anything in .zshrc.d.
 for _rc in ${ZDOTDIR:-$HOME}/.zshrc.d/*.zsh; do
   # Ignore tilde files.

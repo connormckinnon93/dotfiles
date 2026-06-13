@@ -1,0 +1,5 @@
+#!/bin/zsh
+#
+# .zsh_plugins.txt - antidote plugin list. Docs: https://antidote.sh/
+#
+# Plugins are added here one at a time as they are evaluated.
