@@ -14,5 +14,10 @@ aloxaf/fzf-tab
 # and before syntax highlighting.
 zsh-users/zsh-autosuggestions
 
-# Syntax highlighting. Must be sourced last among ZLE widgets.
+# Syntax highlighting. Must be sourced after autosuggestions and before
+# history-substring-search.
 zdharma-continuum/fast-syntax-highlighting
+
+# History substring search (prefix + Up/Down). Must be sourced last, after
+# syntax highlighting. Keybindings live in .zshrc.d/history-substring-search.zsh.
+zsh-users/zsh-history-substring-search
