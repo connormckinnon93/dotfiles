@@ -75,6 +75,24 @@
     executable = true
     refreshPeriod = "168h"
 
+# ripgrep - fast grep that respects .gitignore (Rust target triples).
+[".local/bin/rg"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "BurntSushi/ripgrep" (printf "ripgrep-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "rg"
+    stripComponents = 1
+    executable = true
+    refreshPeriod = "168h"
+
+# fd - fast, user-friendly find (Rust target triples).
+[".local/bin/fd"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "sharkdp/fd" (printf "fd-v*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "fd"
+    stripComponents = 1
+    executable = true
+    refreshPeriod = "168h"
+
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]
