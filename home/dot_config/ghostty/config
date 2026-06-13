@@ -1,0 +1,31 @@
+# Font
+# Mono variant = single-width glyphs (best for terminals). Installed via
+# chezmoiexternal; see .chezmoiexternal.toml.tmpl.
+font-family = "JetBrainsMono Nerd Font Mono"
+
+# Colors
+# No static theme on purpose: tinty/tinted-shell sets the ANSI palette plus
+# foreground/background/cursor (OSC 10/11/12) at shell startup, so the terminal
+# follows `tinty apply <scheme>` and stays consistent with the rest of the stack.
+
+# Window
+confirm-close-surface = false
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Shell integration
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# Clipboard
+clipboard-read = allow
+clipboard-write = allow
+
+# macOS
+macos-option-as-alt = true
+
+# Keybindings
+keybind = global:cmd+backquote=toggle_quick_terminal
