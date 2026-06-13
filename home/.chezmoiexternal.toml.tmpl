@@ -58,6 +58,30 @@
     clone.args = ["--depth=1"]
     pull.args = ["--ff-only"]
 
+# bat - cat clone with syntax highlighting (Rust target triples).
+[".local/bin/bat"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "sharkdp/bat" (printf "bat-v*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "bat"
+    stripComponents = 1
+    executable = true
+    refreshPeriod = "168h"
+
+# zoxide - smarter cd that learns your habits (Rust target triples).
+[".local/bin/zoxide"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "ajeetdsouza/zoxide" (printf "zoxide-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "zoxide"
+    executable = true
+    refreshPeriod = "168h"
+
+# antidote's bat syntax for highlighting .zsh_plugins.txt files.
+# Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).
+[".config/bat/syntaxes/zsh_plugins.sublime-syntax"]
+    type = "file"
+    url = "https://github.com/getantidote/antidote/raw/main/misc/zsh_plugins.sublime-syntax"
+    refreshPeriod = "720h"
+
 # JetBrainsMono Nerd Font (Mono variant: single-width glyphs for terminals).
 # Individual .ttf files pulled directly, so no 128MB family-zip download.
 {{- $fontDir := "Library/Fonts" }}
