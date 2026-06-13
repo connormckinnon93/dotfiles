@@ -1,0 +1,24 @@
+# Plugin-manager and tool binaries managed as chezmoi externals.
+
+# Antidote - the ZSH plugin manager (cloned into $ZDOTDIR/.antidote).
+[".config/zsh/.antidote"]
+    type = "git-repo"
+    url = "https://github.com/mattmc3/antidote.git"
+    refreshPeriod = "168h"
+
+# carapace - multi-shell completion engine (binary on $PATH; bridged to zsh).
+# Asset naming is Go's os_arch, which matches chezmoi's variables directly.
+[".local/bin/carapace"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "carapace-sh/carapace-bin" (printf "carapace-bin_*_%s_%s.tar.gz" .chezmoi.os .chezmoi.arch) | quote }}
+    path = "carapace"
+    executable = true
+    refreshPeriod = "168h"
+
+# fzf - fuzzy finder. Required by the fzf-tab plugin (and useful on its own).
+[".local/bin/fzf"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "junegunn/fzf" (printf "fzf-*-%s_%s.tar.gz" .chezmoi.os .chezmoi.arch) | quote }}
+    path = "fzf"
+    executable = true
+    refreshPeriod = "168h"

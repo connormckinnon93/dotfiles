@@ -2,4 +2,10 @@
 #
 # .zsh_plugins.txt - antidote plugin list. Docs: https://antidote.sh/
 #
-# Plugins are added here one at a time as they are evaluated.
+
+# Completion system - ez-compinit manages compinit timing and caching.
+mattmc3/ez-compinit
+
+# Fuzzy Tab-completion UI. Needs the fzf binary; sits on top of carapace's
+# completions (carapace itself is initialized in .zshrc.d/carapace.zsh).
+aloxaf/fzf-tab
