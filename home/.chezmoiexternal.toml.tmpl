@@ -22,3 +22,12 @@
     path = "fzf"
     executable = true
     refreshPeriod = "168h"
+
+# starship - cross-shell prompt. Rust release assets are named by target
+# triple, resolved via the shared rust-target template.
+[".local/bin/starship"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "starship/starship" (printf "starship-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "starship"
+    executable = true
+    refreshPeriod = "168h"
