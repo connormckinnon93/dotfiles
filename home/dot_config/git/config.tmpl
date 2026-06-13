@@ -1,0 +1,59 @@
+{{- $opSign := "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" -}}
+{{- if eq .chezmoi.os "linux" }}{{ $opSign = "/opt/1Password/op-ssh-sign" }}{{ end -}}
+# Managed by chezmoi. Identity comes from `chezmoi init` prompts (kept out of
+# the public source).
+
+[user]
+    name = {{ .name }}
+    email = {{ .email }}
+    signingkey = {{ onepasswordRead .signingKeyRef | quote }}
+
+# Commit/tag signing via 1Password's SSH agent (op-ssh-sign).
+[gpg]
+    format = ssh
+[gpg "ssh"]
+    program = {{ $opSign | quote }}
+    allowedSignersFile = ~/.config/git/allowed_signers
+[commit]
+    gpgsign = true
+    verbose = true
+[tag]
+    gpgsign = true
+    sort = version:refname
+
+# Sensible defaults.
+[init]
+    defaultBranch = main
+[push]
+    autoSetupRemote = true
+[pull]
+    ff = only
+[fetch]
+    prune = true
+[rebase]
+    autoStash = true
+    autoSquash = true
+[merge]
+    conflictStyle = zdiff3
+[diff]
+    algorithm = histogram
+    colorMoved = default
+[branch]
+    sort = -committerdate
+[column]
+    ui = auto
+
+# Always use SSH for GitHub (rewrite https remotes to ssh).
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+# delta as the diff/pager (syntax-theme=ansi so it follows the tinty palette).
+[core]
+    pager = delta
+    excludesFile = ~/.config/git/ignore
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    line-numbers = true
+    syntax-theme = ansi

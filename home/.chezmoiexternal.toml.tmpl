@@ -93,6 +93,15 @@
     executable = true
     refreshPeriod = "168h"
 
+# delta - syntax-highlighting git diff pager (Rust target triples).
+[".local/bin/delta"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "dandavison/delta" (printf "delta-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    path = "delta"
+    stripComponents = 1
+    executable = true
+    refreshPeriod = "168h"
+
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]

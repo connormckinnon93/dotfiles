@@ -1,4 +1,13 @@
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    # The git signing key itself is pulled from 1Password at render time
+    # (onepasswordRead .signingKeyRef); only the reference is stored here.
+    signingKeyRef = "op://Private/SSH Key/public key"
 
 # Install Homebrew before chezmoi reads the source state, so brew-dependent
 # templates/scripts can rely on it being present.
