@@ -9,3 +9,10 @@ mattmc3/ez-compinit
 # Fuzzy Tab-completion UI. Needs the fzf binary; sits on top of carapace's
 # completions (carapace itself is initialized in .zshrc.d/carapace.zsh).
 aloxaf/fzf-tab
+
+# Inline "as you type" suggestions (config in .zstyles). Loads after fzf-tab
+# and before syntax highlighting.
+zsh-users/zsh-autosuggestions
+
+# Syntax highlighting. Must be sourced last among ZLE widgets.
+zdharma-continuum/fast-syntax-highlighting
