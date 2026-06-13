@@ -102,6 +102,18 @@
     executable = true
     refreshPeriod = "168h"
 
+# gh - GitHub CLI. Non-standard release naming: macOS/.zip vs linux/.tar.gz.
+{{- $ghOS := "linux" -}}
+{{- $ghExt := "tar.gz" -}}
+{{- if eq .chezmoi.os "darwin" -}}{{- $ghOS = "macOS" -}}{{- $ghExt = "zip" -}}{{- end }}
+[".local/bin/gh"]
+    type = "archive-file"
+    url = {{ gitHubLatestReleaseAssetURL "cli/cli" (printf "gh_*_%s_%s.%s" $ghOS .chezmoi.arch $ghExt) | quote }}
+    path = "bin/gh"
+    stripComponents = 1
+    executable = true
+    refreshPeriod = "168h"
+
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]

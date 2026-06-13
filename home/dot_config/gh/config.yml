@@ -1,0 +1,8 @@
+# gh CLI settings (no secrets; auth tokens live in hosts.yml, which is NOT managed).
+git_protocol: ssh
+prompt: enabled
+aliases:
+    co: pr checkout
+    pv: pr view
+    pc: pr create
+version: "1"
