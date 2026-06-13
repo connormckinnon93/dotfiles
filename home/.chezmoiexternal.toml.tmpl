@@ -1,4 +1,6 @@
-# Plugin-manager and tool binaries managed as chezmoi externals.
+# chezmoi externals: only things Homebrew doesn't manage (the zsh plugin
+# manager, tinty's scheme data, bat's syntax def, fonts). CLI tool *binaries*
+# are installed via Homebrew on macOS (see .chezmoiscripts/...install-packages).
 
 # Antidote - the ZSH plugin manager (cloned into $ZDOTDIR/.antidote).
 [".config/zsh/.antidote"]
@@ -6,44 +8,17 @@
     url = "https://github.com/mattmc3/antidote.git"
     refreshPeriod = "168h"
 
-# carapace - multi-shell completion engine (binary on $PATH; bridged to zsh).
-# Asset naming is Go's os_arch, which matches chezmoi's variables directly.
-[".local/bin/carapace"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "carapace-sh/carapace-bin" (printf "carapace-bin_*_%s_%s.tar.gz" .chezmoi.os .chezmoi.arch) | quote }}
-    path = "carapace"
-    executable = true
-    refreshPeriod = "168h"
-
-# fzf - fuzzy finder. Required by the fzf-tab plugin (and useful on its own).
-[".local/bin/fzf"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "junegunn/fzf" (printf "fzf-*-%s_%s.tar.gz" .chezmoi.os .chezmoi.arch) | quote }}
-    path = "fzf"
-    executable = true
-    refreshPeriod = "168h"
-
-# starship - cross-shell prompt. Rust release assets are named by target
-# triple, resolved via the shared rust-target template.
-[".local/bin/starship"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "starship/starship" (printf "starship-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "starship"
-    executable = true
-    refreshPeriod = "168h"
-
-# tinty - base16/base24 theme manager (Rust target triples). Note: tinty has
-# no aarch64 musl build, so the rust-target template (musl) only resolves on
-# arm64 *Linux* to a missing asset; darwin/x86_64 are fine.
+# tinty - base16/base24 theme manager. Not in brew core (only an untrusted tap),
+# so kept as a direct-binary external (macOS). The brew-on-macOS exception.
 [".local/bin/tinty"]
     type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "tinted-theming/tinty" (printf "tinty-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
+    url = {{ gitHubLatestReleaseAssetURL "tinted-theming/tinty" (printf "tinty-%s-apple-darwin.tar.gz" .appleArch) | quote }}
     path = "tinty"
     executable = true
     refreshPeriod = "168h"
 
 # tinty's template + scheme repos, pre-cloned into its data dir so it needs no
-# `tinty install` step and they auto-update like the binary.
+# `tinty install` step and they auto-update.
 [".local/share/tinted-theming/tinty/repos/tinted-shell"]
     type = "git-repo"
     url = "https://github.com/tinted-theming/tinted-shell.git"
@@ -57,67 +32,6 @@
     refreshPeriod = "168h"
     clone.args = ["--depth=1"]
     pull.args = ["--ff-only"]
-
-# bat - cat clone with syntax highlighting (Rust target triples).
-[".local/bin/bat"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "sharkdp/bat" (printf "bat-v*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "bat"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-
-# zoxide - smarter cd that learns your habits (Rust target triples).
-[".local/bin/zoxide"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "ajeetdsouza/zoxide" (printf "zoxide-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "zoxide"
-    executable = true
-    refreshPeriod = "168h"
-
-# ripgrep - fast grep that respects .gitignore (Rust target triples).
-[".local/bin/rg"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "BurntSushi/ripgrep" (printf "ripgrep-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "rg"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-
-# fd - fast, user-friendly find (Rust target triples).
-[".local/bin/fd"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "sharkdp/fd" (printf "fd-v*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "fd"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-
-# delta - syntax-highlighting git diff pager (Rust target triples).
-[".local/bin/delta"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "dandavison/delta" (printf "delta-*-%s.tar.gz" (includeTemplate "rust-target" .)) | quote }}
-    path = "delta"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-
-# gh - GitHub CLI. Non-standard release naming: macOS/.zip vs linux/.tar.gz.
-[".local/bin/gh"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "cli/cli" (printf "gh_*_%s_%s.%s" .ghOS .chezmoi.arch .ghExt) | quote }}
-    path = "bin/gh"
-    stripComponents = 1
-    executable = true
-    refreshPeriod = "168h"
-
-# Neovim - ships as a full tree (binary + runtime), so extract the archive and
-# expose the binary via dot_local/bin/symlink_nvim. Asset: nvim-<os>-<arch>.
-[".local/opt/nvim"]
-    type = "archive"
-    url = {{ gitHubLatestReleaseAssetURL "neovim/neovim" (printf "%s.tar.gz" .nvimPlatform) | quote }}
-    stripComponents = 1
-    refreshPeriod = "168h"
 
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).

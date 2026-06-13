@@ -8,7 +8,17 @@ set -eufo pipefail
 
 {{ if eq .chezmoi.os "darwin" -}}
 {{- $brews := list
-      "eza" -}}
+      "bat"
+      "carapace"
+      "eza"
+      "fd"
+      "fzf"
+      "gh"
+      "git-delta"
+      "neovim"
+      "ripgrep"
+      "starship"
+      "zoxide" -}}
 {{- $casks := list
       "1password"
       "1password-cli"
