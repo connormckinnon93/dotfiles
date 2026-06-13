@@ -31,3 +31,15 @@
     path = "starship"
     executable = true
     refreshPeriod = "168h"
+
+# JetBrainsMono Nerd Font (Mono variant: single-width glyphs for terminals).
+# Individual .ttf files pulled directly, so no 128MB family-zip download.
+{{- $fontDir := "Library/Fonts" }}
+{{- if eq .chezmoi.os "linux" }}{{ $fontDir = ".local/share/fonts" }}{{ end }}
+{{- $fontBase := "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures" }}
+{{- range (list "Regular" "Bold" "Italic" "BoldItalic") }}
+["{{ $fontDir }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"]
+    type = "file"
+    url = "{{ $fontBase }}/{{ . }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"
+    refreshPeriod = "8760h"
+{{- end }}
