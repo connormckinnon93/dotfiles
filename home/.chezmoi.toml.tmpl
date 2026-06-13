@@ -14,6 +14,7 @@
     ghOS = {{ index (dict "darwin" "macOS" "linux" "linux") .chezmoi.os | quote }}
     ghExt = {{ index (dict "darwin" "zip" "linux" "tar.gz") .chezmoi.os | quote }}
     onePasswordAgent = {{ index (dict "darwin" "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" "linux" "~/.1password/agent.sock") .chezmoi.os | quote }}
+    nvimPlatform = {{ printf "nvim-%s-%s" (index (dict "darwin" "macos" "linux" "linux") .chezmoi.os) (index (dict "amd64" "x86_64" "arm64" "arm64") .chezmoi.arch) | quote }}
 
 # Install Homebrew before chezmoi reads the source state, so brew-dependent
 # templates/scripts can rely on it being present.

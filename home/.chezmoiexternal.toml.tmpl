@@ -111,6 +111,14 @@
     executable = true
     refreshPeriod = "168h"
 
+# Neovim - ships as a full tree (binary + runtime), so extract the archive and
+# expose the binary via dot_local/bin/symlink_nvim. Asset: nvim-<os>-<arch>.
+[".local/opt/nvim"]
+    type = "archive"
+    url = {{ gitHubLatestReleaseAssetURL "neovim/neovim" (printf "%s.tar.gz" .nvimPlatform) | quote }}
+    stripComponents = 1
+    refreshPeriod = "168h"
+
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]
