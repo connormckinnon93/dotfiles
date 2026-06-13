@@ -1,5 +1,3 @@
-{{- $opSign := "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" -}}
-{{- if eq .chezmoi.os "linux" }}{{ $opSign = "/opt/1Password/op-ssh-sign" }}{{ end -}}
 # Managed by chezmoi. Identity comes from `chezmoi init` prompts (kept out of
 # the public source).
 
@@ -12,7 +10,7 @@
 [gpg]
     format = ssh
 [gpg "ssh"]
-    program = {{ $opSign | quote }}
+    program = {{ .opSshSign | quote }}
     allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
     gpgsign = true

@@ -8,6 +8,11 @@
     # The git signing key itself is pulled from 1Password at render time
     # (onepasswordRead .signingKeyRef); only the reference is stored here.
     signingKeyRef = "op://Private/SSH Key/public key"
+    # OS-specific values, resolved once here so other templates stay branch-free.
+    fontDir = {{ index (dict "darwin" "Library/Fonts" "linux" ".local/share/fonts") .chezmoi.os | quote }}
+    opSshSign = {{ index (dict "darwin" "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" "linux" "/opt/1Password/op-ssh-sign") .chezmoi.os | quote }}
+    ghOS = {{ index (dict "darwin" "macOS" "linux" "linux") .chezmoi.os | quote }}
+    ghExt = {{ index (dict "darwin" "zip" "linux" "tar.gz") .chezmoi.os | quote }}
 
 # Install Homebrew before chezmoi reads the source state, so brew-dependent
 # templates/scripts can rely on it being present.
