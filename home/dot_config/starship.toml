@@ -24,6 +24,7 @@ $kotlin\
 $haskell\
 $python\
 [](fg:green bg:sapphire)\
+$aws\
 $conda\
 [](fg:sapphire bg:lavender)\
 $time\
@@ -142,6 +143,11 @@ format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
 symbol = ""
 style = "bg:sapphire"
 format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
+
+[aws]
+symbol = " "
+style = "bg:sapphire"
+format = '[[ $symbol($profile )(\($region\) )](fg:crust bg:sapphire)]($style)'
 
 [conda]
 symbol = "  "
