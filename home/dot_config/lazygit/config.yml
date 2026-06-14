@@ -1,0 +1,12 @@
+# lazygit - terminal UI for git. Docs: https://github.com/jesseduffield/lazygit
+# Read from ~/.config/lazygit because XDG_CONFIG_HOME is set (see .zshenv);
+# lazygit would otherwise default to ~/Library/Application Support on macOS.
+gui:
+  # We ship JetBrainsMono Nerd Font, so use its richer glyph set.
+  nerdFontsVersion: "3"
+git:
+  paging:
+    # Reuse the same delta pager configured for git (syntax-theme=ansi, so it
+    # follows the tinty/base24 terminal palette like everything else).
+    colorArg: always
+    pager: delta --paging=never

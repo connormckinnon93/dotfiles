@@ -34,6 +34,7 @@ abbr "grss"="git restore --staged"
 abbr "gsta"="git stash"
 abbr "gstp"="git stash pop"
 abbr "gwt"="git worktree"
+abbr "lg"="lazygit"
 
 # chezmoi
 abbr "cm"="chezmoi"
