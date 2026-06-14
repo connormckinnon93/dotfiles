@@ -8,6 +8,10 @@ python = "3.13"
 pnpm = "latest"   # fast Node package manager
 uv = "latest"     # fast Python package/project manager (complements mise's python)
 
+# CLI tools delivered through a language runtime (kept here so `mise install`
+# provisions them too). mmdc renders Mermaid diagrams for nvim's Snacks.image.
+"npm:@mermaid-js/mermaid-cli" = "latest"
+
 [settings]
 # Also honor .nvmrc / .node-version files in projects that ship them.
 idiomatic_version_file_enable_tools = ["node"]
