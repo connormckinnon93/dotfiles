@@ -14,6 +14,9 @@ aloxaf/fzf-tab
 # bat binary (chezmoiexternal); use `rcat` for the real cat.
 fdellwing/zsh-bat
 
+# zsh-abbr - fish-style abbreviations that expand inline (e.g. gst -> git status).
+olets/zsh-abbr
+
 # Inline "as you type" suggestions (config in .zstyles). Loads after fzf-tab
 # and before syntax highlighting.
 zsh-users/zsh-autosuggestions
