@@ -10,11 +10,17 @@ font-family = "JetBrainsMono Nerd Font Mono"
 
 # Window
 confirm-close-surface = false
-# No window decorations: strips the titlebar and (enforced by macOS) disables
-# native tabs, which fight AeroSpace's tiling - each native tab is a separate
-# NSWindow, so clicking a tab made AeroSpace re-layout. Use AeroSpace windows
-# or a multiplexer (zellij) for "tabs" instead.
-window-decoration = none
+# Hide the titlebar but keep native rounded corners. We avoid native tabs (each
+# is a separate NSWindow, which fights AeroSpace's tiling); the cmd+t rebind
+# below makes new windows instead, so use AeroSpace windows or zellij for "tabs".
+macos-titlebar-style = hidden
+# Breathing room: balanced padding and a touch more line height.
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+adjust-cell-height = 8%
+# Don't flash the dimensions overlay on every resize (AeroSpace resizes a lot).
+resize-overlay = never
 
 # Cursor
 cursor-style = block
