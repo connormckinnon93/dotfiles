@@ -1,0 +1,12 @@
+// zellij - terminal multiplexer. KDL config. Docs: https://zellij.dev/documentation/
+// Launched manually (`zellij`, or `zellij attach`); no shell auto-start.
+// Default keybindings are Ctrl-based modes and don't collide with AeroSpace's
+// alt bindings.
+
+// Follow the tinty/base24 terminal palette (see themes/tinty.kdl).
+theme "tinty"
+
+default_shell "zsh"
+
+// Copy yanked text to the macOS system clipboard.
+copy_command "pbcopy"
