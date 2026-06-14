@@ -11,6 +11,7 @@ set -eufo pipefail
       "atuin"
       "awscli"
       "bat"
+      "borders"
       "carapace"
       "eza"
       "fd"
@@ -43,6 +44,7 @@ set -eufo pipefail
       "ghostty" -}}
 {{- /* Taps required by the casks above (e.g. aerospace lives in a tap). */ -}}
 {{- $taps := list
+      "FelixKratz/formulae"
       "nikitabobko/tap" -}}
 
 # Ensure brew is on PATH (e.g. immediately after a fresh install in this run,

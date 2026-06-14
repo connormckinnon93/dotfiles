@@ -8,6 +8,10 @@
 # Start tiling automatically at login.
 start-at-login = true
 
+# Draw a border around the focused window (JankyBorders), started with AeroSpace.
+# Absolute path: AeroSpace's exec environment has a minimal PATH at login.
+after-startup-command = ['exec-and-forget /opt/homebrew/bin/borders']
+
 # Keep the window tree tidy (defaults).
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
