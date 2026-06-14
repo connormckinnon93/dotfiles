@@ -38,7 +38,11 @@ set -eufo pipefail
 {{- $casks := list
       "1password"
       "1password-cli"
+      "aerospace"
       "ghostty" -}}
+{{- /* Taps required by the casks above (e.g. aerospace lives in a tap). */ -}}
+{{- $taps := list
+      "nikitabobko/tap" -}}
 
 # Ensure brew is on PATH (e.g. immediately after a fresh install in this run,
 # before the shell that adds it has been started).
@@ -52,7 +56,16 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 command -v brew >/dev/null 2>&1 || exit 0
 
+# Third-party taps must be tapped and trusted before brew will load their
+# casks/formulae (HOMEBREW_REQUIRE_TAP_TRUST). Do this before bundling.
+{{ range ($taps | sortAlpha | uniq) -}}
+brew tap "{{ . }}" >/dev/null 2>&1 || true
+brew trust "{{ . }}" >/dev/null 2>&1 || true
+{{ end }}
 brew bundle --file=/dev/stdin <<EOF
+{{ range ($taps | sortAlpha | uniq) -}}
+tap "{{ . }}"
+{{ end -}}
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}
