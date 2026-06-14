@@ -1,26 +1,22 @@
 # AWS CLI configuration. Managed by chezmoi.
 #
 # SECURITY: this repo is public. NEVER put credentials here. No access keys, no
-# ~/.aws/credentials. Use AWS SSO, aws-vault (Keychain), or environment vars.
-# Identifying values (SSO start URL, account IDs) belong in chezmoi [data]
-# (~/.config/chezmoi, outside the repo), referenced as {{ "{{ .aws... }}" }}.
+# ~/.aws/credentials. Identifying values (SSO start URL, account IDs) are pulled
+# from the "AWS SSO" item in the Cloudlab 1Password vault at render time
+# (onepasswordRead), so only op:// references live in the repo. Region/role/
+# profile names aren't secret.
+#
+# Profiles below mirror what `granted sso populate` writes. To add an account:
+# re-run populate, add its id to 1Password, and copy a block here.
 
 [default]
 region = {{ .awsRegion }}
 output = json
 
-# --- Wiring up auth later -------------------------------------------------
-# Easiest: run `aws configure sso` (writes the blocks below for you), or
-# uncomment and fill these in. Keep account_id / start_url in [data].
-#
-# [sso-session my-sso]
-# sso_start_url = https://my-org.awsapps.com/start
-# sso_region = {{ .awsRegion }}
-# sso_registration_scopes = sso:account:access
-#
-# [profile my-profile]
-# sso_session = my-sso
-# sso_account_id = 123456789012
-# sso_role_name = AdministratorAccess
-# region = {{ .awsRegion }}
-# output = json
+[profile David/AdministratorAccess]
+granted_sso_start_url      = {{ onepasswordRead "op://Cloudlab/AWS SSO/start_url" }}
+granted_sso_region         = us-east-1
+granted_sso_account_id     = {{ onepasswordRead "op://Cloudlab/AWS SSO/Account ID" | replace "-" "" }}
+granted_sso_role_name      = AdministratorAccess
+common_fate_generated_from = aws-sso
+credential_process         = granted credential-process --profile David/AdministratorAccess
