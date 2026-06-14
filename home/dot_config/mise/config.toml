@@ -5,6 +5,8 @@
 [tools]
 node = "lts"
 python = "3.13"
+pnpm = "latest"   # fast Node package manager
+uv = "latest"     # fast Python package/project manager (complements mise's python)
 
 [settings]
 # Also honor .nvmrc / .node-version files in projects that ship them.
