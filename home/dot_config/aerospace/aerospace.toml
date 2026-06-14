@@ -8,19 +8,9 @@
 # Start tiling automatically at login.
 start-at-login = true
 
-# Start the focused-window border (JankyBorders) and the status bar (SketchyBar)
-# with AeroSpace. Absolute paths: AeroSpace's exec environment has a minimal
-# PATH at login.
-after-startup-command = [
-    'exec-and-forget /opt/homebrew/bin/borders',
-    'exec-and-forget /opt/homebrew/bin/sketchybar',
-]
-
-# Tell SketchyBar which workspace is focused so it can highlight it.
-exec-on-workspace-change = [
-    '/bin/bash', '-c',
-    '/opt/homebrew/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-]
+# Draw a border around the focused window (JankyBorders), started with AeroSpace.
+# Absolute path: AeroSpace's exec environment has a minimal PATH at login.
+after-startup-command = ['exec-and-forget /opt/homebrew/bin/borders']
 
 # Keep the window tree tidy (defaults).
 enable-normalization-flatten-containers = true
