@@ -1,0 +1,11 @@
+# mise global config. Docs: https://mise.jdx.dev/
+# These are the default global runtimes; a project's .mise.toml / .tool-versions
+# overrides them inside that directory. Add more with `mise use -g go@latest`
+# (which edits this file) or by hand, e.g. go = "latest", rust = "latest".
+[tools]
+node = "lts"
+python = "3.13"
+
+[settings]
+# Also honor .nvmrc / .node-version files in projects that ship them.
+idiomatic_version_file_enable_tools = ["node"]
