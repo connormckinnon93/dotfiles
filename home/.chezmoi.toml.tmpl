@@ -1,5 +1,6 @@
 {{- $name := promptStringOnce . "name" "Full name" -}}
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $awsRegion := promptStringOnce . "awsRegion" "AWS default region" "us-east-1" -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
 
 [data]
@@ -13,6 +14,9 @@
     opSshSign = {{ index (dict "darwin" "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" "linux" "/opt/1Password/op-ssh-sign") .chezmoi.os | quote }}
     onePasswordAgent = {{ index (dict "darwin" "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" "linux" "~/.1password/agent.sock") .chezmoi.os | quote }}
     appleArch = {{ index (dict "arm64" "aarch64" "amd64" "x86_64") .chezmoi.arch | quote }}
+    # AWS default region for ~/.aws/config. Account IDs / SSO URLs, if added
+    # later, should also live here (not in the public repo).
+    awsRegion = {{ $awsRegion | quote }}
 
 # Install Homebrew before chezmoi reads the source state, so brew-dependent
 # templates/scripts can rely on it being present.

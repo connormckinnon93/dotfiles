@@ -1,0 +1,26 @@
+# AWS CLI configuration. Managed by chezmoi.
+#
+# SECURITY: this repo is public. NEVER put credentials here. No access keys, no
+# ~/.aws/credentials. Use AWS SSO, aws-vault (Keychain), or environment vars.
+# Identifying values (SSO start URL, account IDs) belong in chezmoi [data]
+# (~/.config/chezmoi, outside the repo), referenced as {{ "{{ .aws... }}" }}.
+
+[default]
+region = {{ .awsRegion }}
+output = json
+
+# --- Wiring up auth later -------------------------------------------------
+# Easiest: run `aws configure sso` (writes the blocks below for you), or
+# uncomment and fill these in. Keep account_id / start_url in [data].
+#
+# [sso-session my-sso]
+# sso_start_url = https://my-org.awsapps.com/start
+# sso_region = {{ .awsRegion }}
+# sso_registration_scopes = sso:account:access
+#
+# [profile my-profile]
+# sso_session = my-sso
+# sso_account_id = 123456789012
+# sso_role_name = AdministratorAccess
+# region = {{ .awsRegion }}
+# output = json
