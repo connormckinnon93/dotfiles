@@ -10,6 +10,11 @@ font-family = "JetBrainsMono Nerd Font Mono"
 
 # Window
 confirm-close-surface = false
+# No window decorations: strips the titlebar and (enforced by macOS) disables
+# native tabs, which fight AeroSpace's tiling - each native tab is a separate
+# NSWindow, so clicking a tab made AeroSpace re-layout. Use AeroSpace windows
+# or a multiplexer (zellij) for "tabs" instead.
+window-decoration = none
 
 # Cursor
 cursor-style = block
@@ -31,3 +36,5 @@ macos-option-as-alt = true
 
 # Keybindings
 keybind = global:cmd+backquote=toggle_quick_terminal
+# Make the tab muscle-memory create a (tileable) window instead of a native tab.
+keybind = cmd+t=new_window
