@@ -1,0 +1,11 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Disable the Notification Center UI entirely. On recent macOS this may be
+# restricted by SIP (and -w is deprecated), so failure is tolerated rather
+# than aborting the whole apply.
+#
+set -eufo pipefail
+
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2>/dev/null || true
+{{ end -}}
