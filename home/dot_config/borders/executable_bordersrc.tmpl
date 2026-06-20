@@ -4,8 +4,9 @@
 # AeroSpace tile is obvious. Started by AeroSpace (after-startup-command).
 # Docs: https://github.com/FelixKratz/JankyBorders
 #
-# Ensure brew's bin is reachable: AeroSpace/launchd launch with a minimal PATH.
-export PATH="/opt/homebrew/bin:$PATH"
+# Ensure brew's bin is reachable (AeroSpace/launchd launch with a minimal PATH),
+# using whichever Homebrew prefix exists (Apple Silicon /opt/homebrew or Intel).
+export PATH="{{ template "brew-prefix" . }}/bin:$PATH"
 
 options=(
 	style=round                  # match Ghostty's rounded corners

@@ -1,0 +1,6 @@
+{{- /* Emit the Homebrew prefix for this machine: Apple Silicon /opt/homebrew or
+       Intel /usr/local. Detected by which brew binary exists (filesystem stat,
+       independent of PATH) so it is correct even during fresh-machine bootstrap,
+       when brew is not yet on chezmoi's own PATH (unlike lookPath). Callers
+       append /bin/<tool> as needed. */ -}}
+{{- if stat "/opt/homebrew/bin/brew" -}}/opt/homebrew{{- else -}}/usr/local{{- end -}}
