@@ -5,7 +5,9 @@
 # macOS only. May prompt once for your sudo password on a fresh machine.
 #
 type brew >/dev/null 2>&1 && exit 0
-[ -x /opt/homebrew/bin/brew ] && exit 0
+for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  [ -x "$brew_bin" ] && exit 0
+done
 [ "$(uname -s)" = "Darwin" ] || exit 0
 
 echo "Installing Homebrew..."
