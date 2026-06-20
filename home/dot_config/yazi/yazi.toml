@@ -1,7 +1,7 @@
 # yazi - terminal file manager. Docs: https://yazi-rs.github.io/
 # Theming: Catppuccin Mocha via theme.toml, pulled by chezmoiexternal (see
 # .chezmoiexternal.toml.tmpl). Preview deps (ffmpeg, poppler, resvg,
-# imagemagick, 7zip) are installed via the brew bundle.
+# imagemagick, sevenzip) are installed via the brew bundle.
 [mgr]
 show_hidden    = true
 sort_by        = "natural"
