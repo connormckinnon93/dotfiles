@@ -24,3 +24,9 @@ for _rc in ${ZDOTDIR:-$HOME}/.zshrc.d/*.zsh; do
   fi
 done
 unset _rc
+
+# Source machine-local overrides last, if present. Untracked (not managed by
+# chezmoi; see .chezmoiignore): a home for per-machine tweaks and the lines tool
+# installers append to a shell rc, keeping the managed .zshrc and .zshrc.d/
+# snippets pristine.
+[[ ! -f ${ZDOTDIR:-$HOME}/.zshrc.local ]] || source ${ZDOTDIR:-$HOME}/.zshrc.local

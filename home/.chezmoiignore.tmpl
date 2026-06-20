@@ -1,3 +1,9 @@
+# Machine-local override, never tracked: the untracked file sourced last by
+# .zshrc (see dot_config/zsh/dot_zshrc). Listed so `chezmoi add` won't scoop it
+# up; it exists only on the machine, as a home for local tweaks and the lines
+# tool installers append to a shell rc.
+.config/zsh/.zshrc.local
+
 # chezmoi has no built-in notion of OS-specific directories or files. Gating is
 # done here: ignore macOS-only paths unless we're actually running on macOS.
 # This is what makes home/.chezmoiscripts/darwin/ (and the configs below)
