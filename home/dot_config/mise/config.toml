@@ -3,14 +3,14 @@
 # overrides them inside that directory. Add more with `mise use -g go@latest`
 # (which edits this file) or by hand, e.g. go = "latest", rust = "latest".
 [tools]
-node = "lts"
+node = "24.17"    # current LTS line
 python = "3.13"
-pnpm = "latest"   # fast Node package manager
-uv = "latest"     # fast Python package/project manager (complements mise's python)
+pnpm = "11.8"     # fast Node package manager
+uv = "0.11"       # fast Python package/project manager (complements mise's python)
 
 # CLI tools delivered through a language runtime (kept here so `mise install`
 # provisions them too). mmdc renders Mermaid diagrams for nvim's Snacks.image.
-"npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "11.15"
 
 [settings]
 # Also honor .nvmrc / .node-version files in projects that ship them.
