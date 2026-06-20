@@ -1,0 +1,4 @@
+# inputrc - GNU Readline config (bash, python REPL, psql, gdb, ...; not zsh).
+
+# Use vi-style command-line editing.
+set editing-mode vi
