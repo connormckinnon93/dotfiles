@@ -11,15 +11,7 @@ set -eufo pipefail
 
 # Ensure brew-installed mise is on PATH (on a fresh machine it was just
 # installed this run, after chezmoi captured its environment).
-if ! command -v mise >/dev/null 2>&1; then
-  for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
-    if [ -x "$brew_bin" ]; then
-      eval "$("$brew_bin" shellenv)"
-      break
-    fi
-  done
-fi
-command -v mise >/dev/null 2>&1 || exit 0
+{{ template "brew-shellenv" "mise" }}
 
 # Install everything declared in the global config.toml.
 mise install --yes

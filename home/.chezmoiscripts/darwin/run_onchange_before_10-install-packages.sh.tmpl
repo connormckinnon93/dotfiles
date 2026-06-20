@@ -69,15 +69,7 @@ set -eufo pipefail
 
 # Ensure brew is on PATH (e.g. immediately after a fresh install in this run,
 # before the shell that adds it has been started).
-if ! command -v brew >/dev/null 2>&1; then
-  for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
-    if [ -x "$brew_bin" ]; then
-      eval "$("$brew_bin" shellenv)"
-      break
-    fi
-  done
-fi
-command -v brew >/dev/null 2>&1 || exit 0
+{{ template "brew-shellenv" "brew" }}
 
 # Third-party taps must be tapped and trusted before brew will load their
 # casks/formulae (HOMEBREW_REQUIRE_TAP_TRUST). Do this before bundling.
