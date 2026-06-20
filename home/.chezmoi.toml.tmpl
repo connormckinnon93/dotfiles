@@ -1,11 +1,15 @@
 {{- $name := promptStringOnce . "name" "Full name" -}}
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $awsRegion := promptStringOnce . "awsRegion" "AWS default region" "us-east-1" -}}
+{{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") "personal" -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
 
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
+    # Machine profile: "personal" or "work". A general-purpose switch available
+    # to any template (package installs, .chezmoiignore, other configs).
+    profile = {{ $profile | quote }}
     # The git signing key itself is pulled from 1Password at render time
     # (onepasswordRead .signingKeyRef); only the reference is stored here.
     signingKeyRef = "op://Private/SSH Key/public key"

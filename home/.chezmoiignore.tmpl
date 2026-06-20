@@ -8,3 +8,11 @@
 .config/borders
 .config/homebrew
 {{ end }}
+{{/* Profile-specific ignores. .profile is "personal" or "work"; list paths to
+     exclude on each machine class as personal/work configs diverge. */}}
+{{ if eq .profile "work" }}
+{{/* personal-only paths to skip on work machines, e.g. .config/personal-app */}}
+{{ end }}
+{{ if eq .profile "personal" }}
+{{/* work-only paths to skip on personal machines */}}
+{{ end }}

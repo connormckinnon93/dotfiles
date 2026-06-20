@@ -6,6 +6,23 @@ Managed with [chezmoi](https://chezmoi.io). `.chezmoiroot` points at `home/`, so
 
 macOS is the only supported target today; package installs assume Homebrew.
 
+## Machine profile
+
+`chezmoi init` prompts for a `profile` (`personal` or `work`, default `personal`),
+stored in `[data].profile` in `home/.chezmoi.toml.tmpl`. It is a general-purpose
+switch available to **every** template — not only package installs. Use it to vary
+anything per machine class:
+
+- **Packages:** `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl`
+  has ready-to-fill `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat`
+  extra brews/casks onto the base lists (base lists apply to both profiles).
+- **Ignored files:** add a `{{ if eq .profile "work" }} … {{ end }}` block to
+  `home/.chezmoiignore.tmpl` to drop personal-only configs on a work machine.
+- **Any other template:** reference `.profile` directly.
+
+Set it non-interactively by re-running init, keyed by the **prompt string** (not the
+data key): `chezmoi init --promptChoice "Machine profile=work"`.
+
 ## `.chezmoiscripts/` — setup scripts
 
 Scripts that run on `chezmoi apply`. OS-specific scripts live in an OS subdirectory

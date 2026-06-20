@@ -45,6 +45,16 @@ set -eufo pipefail
 {{- $taps := list
       "FelixKratz/formulae"
       "nikitabobko/tap" -}}
+{{- /* Profile-specific packages, merged into the base lists above as the
+       personal and work machines diverge. .profile is "personal" or "work";
+       replace (list) with e.g. (list "package-name") to add packages. */ -}}
+{{- if eq .profile "personal" -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{- else if eq .profile "work" -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{- end -}}
 
 # Ensure brew is on PATH (e.g. immediately after a fresh install in this run,
 # before the shell that adds it has been started).
