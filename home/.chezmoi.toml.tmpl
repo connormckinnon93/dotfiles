@@ -2,6 +2,20 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $awsRegion := promptStringOnce . "awsRegion" "AWS default region" "us-east-1" -}}
 {{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") "personal" -}}
+{{- /* Ephemeral machines (cloud/VM/container/CI) get a leaner setup. Auto-detect
+       common throwaway environments; otherwise prompt when interactive, and
+       assume ephemeral when running non-interactively (e.g. CI provisioning). */ -}}
+{{- $ephemeral := false -}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
+{{-   $ephemeral = true -}}
+{{- end -}}
+{{- if not $ephemeral -}}
+{{-   if stdinIsATTY -}}
+{{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" false -}}
+{{-   else -}}
+{{-     $ephemeral = true -}}
+{{-   end -}}
+{{- end -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
 
 [data]
@@ -10,6 +24,9 @@
     # Machine profile: "personal" or "work". A general-purpose switch available
     # to any template (package installs, .chezmoiignore, other configs).
     profile = {{ $profile | quote }}
+    # Ephemeral machine (cloud/VM/container/CI): auto-detected, drives a leaner
+    # package set and can gate other templates. "Stable" is simply ephemeral=false.
+    ephemeral = {{ $ephemeral }}
     # The git signing key itself is pulled from 1Password at render time
     # (onepasswordRead .signingKeyRef); only the reference is stored here.
     signingKeyRef = "op://Private/SSH Key/public key"

@@ -23,6 +23,26 @@ anything per machine class:
 Set it non-interactively by re-running init, keyed by the **prompt string** (not the
 data key): `chezmoi init --promptChoice "Machine profile=work"`.
 
+## Ephemeral machines
+
+`chezmoi init` also computes `ephemeral` (bool, default false), stored in
+`[data].ephemeral`. Ephemeral means a throwaway machine (cloud/VM/container/CI) that
+should get a leaner setup; "stable" is simply `ephemeral = false`. It is auto-detected
+from the environment — GitHub Codespaces (`CODESPACES`), VS Code remote containers
+(`REMOTE_CONTAINERS_IPC`), or a `root`/`ubuntu`/`vagrant`/`vscode` username — and
+otherwise prompts when interactive, falling back to ephemeral when run
+non-interactively (e.g. CI provisioning).
+
+Like `.profile`, it is available to every template. The install-packages script has
+`{{ if not .ephemeral }}` (stable-only) and `{{ if .ephemeral }}` blocks ready to
+fill; stable-only is where GUI casks belong.
+
+**Gotcha for maintainers:** because the non-interactive branch forces
+`ephemeral = true`, do not run `chezmoi init` without a TTY on a stable machine — it
+would flip the cached value. (`chezmoi apply` is unaffected; it does not regenerate the
+config.) To re-init from a non-TTY context, run it under a PTY:
+`python3 -c 'import pty,sys; sys.exit(pty.spawn(["chezmoi","init","--promptBool","ephemeral=false"]))'`.
+
 ## `.chezmoiscripts/` — setup scripts
 
 Scripts that run on `chezmoi apply`. OS-specific scripts live in an OS subdirectory

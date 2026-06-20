@@ -55,6 +55,17 @@ set -eufo pipefail
 {{-   $brews = concat $brews (list) -}}
 {{-   $casks = concat $casks (list) -}}
 {{- end -}}
+{{- /* Stable-only packages, skipped on ephemeral machines (VMs/containers/CI) —
+       e.g. GUI casks that make no sense on a headless throwaway box. */ -}}
+{{- if not .ephemeral -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{- end -}}
+{{- /* Ephemeral-only extras (rare; e.g. a CI-specific tool). */ -}}
+{{- if .ephemeral -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{- end -}}
 
 # Ensure brew is on PATH (e.g. immediately after a fresh install in this run,
 # before the shell that adds it has been started).
