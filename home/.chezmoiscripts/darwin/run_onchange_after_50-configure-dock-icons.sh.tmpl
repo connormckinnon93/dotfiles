@@ -1,0 +1,39 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Dock contents: strip the default macOS app icons (distinct from Dock
+# behavior in configure-dock). Uses dockutil, installed in the not-headless
+# package block. Restarts the Dock once at the end.
+#
+set -eufo pipefail
+
+# Ensure brew (hence brew-installed dockutil) is on PATH.
+{{ template "brew-shellenv" "dockutil" }}
+
+trap 'killall Dock' EXIT
+
+declare -a remove_labels=(
+	Launchpad
+	Safari
+	Messages
+	Mail
+	Maps
+	Photos
+	FaceTime
+	Calendar
+	Contacts
+	Reminders
+	Notes
+	Freeform
+	TV
+	Music
+	Keynote
+	Numbers
+	Pages
+	"App Store"
+)
+
+for label in "${remove_labels[@]}"; do
+	dockutil --no-restart --remove "${label}" || true
+done
+{{ end -}}
