@@ -1,7 +1,6 @@
 # yazi - terminal file manager. Docs: https://yazi-rs.github.io/
-# Theming: none needed. yazi's default theme uses ANSI color names for all its
-# chrome, so it follows the tinty/base24 terminal palette automatically (only
-# the [icon] glyph colors are fixed). Preview deps (ffmpeg, poppler, resvg,
+# Theming: Catppuccin Mocha via theme.toml, pulled by chezmoiexternal (see
+# .chezmoiexternal.toml.tmpl). Preview deps (ffmpeg, poppler, resvg,
 # imagemagick, 7zip) are installed via the brew bundle.
 [mgr]
 show_hidden    = true

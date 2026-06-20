@@ -1,6 +1,6 @@
 # chezmoi externals: only things Homebrew doesn't manage (the zsh plugin
-# manager, tinty's scheme data, bat's syntax def, fonts). CLI tool *binaries*
-# are installed via Homebrew on macOS (see .chezmoiscripts/...install-packages).
+# manager, Catppuccin Mocha theme files, bat's syntax def, fonts). CLI tool
+# *binaries* are installed via Homebrew on macOS (see .chezmoiscripts/...).
 
 # Antidote - the ZSH plugin manager (cloned into $ZDOTDIR/.antidote).
 [".config/zsh/.antidote"]
@@ -8,30 +8,19 @@
     url = "https://github.com/mattmc3/antidote.git"
     refreshPeriod = "168h"
 
-# tinty - base16/base24 theme manager. Not in brew core (only an untrusted tap),
-# so kept as a direct-binary external (macOS). The brew-on-macOS exception.
-[".local/bin/tinty"]
-    type = "archive-file"
-    url = {{ gitHubLatestReleaseAssetURL "tinted-theming/tinty" (printf "tinty-%s-apple-darwin.tar.gz" .appleArch) | quote }}
-    path = "tinty"
-    executable = true
-    refreshPeriod = "168h"
+# yazi's Catppuccin Mocha theme (mauve accent, matching JankyBorders) plus the
+# tmTheme its syntect_theme points at (yazi doesn't use bat, so it needs its own
+# copy; bat/delta use the Catppuccin Mocha that bat bundles). theme.toml fully
+# colors yazi's chrome.
+[".config/yazi/theme.toml"]
+    type = "file"
+    url = "https://github.com/catppuccin/yazi/raw/main/themes/mocha/catppuccin-mocha-mauve.toml"
+    refreshPeriod = "720h"
 
-# tinty's template + scheme repos, pre-cloned into its data dir so it needs no
-# `tinty install` step and they auto-update.
-[".local/share/tinted-theming/tinty/repos/tinted-shell"]
-    type = "git-repo"
-    url = "https://github.com/tinted-theming/tinted-shell.git"
-    refreshPeriod = "168h"
-    clone.args = ["--depth=1"]
-    pull.args = ["--ff-only"]
-
-[".local/share/tinted-theming/tinty/repos/schemes"]
-    type = "git-repo"
-    url = "https://github.com/tinted-theming/schemes.git"
-    refreshPeriod = "168h"
-    clone.args = ["--depth=1"]
-    pull.args = ["--ff-only"]
+[".config/yazi/Catppuccin-mocha.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme"
+    refreshPeriod = "720h"
 
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...bat-cache).

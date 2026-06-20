@@ -1,4 +1,3 @@
 # bat configuration.
-# Use the ANSI theme so highlighting follows the terminal's tinty/base24
-# palette instead of a fixed scheme.
---theme="ansi"
+# Catppuccin Mocha, which bat bundles (>=0.25). delta reuses it via syntax-theme.
+--theme="Catppuccin Mocha"

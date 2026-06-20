@@ -4,9 +4,10 @@
 font-family = "JetBrainsMono Nerd Font Mono"
 
 # Colors
-# No static theme on purpose: tinty/tinted-shell sets the ANSI palette plus
-# foreground/background/cursor (OSC 10/11/12) at shell startup, so the terminal
-# follows `tinty apply <scheme>` and stays consistent with the rest of the stack.
+# Catppuccin Mocha (Ghostty bundles it), which sets the 16 ANSI colors plus
+# foreground/background/cursor. Tools that follow ANSI (eza, ls,
+# fast-syntax-highlighting) inherit it; the rest are themed Catppuccin directly.
+theme = Catppuccin Mocha
 
 # Window
 confirm-close-surface = false

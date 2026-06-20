@@ -11,8 +11,8 @@ options=(
 	style=round                  # match Ghostty's rounded corners
 	width=5.0
 	hidpi=off
-	active_color=0xffcba6f7      # catppuccin mocha mauve (fixed; borders can't
-	inactive_color=0x00000000    # follow tinty). Unfocused = no border.
+	active_color=0xffcba6f7      # catppuccin mocha mauve. Unfocused = no
+	inactive_color=0x00000000    # border (fully transparent).
 )
 
 borders "${options[@]}"

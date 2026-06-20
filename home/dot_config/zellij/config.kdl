@@ -3,8 +3,8 @@
 // Default keybindings are Ctrl-based modes and don't collide with AeroSpace's
 // alt bindings.
 
-// Follow the tinty/base24 terminal palette (see themes/tinty.kdl).
-theme "tinty"
+// Catppuccin Mocha (bundled with zellij).
+theme "catppuccin-mocha"
 
 default_shell "zsh"
 

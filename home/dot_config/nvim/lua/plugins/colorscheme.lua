@@ -1,26 +1,20 @@
--- tinted-nvim: base16/base24 colorscheme that follows the active tinty scheme.
--- It watches tinty's current_scheme file, so `tinty apply <scheme>` recolors
--- Neovim live to match the terminal/prompt/etc.
+-- Catppuccin Mocha: the Neovim port, matching the terminal/prompt/rest of the
+-- stack. flavour is pinned to mocha (no system/background following).
 return {
   {
-    "tinted-theming/tinted-nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     opts = {
-      default_scheme = "base24-catppuccin-mocha",
-      selector = {
-        enabled = true,
-        mode = "file",
-        path = vim.fn.expand("~/.local/share/tinted-theming/tinty/current_scheme"),
-        watch = true,
-      },
+      flavour = "mocha",
     },
   },
   -- Use it as LazyVim's colorscheme.
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "base24-catppuccin-mocha",
+      colorscheme = "catppuccin",
     },
   },
 }

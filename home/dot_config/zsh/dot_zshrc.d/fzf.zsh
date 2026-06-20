@@ -1,8 +1,12 @@
 #!/bin/zsh
 #
-# fzf - use the terminal's 16 ANSI colors so fzf (and fzf-tab, via
-# use-fzf-default-opts) follow the active tinty/base24 theme. Switching schemes
-# with `tinty apply` then recolors fzf automatically.
+# fzf - Catppuccin Mocha palette (from catppuccin/fzf), which fzf-tab inherits
+# via use-fzf-default-opts. Append so any earlier FZF_DEFAULT_OPTS survive.
 #
 
-export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--color=16"
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }\
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a \
+--color=border:#6c7086,label:#cdd6f4"
