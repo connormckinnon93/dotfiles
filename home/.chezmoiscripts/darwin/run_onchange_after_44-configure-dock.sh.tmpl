@@ -1,0 +1,17 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Dock behavior (distinct from Dock contents, handled in configure-dock-icons).
+# Gestures are disabled because aerospace manages workspaces. Restarts the Dock
+# so changes take effect.
+#
+set -eufo pipefail
+
+trap 'killall Dock' EXIT
+
+defaults write com.apple.dock autohide -int 1
+defaults write com.apple.dock show-recents -int 0
+defaults write com.apple.dock showDesktopGestureEnabled -int 0
+defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
+defaults write com.apple.dock showMissionControlGestureEnabled -int 0
+{{ end -}}

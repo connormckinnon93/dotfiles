@@ -1,0 +1,15 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Pointer / scroll / trackpad behavior. Some of these only take full effect
+# after the next login.
+#
+set -eufo pipefail
+
+# Traditional (non-"natural") scrolling; also affects the mouse wheel.
+defaults write -g com.apple.swipescrolldirection -int 0
+# No two-finger swipe to navigate back/forward (avoids accidental browser nav).
+defaults write -g AppleEnableSwipeNavigateWithScrolls -int 0
+# Disable force-click (hard-press Look Up / QuickLook).
+defaults write -g com.apple.trackpad.forceClick -int 0
+{{ end -}}

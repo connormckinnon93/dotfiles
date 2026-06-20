@@ -1,0 +1,18 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Finder behavior. Restarts Finder so changes take effect.
+#
+set -eufo pipefail
+
+trap 'killall Finder' EXIT
+
+# Always show file extensions (global domain).
+defaults write -g AppleShowAllExtensions -int 1
+# Show the full POSIX path in the window title; default to list view, folders first.
+defaults write com.apple.finder _FXShowPosixPathInTitle -int 1
+defaults write com.apple.finder FXPreferredViewStyle -string Nlsv
+defaults write com.apple.finder _FXSortFoldersFirst -int 1
+# No nag when changing a file's extension.
+defaults write com.apple.finder FXEnableExtensionChangeWarning -int 0
+{{ end -}}

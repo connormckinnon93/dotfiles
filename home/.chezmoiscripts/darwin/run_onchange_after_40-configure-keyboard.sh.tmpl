@@ -1,0 +1,11 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Keyboard input behavior. Holding a key repeats the character instead of
+# showing the accent-popup menu. Applies to all keyboards (OS-level); takes
+# effect for newly launched apps.
+#
+set -eufo pipefail
+
+defaults write -g ApplePressAndHoldEnabled -int 0
+{{ end -}}
