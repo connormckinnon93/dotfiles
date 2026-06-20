@@ -2,18 +2,23 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $awsRegion := promptStringOnce . "awsRegion" "AWS default region" "us-east-1" -}}
 {{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") "personal" -}}
-{{- /* Ephemeral machines (cloud/VM/container/CI) get a leaner setup. Auto-detect
-       common throwaway environments; otherwise prompt when interactive, and
-       assume ephemeral when running non-interactively (e.g. CI provisioning). */ -}}
+{{- /* Ephemeral machines (cloud/VM/container/CI) get a leaner setup; headless
+       machines have no display (skip GUI apps). Auto-detect common throwaway,
+       headless environments; otherwise prompt when interactive, and assume both
+       when running non-interactively (e.g. CI provisioning). */ -}}
 {{- $ephemeral := false -}}
+{{- $headless := false -}}
 {{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
 {{-   $ephemeral = true -}}
+{{-   $headless = true -}}
 {{- end -}}
 {{- if not $ephemeral -}}
 {{-   if stdinIsATTY -}}
+{{-     $headless = promptBoolOnce . "headless" "headless" false -}}
 {{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" false -}}
 {{-   else -}}
 {{-     $ephemeral = true -}}
+{{-     $headless = true -}}
 {{-   end -}}
 {{- end -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
@@ -27,6 +32,9 @@
     # Ephemeral machine (cloud/VM/container/CI): auto-detected, drives a leaner
     # package set and can gate other templates. "Stable" is simply ephemeral=false.
     ephemeral = {{ $ephemeral }}
+    # Headless machine (no display): auto-detected, gates GUI-only installs and
+    # desktop config. Orthogonal to ephemeral (a server can be headless+stable).
+    headless = {{ $headless }}
     # The git signing key itself is pulled from 1Password at render time
     # (onepasswordRead .signingKeyRef); only the reference is stored here.
     signingKeyRef = "op://Private/SSH Key/public key"

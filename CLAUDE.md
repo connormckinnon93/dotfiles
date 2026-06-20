@@ -34,14 +34,21 @@ otherwise prompts when interactive, falling back to ephemeral when run
 non-interactively (e.g. CI provisioning).
 
 Like `.profile`, it is available to every template. The install-packages script has
-`{{ if not .ephemeral }}` (stable-only) and `{{ if .ephemeral }}` blocks ready to
-fill; stable-only is where GUI casks belong.
+`{{ if not .ephemeral }}` (stable-only) and `{{ if .ephemeral }}` blocks ready to fill.
+
+A separate `headless` bool (also auto-detected, also in `[data]`) marks machines with
+no display. It is **orthogonal** to `ephemeral` — a persistent server can be
+headless+stable, and an ephemeral desktop VM can have a screen. It is set `true`
+alongside `ephemeral` in container environments, prompted independently when
+interactive, and assumed non-interactively. Use it to gate GUI installs/config:
+install-packages has `{{ if not .headless }}` (GUI-only) and `{{ if .headless }}`
+blocks; GUI casks (window manager, terminal, etc.) belong under not-headless.
 
 **Gotcha for maintainers:** because the non-interactive branch forces
-`ephemeral = true`, do not run `chezmoi init` without a TTY on a stable machine — it
-would flip the cached value. (`chezmoi apply` is unaffected; it does not regenerate the
-config.) To re-init from a non-TTY context, run it under a PTY:
-`python3 -c 'import pty,sys; sys.exit(pty.spawn(["chezmoi","init","--promptBool","ephemeral=false"]))'`.
+`ephemeral = true` and `headless = true`, do not run `chezmoi init` without a TTY on a
+normal workstation — it would flip the cached values. (`chezmoi apply` is unaffected;
+it does not regenerate the config.) To re-init from a non-TTY context, run it under a
+PTY: `python3 -c 'import pty,sys; sys.exit(pty.spawn(["chezmoi","init","--promptBool","headless=false","--promptBool","ephemeral=false"]))'`.
 
 ## `.chezmoiscripts/` — setup scripts
 
