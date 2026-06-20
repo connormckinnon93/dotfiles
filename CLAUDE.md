@@ -64,10 +64,26 @@ top level of `.chezmoiscripts/`.
 
 ```
 home/.chezmoiscripts/darwin/
-├── run_onchange_before_10-install-packages.sh.tmpl   # brew bundle (taps, brews, casks)
-├── run_onchange_after_20-mise-install.sh.tmpl        # mise install global runtimes
-└── run_once_after_30-bat-cache.sh                    # bat cache --build
+├── run_once_before_05-install-rosetta.sh.tmpl              # Rosetta 2 (personal+headed+arm64)
+├── run_onchange_before_10-install-packages.sh.tmpl         # brew bundle (taps, brews, casks)
+├── run_onchange_after_20-mise-install.sh.tmpl              # mise install global runtimes
+├── run_once_after_30-bat-cache.sh                          # bat cache --build
+├── run_onchange_after_40-configure-keyboard.sh.tmpl        # press-and-hold off
+├── run_onchange_after_42-configure-trackpad.sh.tmpl        # scroll/force-click/swipe-nav
+├── run_onchange_after_44-configure-dock.sh.tmpl            # autohide, recents, gestures
+├── run_onchange_after_46-configure-finder.sh.tmpl          # extensions, path, view, sort
+├── run_onchange_after_48-configure-ui.sh.tmpl              # window anims, save-to-disk
+├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
+├── run_onchange_after_60-configure-spaces.sh.tmpl          # spans-displays (aerospace)
+└── run_onchange_after_70-configure-notificationcenter.sh.tmpl  # disable Notification Center
 ```
+
+The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
+follow a `NN-verb-noun` name (numeric prefix for ordering + descriptive concern), are
+each wrapped in `{{ if not .headless }}` (a display is required, so they render empty
+on headless boxes — hence the `.tmpl` extension), and are split one-concern-per-file.
+`configure-dock` (behavior: autohide/gestures) is deliberately separate from
+`configure-dock-icons` (contents: the `dockutil` removal list).
 
 ### OS gating
 
@@ -95,7 +111,8 @@ chezmoi's actual ordering rules (verified empirically — see below):
 Practical rule: **keep a given before/after group entirely within one directory.** As
 long as all OS-specific scripts stay in their OS directory (and we don't split a group
 across top-level + subdir), the numeric prefixes order exactly as written. Today all
-scripts are in `darwin/`, so ordering is simply: `before_10` → `after_20` → `after_30`.
+scripts are in `darwin/`, so ordering is simply all `before_` (`05` → `10`) then all
+`after_` (`20` → `30` → `40` … → `70`).
 
 To re-verify rule changes, drop throwaway `run_onchange_before_/after_` scripts that
 `echo` to a log into a temp source dir and `chezmoi apply --source … --destination …`
