@@ -28,6 +28,13 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Leave macOS-hidden apps hidden when focusing.
 automatically-unhide-macos-hidden-apps = false
 
+# Re-tile every newly detected window. Apps launched from Finder/Spotlight can
+# appear before AeroSpace lays them out (macOS Accessibility timing); forcing a
+# tiling pass on detect snaps them into the tree instead of waiting for the next
+# focus/workspace event. Catch-all (no `if` filter), so it runs for every window.
+[[on-window-detected]]
+run = ['layout tiling']
+
 [key-mapping]
 preset = 'qwerty'
 
