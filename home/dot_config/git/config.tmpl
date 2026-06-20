@@ -41,6 +41,15 @@
 [column]
     ui = auto
 
+# git-lfs, declared rather than run imperatively: this block is exactly what
+# `git lfs install` writes to the global config, so the git-lfs brew works in
+# any repo without a one-time setup step.
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
 # Always use SSH for GitHub (rewrite https remotes to ssh).
 [url "git@github.com:"]
     insteadOf = https://github.com/
