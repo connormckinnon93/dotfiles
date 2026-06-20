@@ -66,8 +66,8 @@ top level of `.chezmoiscripts/`.
 home/.chezmoiscripts/darwin/
 ├── run_once_before_05-install-rosetta.sh.tmpl              # Rosetta 2 (personal+headed+arm64)
 ├── run_onchange_before_10-install-packages.sh.tmpl         # brew bundle (taps, brews, casks)
-├── run_onchange_after_20-mise-install.sh.tmpl              # mise install global runtimes
-├── run_once_after_30-bat-cache.sh                          # bat cache --build
+├── run_onchange_after_20-install-mise.sh.tmpl              # mise install global runtimes
+├── run_once_after_30-build-bat-cache.sh                    # bat cache --build
 ├── run_onchange_after_40-configure-keyboard.sh.tmpl        # press-and-hold off
 ├── run_onchange_after_42-configure-trackpad.sh.tmpl        # scroll/force-click/swipe-nav
 ├── run_onchange_after_44-configure-dock.sh.tmpl            # autohide, recents, gestures
@@ -75,7 +75,7 @@ home/.chezmoiscripts/darwin/
 ├── run_onchange_after_48-configure-ui.sh.tmpl              # window anims, save-to-disk
 ├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
 ├── run_onchange_after_60-configure-spaces.sh.tmpl          # spans-displays (aerospace)
-└── run_onchange_after_70-configure-notificationcenter.sh.tmpl  # disable Notification Center
+└── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
 ```
 
 The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
