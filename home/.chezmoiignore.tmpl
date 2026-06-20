@@ -1,0 +1,10 @@
+# chezmoi has no built-in notion of OS-specific directories or files. Gating is
+# done here: ignore macOS-only paths unless we're actually running on macOS.
+# This is what makes home/.chezmoiscripts/darwin/ (and the configs below)
+# behave as OS-scoped. See the repo-root CLAUDE.md for the convention.
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+.config/aerospace
+.config/borders
+.config/homebrew
+{{ end }}

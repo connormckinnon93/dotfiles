@@ -1,0 +1,69 @@
+# chezmoi dotfiles
+
+Managed with [chezmoi](https://chezmoi.io). `.chezmoiroot` points at `home/`, so
+`home/` is the source root and its contents map to `~`. Anything at the repo root
+(this file, `README.md`, `zdotdir/`) is outside chezmoi's view and is never applied.
+
+macOS is the only supported target today; package installs assume Homebrew.
+
+## `.chezmoiscripts/` — setup scripts
+
+Scripts that run on `chezmoi apply`. OS-specific scripts live in an OS subdirectory
+(`darwin/`, and `linux/`/`windows/` if ever added); cross-OS scripts would go at the
+top level of `.chezmoiscripts/`.
+
+```
+home/.chezmoiscripts/darwin/
+├── run_onchange_before_10-install-packages.sh.tmpl   # brew bundle (taps, brews, casks)
+├── run_onchange_after_20-mise-install.sh.tmpl        # mise install global runtimes
+└── run_once_after_30-bat-cache.sh                    # bat cache --build
+```
+
+### OS gating
+
+chezmoi has **no** built-in notion of OS directories — the `darwin/` name alone does
+nothing. Gating is done in `home/.chezmoiignore.tmpl`, whose non-darwin block ignores
+the macOS-only paths: `.chezmoiscripts/darwin/**` plus the macOS-only configs
+(`.config/aerospace`, `.config/borders`, `.config/homebrew`). Add to that block when
+introducing a new macOS-only path, or add a parallel block for another OS. Because
+only the matching OS's paths are active, scripts inside `darwin/` need no internal
+`{{ if eq .chezmoi.os ... }}` wrapper.
+
+### Numeric ordering convention
+
+Filenames carry a two-digit prefix (`10-`, `20-`, `30-`) to make run order explicit.
+chezmoi's actual ordering rules (verified empirically — see below):
+
+1. **`before_` vs `after_` is a global partition.** Every `run_*_before_` script runs
+   before every `run_*_after_` script, regardless of number or directory.
+2. **Within a partition, top-level scripts run before subdirectory scripts.** A number
+   does **not** interleave a `darwin/` script with a top-level one — e.g. a top-level
+   `before_15-` runs before `darwin/before_10-`.
+3. **Numbers only order scripts within the same directory and the same before/after
+   partition.**
+
+Practical rule: **keep a given before/after group entirely within one directory.** As
+long as all OS-specific scripts stay in their OS directory (and we don't split a group
+across top-level + subdir), the numeric prefixes order exactly as written. Today all
+scripts are in `darwin/`, so ordering is simply: `before_10` → `after_20` → `after_30`.
+
+To re-verify rule changes, drop throwaway `run_onchange_before_/after_` scripts that
+`echo` to a log into a temp source dir and `chezmoi apply --source … --destination …`
+with an isolated `HOME`.
+
+### Gotcha: only scripts allowed in `.chezmoiscripts/`
+
+Every entry in `.chezmoiscripts/` must be a script — any other file (e.g. a plain
+`CLAUDE.md` or `README.md`) makes **all** chezmoi commands fail with `not a script`.
+That is why this documentation lives at the repo root rather than beside the scripts.
+(A dot-prefixed file like `.notes.md` is ignored by chezmoi and would be safe, but is
+not auto-discovered by tooling.)
+
+## Homebrew
+
+- `home/.install-homebrew.sh` — `read-source-state.pre` hook (registered in
+  `home/.chezmoi.toml.tmpl`); installs Homebrew on a fresh macOS machine.
+- `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl` —
+  taps (with `brew trust`), brews, and casks via `brew bundle`.
+- `home/dot_config/homebrew/brew.env` — `HOMEBREW_*` environment settings.
+- `home/dot_config/zsh/dot_zshrc.d/brew.zsh` — `eval "$(brew shellenv)"` for shells.

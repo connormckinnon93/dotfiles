@@ -6,7 +6,6 @@
 #
 set -eufo pipefail
 
-{{ if eq .chezmoi.os "darwin" -}}
 # mise global config hash (forces a re-run on change):
 # {{ include "dot_config/mise/config.toml" | sha256sum }}
 
@@ -24,4 +23,3 @@ command -v mise >/dev/null 2>&1 || exit 0
 
 # Install everything declared in the global config.toml.
 mise install --yes
-{{ end -}}

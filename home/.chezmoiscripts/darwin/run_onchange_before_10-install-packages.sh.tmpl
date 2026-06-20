@@ -6,8 +6,7 @@
 #
 set -eufo pipefail
 
-{{ if eq .chezmoi.os "darwin" -}}
-{{- $brews := list
+{{ $brews := list
       "atuin"
       "awscli"
       "bat"
@@ -76,4 +75,3 @@ brew "{{ . }}"
 cask "{{ . }}"
 {{ end -}}
 EOF
-{{ end -}}
