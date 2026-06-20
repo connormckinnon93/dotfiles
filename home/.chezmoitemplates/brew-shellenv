@@ -11,3 +11,4 @@ if ! command -v {{ . }} >/dev/null 2>&1; then
   done
 fi
 command -v {{ . }} >/dev/null 2>&1 || exit 0
+{{- /* vim: set filetype=bash: */ -}}
