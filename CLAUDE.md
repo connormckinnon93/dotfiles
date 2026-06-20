@@ -14,8 +14,10 @@ switch available to **every** template — not only package installs. Use it to 
 anything per machine class:
 
 - **Packages:** `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl`
-  has ready-to-fill `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat`
-  extra brews/casks onto the base lists (base lists apply to both profiles).
+  has `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat` profile-specific
+  brews/casks/taps onto the base lists (base lists apply to both profiles). The personal
+  block adds the `granted` brew plus, nested under `{{ if not .headless }}`, the
+  gaming/desktop casks (steam, epic-games, …); the work block is an empty placeholder.
 - **Ignored files:** add a `{{ if eq .profile "work" }} … {{ end }}` block to
   `home/.chezmoiignore.tmpl` to drop personal-only configs on a work machine.
 - **Any other template:** reference `.profile` directly.
@@ -40,9 +42,13 @@ A separate `headless` bool (also auto-detected, also in `[data]`) marks machines
 no display. It is **orthogonal** to `ephemeral` — a persistent server can be
 headless+stable, and an ephemeral desktop VM can have a screen. It is set `true`
 alongside `ephemeral` in container environments, prompted independently when
-interactive, and assumed non-interactively. Use it to gate GUI installs/config:
-install-packages has `{{ if not .headless }}` (GUI-only) and `{{ if .headless }}`
-blocks; GUI casks (window manager, terminal, etc.) belong under not-headless.
+interactive, and assumed non-interactively. Use it to gate GUI installs/config. In
+install-packages the `{{ if not .headless }}` block holds the GUI casks (1password,
+aerospace, brave-browser, ghostty, tailscale-app, zed, …), the GUI-only brews
+(borders, dockutil), **and the third-party taps** they need (FelixKratz/formulae,
+nikitabobko/tap) — so a headless box taps nothing. The `{{ if .headless }}` block
+holds CLI counterparts of GUI tools (e.g. the `tailscale` CLI instead of the
+`tailscale-app` cask). CLI tools stay in the base list.
 
 **Gotcha for maintainers:** because the non-interactive branch forces
 `ephemeral = true` and `headless = true`, do not run `chezmoi init` without a TTY on a
