@@ -13,3 +13,10 @@ if (( $+commands[eza] )); then
   alias la='eza -la --icons=auto --git --group-directories-first'
   alias lt='eza --tree --level=2 --icons=auto --group-directories-first'
 fi
+
+# nvim - reach for it via the muscle-memory names. $EDITOR/$VISUAL live in
+# editor.zsh.
+if (( $+commands[nvim] )); then
+  alias vi=nvim
+  alias vim=nvim
+fi
