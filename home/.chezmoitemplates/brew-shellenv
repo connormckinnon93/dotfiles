@@ -10,5 +10,8 @@ if ! command -v {{ . }} >/dev/null 2>&1; then
     fi
   done
 fi
-command -v {{ . }} >/dev/null 2>&1 || exit 0
+command -v {{ . }} >/dev/null 2>&1 || {
+  echo "{{ . }}: not found on PATH after sourcing Homebrew shellenv; cannot continue" >&2
+  exit 1
+}
 {{- /* vim: set filetype=bash: */ -}}
