@@ -12,6 +12,8 @@
      exclude on each machine class as personal/work configs diverge. */}}
 {{ if eq .profile "work" }}
 {{/* personal-only paths to skip on work machines, e.g. .config/personal-app */}}
+{{/* Inbound SSH authorized by personal GitHub keys: don't grant that on work boxes. */}}
+.ssh/authorized_keys
 {{ end }}
 {{ if eq .profile "personal" }}
 {{/* work-only paths to skip on personal machines */}}
