@@ -4,6 +4,34 @@
 # tool installers append to a shell rc.
 .config/zsh/.zshrc.local
 
+# Claude Code (~/.claude): we manage only a curated config surface (settings.json,
+# CLAUDE.md, commands/, agents/ — none of which are ignored here). Everything
+# below is runtime state, caches, per-machine state, or secrets that must never
+# be tracked. OS-agnostic, so unconditional. Tailored to what this machine
+# actually creates; append new runtime dirs here if Claude Code adds them.
+.claude/history.jsonl
+.claude/projects
+.claude/sessions
+.claude/session-env
+.claude/tasks
+.claude/file-history
+.claude/shell-snapshots
+.claude/backups
+.claude/.last-cleanup
+.claude/cache
+.claude/paste-cache
+{{/* plugins/: marketplaces are cloned repos; known_marketplaces.json is local
+     state with absolute paths and timestamps. */}}
+.claude/plugins
+{{/* Secrets + per-machine state. macOS keeps OAuth in the Keychain (no
+     .credentials.json on disk), but ignore it defensively. .claude.json lives at
+     $HOME root and holds OAuth/MCP/cache state. The .local files are Claude
+     Code's per-machine override convention. */}}
+.claude.json
+.claude/.credentials.json
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+
 # chezmoi has no built-in notion of OS-specific directories or files. Gating is
 # done here: ignore macOS-only paths unless we're actually running on macOS.
 # This is what makes home/.chezmoiscripts/darwin/ (and the configs below)
