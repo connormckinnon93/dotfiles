@@ -11,6 +11,10 @@ uv = "0.11"       # fast Python package/project manager (complements mise's pyth
 # CLI tools delivered through a language runtime (kept here so `mise install`
 # provisions them too). mmdc renders Mermaid diagrams for nvim's Snacks.image.
 "npm:@mermaid-js/mermaid-cli" = "11.15"
+# ccstatusline: Claude Code status line. Wired in via ~/.claude/settings.json
+# (statusLine.command -> this tool's mise shim); configured in
+# ~/.config/ccstatusline/settings.json.
+"npm:ccstatusline" = "2.2"
 
 [settings]
 # Also honor .nvmrc / .node-version files in projects that ship them.
