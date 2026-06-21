@@ -1,0 +1,34 @@
+// Zed settings — managed by chezmoi. JSONC, hand-authored (Zed does surgical,
+// comment-preserving writes, so this is kept as a static file rather than a
+// modify_ template, which would strip these comments). Edit the chezmoi source;
+// in-app changes to keys set here revert on the next `chezmoi apply`.
+//
+// Docs: https://zed.dev/docs/configuring-zed
+{
+  // Catppuccin Mocha to match starship / JankyBorders / yazi / bat. Both the
+  // color theme and file icons come from the extensions auto-installed below;
+  // on a fresh machine they apply once Zed finishes installing them on launch.
+  "theme": "Catppuccin Mocha",
+  "icon_theme": "Catppuccin Mocha",
+
+  // JetBrainsMono Nerd Font (Mono = single-width glyphs), installed via
+  // chezmoiexternal. Same family name the ghostty config uses; macOS also
+  // exposes it as "JetBrainsMono NFM" if this ever fails to resolve.
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+
+  // Panel layout: keep the side panels together on the right so the editor's
+  // left edge stays put as you toggle them; terminal stays at the bottom and
+  // secondary (your primary terminal is ghostty + zellij). Flip "right" ->
+  // "left" on any of these to move it.
+  "project_panel": { "dock": "right" },
+  "outline_panel": { "dock": "right" },
+  "git_panel": { "dock": "right" },
+  "terminal": { "dock": "bottom" },
+
+  // Declarative extension management: Zed installs/uninstalls to match this on
+  // launch (the list is authoritative — UI installs don't write back here).
+  "auto_install_extensions": {
+    "catppuccin": true,
+    "catppuccin-icons": true
+  }
+}
