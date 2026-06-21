@@ -1,4 +1,4 @@
-{{ if not .headless }}{{ if not .ephemeral }}
+{{ if and (not .headless) (not .ephemeral) -}}
 #!/bin/sh
 set -eu
 
@@ -6,4 +6,4 @@ set -eu
 # Claude Code session) survives idle periods. Display sleep and screen lock are
 # left untouched — only system idle-sleep is disabled, and only while plugged in.
 sudo pmset -c sleep 0
-{{ end }}{{ end }}
+{{- end }}
