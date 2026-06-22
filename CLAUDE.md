@@ -67,10 +67,11 @@ home/.chezmoiscripts/darwin/
 ├── run_once_before_05-install-rosetta.sh.tmpl              # Rosetta 2 (personal+headed+arm64)
 ├── run_onchange_before_10-install-packages.sh.tmpl         # brew bundle (taps, brews, casks)
 ├── run_onchange_after_20-install-mise.sh.tmpl              # mise install global runtimes
-├── run_once_after_30-build-bat-cache.sh                    # bat cache --build
+├── run_once_after_30-build-bat-cache.sh.tmpl              # bat cache --build
 ├── run_onchange_after_40-configure-keyboard.sh.tmpl        # press-and-hold off
 ├── run_onchange_after_42-configure-trackpad.sh.tmpl        # scroll/force-click/swipe-nav
 ├── run_onchange_after_44-configure-dock.sh.tmpl            # autohide, recents, gestures
+├── run_once_after_45-configure-power.sh.tmpl               # pmset -c sleep 0 (personal+headed+stable)
 ├── run_onchange_after_46-configure-finder.sh.tmpl          # extensions, path, view, sort
 ├── run_onchange_after_48-configure-ui.sh.tmpl              # window anims, save-to-disk
 ├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
@@ -80,8 +81,11 @@ home/.chezmoiscripts/darwin/
 
 The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
 follow a `NN-verb-noun` name (numeric prefix for ordering + descriptive concern), are
-each wrapped in `{{ if not .headless }}` (a display is required, so they render empty
+mostly wrapped in `{{ if not .headless }}` (a display is required, so they render empty
 on headless boxes — hence the `.tmpl` extension), and are split one-concern-per-file.
+The exception is `45-configure-power`, which is additionally gated on `not .ephemeral`
+(keeping a throwaway VM awake is pointless) and uses `run_once_` rather than
+`run_onchange_` since `pmset` takes no input that would change.
 `configure-dock` (behavior: autohide/gestures) is deliberately separate from
 `configure-dock-icons` (contents: the `dockutil` removal list).
 
@@ -133,4 +137,4 @@ not auto-discovered by tooling.)
 - `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl` —
   taps (with `brew trust`), brews, and casks via `brew bundle`.
 - `home/dot_config/homebrew/brew.env` — `HOMEBREW_*` environment settings.
-- `home/dot_config/zsh/dot_zshrc.d/brew.zsh` — `eval "$(brew shellenv)"` for shells.
+- `home/dot_config/zsh/exact_dot_zshrc.d/brew.zsh` — `eval "$(brew shellenv)"` for shells.
