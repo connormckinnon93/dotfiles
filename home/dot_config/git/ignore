@@ -1,0 +1,8 @@
+# Global git ignore (core.excludesFile).
+.DS_Store
+.AppleDouble
+*~
+*.swp
+.idea/
+.vscode/
+.direnv/

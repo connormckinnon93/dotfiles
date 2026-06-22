@@ -1,0 +1,47 @@
+# Font
+# Mono variant = single-width glyphs (best for terminals). Installed via
+# chezmoiexternal; see .chezmoiexternal.toml.tmpl.
+font-family = "JetBrainsMono Nerd Font Mono"
+
+# Colors
+# Catppuccin Mocha (Ghostty bundles it), which sets the 16 ANSI colors plus
+# foreground/background/cursor. Tools that follow ANSI (eza, ls,
+# fast-syntax-highlighting) inherit it; the rest are themed Catppuccin directly.
+theme = Catppuccin Mocha
+
+# Window
+confirm-close-surface = false
+# Hide the titlebar but keep native rounded corners. We avoid native tabs (each
+# is a separate NSWindow, which fights AeroSpace's tiling); the cmd+t rebind
+# below makes new windows instead, so use AeroSpace windows or zellij for "tabs".
+macos-titlebar-style = hidden
+# Breathing room: balanced padding and a touch more line height.
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+adjust-cell-height = 8%
+# Don't flash the dimensions overlay on every resize (AeroSpace resizes a lot).
+resize-overlay = never
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Shell integration
+# ssh-env/ssh-terminfo propagate Ghostty's terminfo to remote hosts so colors
+# and keys work over SSH (otherwise TERM=xterm-ghostty is unknown remotely).
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title,ssh-env,ssh-terminfo
+
+# Clipboard
+clipboard-read = allow
+clipboard-write = allow
+
+# macOS
+macos-option-as-alt = true
+
+# Keybindings
+keybind = global:cmd+backquote=toggle_quick_terminal
+# Make the tab muscle-memory create a (tileable) window instead of a native tab.
+keybind = cmd+t=new_window

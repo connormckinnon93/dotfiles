@@ -1,0 +1,8 @@
+# bat configuration.
+# Catppuccin Mocha, which bat bundles (>=0.25). delta reuses it via syntax-theme.
+--theme="Catppuccin Mocha"
+
+# Map the antidote bundle to its custom syntax. The syntax's file_extensions
+# only match `zsh_plugins.txt`; this glob also catches the dotfile form
+# `.zsh_plugins.txt`, which bat otherwise renders as plain text.
+--map-syntax="*zsh_plugins.txt:Antidote Bundle"

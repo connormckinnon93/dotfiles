@@ -1,0 +1,17 @@
+{{- /* Ensure the named Homebrew-installed command (the template argument) is on
+       PATH. On a fresh machine brew was installed earlier this run, after chezmoi
+       captured its environment, so re-source brew's shellenv from whichever
+       prefix exists (Apple Silicon /opt/homebrew or Intel /usr/local). */ -}}
+if ! command -v {{ . }} >/dev/null 2>&1; then
+  for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [ -x "$brew_bin" ]; then
+      eval "$("$brew_bin" shellenv)"
+      break
+    fi
+  done
+fi
+command -v {{ . }} >/dev/null 2>&1 || {
+  echo "{{ . }}: not found on PATH after sourcing Homebrew shellenv; cannot continue" >&2
+  exit 1
+}
+{{- /* vim: set filetype=bash: */ -}}

@@ -1,0 +1,16 @@
+// zellij - terminal multiplexer. KDL config. Docs: https://zellij.dev/documentation/
+// Launched manually (`zellij`, or `zellij attach`); no shell auto-start.
+// Default keybindings are Ctrl-based modes and don't collide with AeroSpace's
+// alt bindings.
+
+// Catppuccin Mocha (bundled with zellij).
+theme "catppuccin-mocha"
+
+default_shell "zsh"
+
+{{ if eq .chezmoi.os "darwin" -}}
+// macOS: copy yanked text to the system clipboard. Elsewhere (Linux) the line is
+// omitted so zellij falls back to OSC 52, which copies through the terminal and
+// works over SSH / on headless boxes without a clipboard helper.
+copy_command "pbcopy"
+{{ end -}}

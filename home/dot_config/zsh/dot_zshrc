@@ -1,0 +1,32 @@
+#!/bin/zsh
+#
+# .zshrc - Zsh file loaded on interactive shell sessions.
+#
+
+# Lazy-load (autoload) Zsh function files from a directory.
+ZFUNCDIR=${ZDOTDIR:-$HOME}/.zfunctions
+fpath=($ZFUNCDIR $fpath)
+autoload -Uz $ZFUNCDIR/*(N.:t)
+
+# Set any zstyles you might use for configuration.
+[[ ! -f ${ZDOTDIR:-$HOME}/.zstyles ]] || source ${ZDOTDIR:-$HOME}/.zstyles
+
+# Load plugins with antidote (cloned into $ZDOTDIR/.antidote by chezmoiexternal).
+# Reads ${ZDOTDIR:-$HOME}/.zsh_plugins.txt and caches a static bundle.
+source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
+antidote load
+
+# Source anything in .zshrc.d.
+for _rc in ${ZDOTDIR:-$HOME}/.zshrc.d/*.zsh; do
+  # Ignore tilde files.
+  if [[ $_rc:t != '~'* ]]; then
+    source "$_rc"
+  fi
+done
+unset _rc
+
+# Source machine-local overrides last, if present. Untracked (not managed by
+# chezmoi; see .chezmoiignore): a home for per-machine tweaks and the lines tool
+# installers append to a shell rc, keeping the managed .zshrc and .zshrc.d/
+# snippets pristine.
+[[ ! -f ${ZDOTDIR:-$HOME}/.zshrc.local ]] || source ${ZDOTDIR:-$HOME}/.zshrc.local

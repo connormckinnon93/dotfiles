@@ -1,0 +1,41 @@
+# chezmoi externals: only things Homebrew doesn't manage (the zsh plugin
+# manager, Catppuccin Mocha theme files, bat's syntax def, fonts). CLI tool
+# *binaries* are installed via Homebrew on macOS (see .chezmoiscripts/...).
+
+# Antidote - the ZSH plugin manager (cloned into $ZDOTDIR/.antidote).
+[".config/zsh/.antidote"]
+    type = "git-repo"
+    url = "https://github.com/mattmc3/antidote.git"
+    refreshPeriod = "168h"
+
+# yazi's Catppuccin Mocha theme (mauve accent, matching JankyBorders) plus the
+# tmTheme its syntect_theme points at (yazi doesn't use bat, so it needs its own
+# copy; bat/delta use the Catppuccin Mocha that bat bundles). theme.toml fully
+# colors yazi's chrome.
+[".config/yazi/theme.toml"]
+    type = "file"
+    url = "https://github.com/catppuccin/yazi/raw/main/themes/mocha/catppuccin-mocha-mauve.toml"
+    refreshPeriod = "720h"
+
+[".config/yazi/Catppuccin-mocha.tmTheme"]
+    type = "file"
+    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme"
+    refreshPeriod = "720h"
+
+# antidote's bat syntax for highlighting .zsh_plugins.txt files.
+# Picked up after `bat cache --build` (run by .chezmoiscripts/...build-bat-cache).
+[".config/bat/syntaxes/zsh_plugins.sublime-syntax"]
+    type = "file"
+    url = "https://github.com/getantidote/antidote/raw/main/misc/zsh_plugins.sublime-syntax"
+    refreshPeriod = "720h"
+
+# JetBrainsMono Nerd Font (Mono variant: single-width glyphs for terminals).
+# Individual .ttf files pulled directly, so no 128MB family-zip download.
+{{- $fontBase := "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures" }}
+{{- range (list "Regular" "Bold" "Italic" "BoldItalic") }}
+["{{ $.fontDir }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"]
+    type = "file"
+    url = "{{ $fontBase }}/{{ . }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"
+    refreshPeriod = "8760h"
+{{- end }}
+{{- /* vim: set filetype=toml: */}}

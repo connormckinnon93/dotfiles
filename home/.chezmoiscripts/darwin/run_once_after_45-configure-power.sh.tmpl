@@ -1,0 +1,9 @@
+{{ if and (not .headless) (not .ephemeral) -}}
+#!/bin/sh
+set -eu
+
+# Keep the system awake on AC power so background work (e.g. a remote-controlled
+# Claude Code session) survives idle periods. Display sleep and screen lock are
+# left untouched — only system idle-sleep is disabled, and only while plugged in.
+sudo pmset -c sleep 0
+{{- end }}

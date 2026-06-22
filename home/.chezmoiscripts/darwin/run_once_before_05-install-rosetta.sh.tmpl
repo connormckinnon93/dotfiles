@@ -1,0 +1,12 @@
+{{ if and (eq .profile "personal") (not .headless) (eq .chezmoi.arch "arm64") -}}
+#!/bin/bash
+#
+# Pre-install Rosetta 2 so x86-only casks (steam, epic-games) run on Apple
+# Silicon without a first-launch prompt. Personal + headed + arm64 only, and
+# run_once because Rosetta never needs reinstalling (avoids re-prompting sudo
+# on unrelated applies).
+#
+set -eufo pipefail
+
+sudo softwareupdate --agree-to-license --install-rosetta
+{{ end -}}

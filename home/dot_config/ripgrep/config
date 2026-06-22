@@ -1,0 +1,7 @@
+# ripgrep configuration (loaded via $RIPGREP_CONFIG_PATH; see .zshrc.d/ripgrep.zsh).
+--glob=!vendor
+--hidden
+--smart-case
+--line-number
+--no-heading
+--sort=path

@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Install mise-managed global runtimes. Runs after the packages script (10-)
+# so mise itself is present, and re-runs whenever the global tool list changes
+# (the config hash below is part of the rendered script).
+#
+set -eufo pipefail
+
+# mise global config hash (forces a re-run on change):
+# {{ include "dot_config/mise/config.toml" | sha256sum }}
+
+# Ensure brew-installed mise is on PATH (on a fresh machine it was just
+# installed this run, after chezmoi captured its environment).
+{{ template "brew-shellenv" "mise" }}
+
+# Install everything declared in the global config.toml.
+mise install --yes
+{{- /* vim: set filetype=bash: */}}

@@ -1,0 +1,11 @@
+# atuin shell history. Docs: https://docs.atuin.sh/
+# Local-only: no E2E sync / account (history stays in the local SQLite db).
+auto_sync = false
+update_check = false
+
+# Put the chosen command on the prompt to review before running (Enter to run).
+enter_accept = false
+
+# Don't record commands matching these regexes (secrets). Space-prefixed
+# commands are also skipped (HIST_IGNORE_SPACE). Enable/extend as needed:
+# history_filter = ["(?i)(password|secret|token|api[_-]?key)"]

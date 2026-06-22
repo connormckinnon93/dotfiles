@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# Install Homebrew packages. Re-runs whenever the rendered package list below
+# changes. The NN prefix (10-) fixes run order so later setup scripts can be
+# sequenced deterministically (20-, 30-, ...) as this grows.
+#
+set -eufo pipefail
+
+{{ $brews := list
+      "age"
+      "atuin"
+      "awscli"
+      "bat"
+      "btop"
+      "carapace"
+      "chezmoi"
+      "duf"
+      "eza"
+      "fd"
+      "ffmpeg"
+      "fzf"
+      "gdu"
+      "gh"
+      "ghostscript"
+      "git"
+      "git-delta"
+      "git-lfs"
+      "imagemagick"
+      "jless"
+      "jq"
+      "lazygit"
+      "mise"
+      "neovim"
+      "poppler"
+      "resvg"
+      "ripgrep"
+      "sevenzip"
+      "shellcheck"
+      "shfmt"
+      "starship"
+      "tectonic"
+      "tree-sitter-cli"
+      "yazi"
+      "yq"
+      "zellij"
+      "zoxide" -}}
+{{- /* Base casks: universal, headless-safe casks only (e.g. CLI casks). GUI
+       apps live in the not-headless block below. */ -}}
+{{- $casks := list
+      "1password-cli" -}}
+{{- /* Taps start empty and accumulate per-perspective below; the aerospace and
+       borders taps are only needed on headed machines (not-headless block). */ -}}
+{{- $taps := list -}}
+{{- /* Profile-specific packages. .profile is "personal" or "work". */ -}}
+{{- if eq .profile "personal" -}}
+{{- /* granted/assume (AWS SSO helper) is personal-only; awscli stays in base. */ -}}
+{{-   $brews = concat $brews (list "granted") -}}
+{{- /* Gaming/personal GUI apps need a display too (personal AND not headless). */ -}}
+{{-   if not .headless -}}
+{{-     $casks = concat $casks (list
+            "balenaetcher"
+            "epic-games"
+            "steam") -}}
+{{-   end -}}
+{{- else if eq .profile "work" -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{-   $taps = concat $taps (list) -}}
+{{- end -}}
+{{- /* Stable-only packages, skipped on ephemeral machines (VMs/containers/CI). */ -}}
+{{- if not .ephemeral -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{-   $taps = concat $taps (list) -}}
+{{- end -}}
+{{- /* Ephemeral-only extras (rare; e.g. a CI-specific tool). */ -}}
+{{- if .ephemeral -}}
+{{-   $brews = concat $brews (list) -}}
+{{-   $casks = concat $casks (list) -}}
+{{-   $taps = concat $taps (list) -}}
+{{- end -}}
+{{- /* GUI packages, skipped on headless machines (no display): GUI casks and
+       their taps, plus GUI-only brews. CLI tools stay in the base list. */ -}}
+{{- if not .headless -}}
+{{-   $brews = concat $brews (list
+          "borders"
+          "dockutil") -}}
+{{-   $casks = concat $casks (list
+          "1password"
+          "aerospace"
+          "brave-browser"
+          "claude"
+          "claude-code@latest"
+          "docker-desktop"
+          "ghostty"
+          "notunes"
+          "obsidian"
+          "tailscale-app"
+          "zed") -}}
+{{-   $taps = concat $taps (list
+          "FelixKratz/formulae"
+          "nikitabobko/tap") -}}
+{{- end -}}
+{{- /* Headless-only extras: CLI counterparts of GUI tools (e.g. the tailscale
+       CLI/daemon instead of the GUI tailscale-app). */ -}}
+{{- if .headless -}}
+{{-   $brews = concat $brews (list "tailscale") -}}
+{{-   $casks = concat $casks (list) -}}
+{{-   $taps = concat $taps (list) -}}
+{{- end -}}
+
+# Ensure brew is on PATH (e.g. immediately after a fresh install in this run,
+# before the shell that adds it has been started).
+{{ template "brew-shellenv" "brew" }}
+
+# Third-party taps must be tapped and trusted before brew will load their
+# casks/formulae (HOMEBREW_REQUIRE_TAP_TRUST). Do this before bundling.
+{{ range ($taps | sortAlpha | uniq) -}}
+brew tap "{{ . }}"
+brew trust "{{ . }}"
+{{ end }}
+brew bundle --file=/dev/stdin <<EOF
+{{ range ($taps | sortAlpha | uniq) -}}
+tap "{{ . }}"
+{{ end -}}
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
+{{- /* vim: set filetype=bash: */}}

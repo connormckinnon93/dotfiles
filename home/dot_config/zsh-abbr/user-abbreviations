@@ -1,0 +1,44 @@
+# zsh-abbr user abbreviations. Managed by chezmoi - edit here, not via
+# `abbr add` (interactive edits would diverge from the repo). These expand
+# inline at the command position, so the full command lands in history.
+# Docs: https://zsh-abbr.olets.dev/
+
+# git
+abbr "g"="git"
+abbr "gst"="git status -sb"
+abbr "gss"="git status"
+abbr "ga"="git add"
+abbr "gaa"="git add --all"
+abbr "gc"="git commit -v"
+abbr "gcm"="git commit -m"
+abbr "gca"="git commit -v --amend"
+abbr "gcan"="git commit -v --amend --no-edit"
+abbr "gco"="git checkout"
+abbr "gsw"="git switch"
+abbr "gswc"="git switch -c"
+abbr "gd"="git diff"
+abbr "gds"="git diff --staged"
+abbr "gl"="git pull"
+abbr "gp"="git push"
+abbr "gpf"="git push --force-with-lease"
+abbr "gf"="git fetch --all --prune"
+abbr "gb"="git branch"
+abbr "gbd"="git branch -d"
+abbr "glog"="git log --oneline --decorate --graph"
+abbr "grb"="git rebase"
+abbr "grbi"="git rebase -i"
+abbr "grbc"="git rebase --continue"
+abbr "grba"="git rebase --abort"
+abbr "grs"="git restore"
+abbr "grss"="git restore --staged"
+abbr "gsta"="git stash"
+abbr "gstp"="git stash pop"
+abbr "gwt"="git worktree"
+abbr "lg"="lazygit"
+
+# chezmoi
+abbr "cm"="chezmoi"
+abbr "cma"="chezmoi apply"
+abbr "cmd"="chezmoi diff"
+abbr "cme"="chezmoi edit"
+abbr "cmcd"="chezmoi cd"

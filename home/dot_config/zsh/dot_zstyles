@@ -1,0 +1,20 @@
+#!/bin/zsh
+#
+# .zstyles - Set zstyle settings for plugins that need them.
+#
+
+#
+# Completions (fzf-tab + carapace)
+#
+
+# Let fzf-tab own the completion menu (don't enable zsh's built-in menu).
+zstyle ':completion:*' menu no
+
+# Case-insensitive, then partial-word, completion matching.
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
+# Group results under their descriptions so fzf-tab can show headers.
+zstyle ':completion:*:descriptions' format '[%d]'
+
+# Inherit $FZF_DEFAULT_OPTS in fzf-tab's popup.
+zstyle ':fzf-tab:*' use-fzf-default-opts yes

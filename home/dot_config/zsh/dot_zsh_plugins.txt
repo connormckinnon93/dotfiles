@@ -1,0 +1,25 @@
+#!/bin/zsh
+#
+# .zsh_plugins.txt - antidote plugin list. Docs: https://antidote.sh/
+#
+
+# Completion system - ez-compinit manages compinit timing and caching.
+mattmc3/ez-compinit
+
+# Fuzzy Tab-completion UI. Needs the fzf binary; sits on top of carapace's
+# completions (carapace itself is initialized in .zshrc.d/carapace.zsh).
+aloxaf/fzf-tab
+
+# Replace cat with bat (syntax highlighting) and colorize man pages. Needs the
+# bat binary (chezmoiexternal); use `rcat` for the real cat.
+fdellwing/zsh-bat
+
+# zsh-abbr - fish-style abbreviations that expand inline (e.g. gst -> git status).
+olets/zsh-abbr
+
+# Inline "as you type" suggestions (config in .zstyles). Loads after fzf-tab
+# and before syntax highlighting.
+zsh-users/zsh-autosuggestions
+
+# Syntax highlighting. Sourced last among the ZLE widgets.
+zdharma-continuum/fast-syntax-highlighting

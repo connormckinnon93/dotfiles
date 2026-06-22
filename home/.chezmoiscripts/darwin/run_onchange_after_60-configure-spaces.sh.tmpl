@@ -1,0 +1,10 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Spaces span all displays (rather than each display having its own Space),
+# the recommended setting for the aerospace tiling window manager.
+#
+set -eufo pipefail
+
+defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+{{ end -}}

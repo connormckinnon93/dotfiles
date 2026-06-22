@@ -1,0 +1,62 @@
+# Machine-local override, never tracked: the untracked file sourced last by
+# .zshrc (see dot_config/zsh/dot_zshrc). Listed so `chezmoi add` won't scoop it
+# up; it exists only on the machine, as a home for local tweaks and the lines
+# tool installers append to a shell rc.
+.config/zsh/.zshrc.local
+
+# Claude Code (~/.claude): we manage only a curated config surface (settings.json,
+# CLAUDE.md, commands/, agents/ — none of which are ignored here). Everything
+# below is runtime state, caches, per-machine state, or secrets that must never
+# be tracked. OS-agnostic, so unconditional. Tailored to what this machine
+# actually creates; append new runtime dirs here if Claude Code adds them.
+.claude/history.jsonl
+.claude/projects
+.claude/sessions
+.claude/session-env
+.claude/tasks
+.claude/file-history
+.claude/shell-snapshots
+.claude/backups
+.claude/.last-cleanup
+.claude/cache
+.claude/paste-cache
+{{/* plugins/: marketplaces are cloned repos; known_marketplaces.json is local
+     state with absolute paths and timestamps. */}}
+.claude/plugins
+{{/* Secrets + per-machine state. macOS keeps OAuth in the Keychain (no
+     .credentials.json on disk), but ignore it defensively. .claude.json lives at
+     $HOME root and holds OAuth/MCP/cache state. The .local files are Claude
+     Code's per-machine override convention. */}}
+.claude.json
+.claude/.credentials.json
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+
+# chezmoi has no built-in notion of OS-specific directories or files. Gating is
+# done here: ignore macOS-only paths unless we're actually running on macOS.
+# This is what makes home/.chezmoiscripts/darwin/ (and the configs below)
+# behave as OS-scoped. See the repo-root CLAUDE.md for the convention.
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+.config/aerospace
+.config/borders
+.config/homebrew
+Library/Application Support/BraveSoftware
+{{ end }}
+{{/* GUI-only paths: skip on headless machines (no display, no GUI apps). The
+     brave-browser cask installs only on non-headless, so the managed extension
+     force-install list it reads is pointless there. Mirror the install gate. */}}
+{{ if .headless }}
+Library/Application Support/BraveSoftware
+{{ end }}
+{{/* Profile-specific ignores. .profile is "personal" or "work"; list paths to
+     exclude on each machine class as personal/work configs diverge. */}}
+{{ if eq .profile "work" }}
+{{/* personal-only paths to skip on work machines, e.g. .config/personal-app */}}
+{{/* Inbound SSH authorized by personal GitHub keys: don't grant that on work boxes. */}}
+.ssh/authorized_keys
+{{ end }}
+{{ if eq .profile "personal" }}
+{{/* work-only paths to skip on personal machines */}}
+{{ end }}
+{{- /* vim: set filetype=gitignore: */}}

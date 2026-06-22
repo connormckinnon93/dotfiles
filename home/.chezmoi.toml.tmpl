@@ -1,0 +1,53 @@
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $awsRegion := promptStringOnce . "awsRegion" "AWS default region" "us-east-1" -}}
+{{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") "personal" -}}
+{{- /* Ephemeral machines (cloud/VM/container/CI) get a leaner setup; headless
+       machines have no display (skip GUI apps). Auto-detect common throwaway,
+       headless environments; otherwise prompt when interactive, and assume both
+       when running non-interactively (e.g. CI provisioning). */ -}}
+{{- $ephemeral := false -}}
+{{- $headless := false -}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vagrant" "vscode") -}}
+{{-   $ephemeral = true -}}
+{{-   $headless = true -}}
+{{- end -}}
+{{- if not $ephemeral -}}
+{{-   if stdinIsATTY -}}
+{{-     $headless = promptBoolOnce . "headless" "headless" false -}}
+{{-     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" false -}}
+{{-   else -}}
+{{-     $ephemeral = true -}}
+{{-     $headless = true -}}
+{{-   end -}}
+{{- end -}}
+# chezmoi configuration (generated at `chezmoi init` from this template).
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    # Machine profile: "personal" or "work". A general-purpose switch available
+    # to any template (package installs, .chezmoiignore, other configs).
+    profile = {{ $profile | quote }}
+    # Ephemeral machine (cloud/VM/container/CI): auto-detected, drives a leaner
+    # package set and can gate other templates. "Stable" is simply ephemeral=false.
+    ephemeral = {{ $ephemeral }}
+    # Headless machine (no display): auto-detected, gates GUI-only installs and
+    # desktop config. Orthogonal to ephemeral (a server can be headless+stable).
+    headless = {{ $headless }}
+    # The git signing key itself is pulled from 1Password at render time
+    # (onepasswordRead .signingKeyRef); only the reference is stored here.
+    signingKeyRef = "op://Private/SSH Key/public key"
+    # OS-specific values, resolved once here so other templates stay branch-free.
+    fontDir = {{ index (dict "darwin" "Library/Fonts" "linux" ".local/share/fonts") .chezmoi.os | quote }}
+    opSshSign = {{ index (dict "darwin" "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" "linux" "/opt/1Password/op-ssh-sign") .chezmoi.os | quote }}
+    onePasswordAgent = {{ index (dict "darwin" "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" "linux" "~/.1password/agent.sock") .chezmoi.os | quote }}
+    # AWS default region for ~/.aws/config. Account IDs / SSO URLs, if added
+    # later, should also live here (not in the public repo).
+    awsRegion = {{ $awsRegion | quote }}
+
+# Install Homebrew before chezmoi reads the source state, so brew-dependent
+# templates/scripts can rely on it being present.
+[hooks.read-source-state.pre]
+    command = "{{ .chezmoi.sourceDir }}/.install-homebrew.sh"
+{{- /* vim: set filetype=toml: */}}

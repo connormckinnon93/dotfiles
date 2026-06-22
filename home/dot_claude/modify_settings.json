@@ -1,0 +1,66 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /*
+  Merge a pinned baseline into ~/.claude/settings.json without owning the whole
+  file. Claude Code rewrites this file (settings migrations, in-app toggles), so
+  we read the current contents (.chezmoi.stdin), enforce our pinned keys, and
+  leave anything we don't set — including app-added keys — exactly as the app
+  wrote it. Empty stdin (file absent) starts from {}.
+*/ -}}
+{{- $cfg := dict -}}
+{{- with .chezmoi.stdin -}}{{- $cfg = fromJson . -}}{{- end -}}
+
+{{- /* Homebrew (claude-code@latest cask) owns updates; silence the in-app updater. */ -}}
+{{- $env := dig "env" dict $cfg -}}
+{{- $_ := set $env "DISABLE_AUTOUPDATER" "1" -}}
+{{- $cfg = set $cfg "env" $env -}}
+
+{{- /* Don't auto-trust MCP servers shipped in a repo's .mcp.json. */ -}}
+{{- $cfg = set $cfg "enableAllProjectMcpServers" false -}}
+
+{{- /* Keep session transcripts for a year (default is 30 days). */ -}}
+{{- $cfg = set $cfg "cleanupPeriodDays" 365 -}}
+
+{{- /* Personal preferences pinned so they sync across machines: a fresh machine
+       gets these, and in-app changes revert on the next apply. */ -}}
+{{- $cfg = set $cfg "theme" "dark" -}}
+{{- $cfg = set $cfg "preferredNotifChannel" "ghostty" -}}
+{{- $cfg = set $cfg "agentPushNotifEnabled" true -}}
+{{- $cfg = set $cfg "inputNeededNotifEnabled" true -}}
+
+{{- /* Behavior defaults, pinned across machines. fileCheckpointing snapshots
+       files before edits (/rewind); respectGitignore makes @ honor .gitignore;
+       alwaysThinking enables extended thinking every turn; autoCompact
+       summarizes near the context limit. */ -}}
+{{- $cfg = set $cfg "fileCheckpointingEnabled" true -}}
+{{- $cfg = set $cfg "respectGitignore" true -}}
+{{- $cfg = set $cfg "alwaysThinkingEnabled" true -}}
+{{- $cfg = set $cfg "autoCompactEnabled" true -}}
+
+{{- /* Statusline: ccstatusline, installed via mise (npm backend). Reference its
+       mise shim by absolute path so it resolves even outside an activated shell
+       (Claude Code runs this command non-interactively). Merge into any existing
+       statusLine so app-set keys like refreshInterval survive. */ -}}
+{{- $sl := dig "statusLine" dict $cfg -}}
+{{- $_ := set $sl "type" "command" -}}
+{{- $_ := set $sl "command" (printf "%s/.local/share/mise/shims/ccstatusline" .chezmoi.homeDir) -}}
+{{- $cfg = set $cfg "statusLine" $sl -}}
+
+{{- /* Secret/credential read deny-list. Unioned with any existing deny entries
+       so app/user additions survive; sorted + de-duped for a stable diff. These
+       match rendered targets in $HOME, not their chezmoi source. */ -}}
+{{- $baseline := list
+      "Read(./.env)"
+      "Read(./.env.*)"
+      "Read(./secrets/**)"
+      "Read(~/.aws/**)"
+      "Read(~/.git-credentials)"
+      "Read(~/.netrc)"
+      "Read(~/.npmrc)"
+      "Read(~/.pypirc)"
+      "Read(~/.ssh/**)" -}}
+{{- $perms := dig "permissions" dict $cfg -}}
+{{- $deny := dig "deny" (list) $perms -}}
+{{- $_ := set $perms "deny" (concat $deny $baseline | uniq | sortAlpha) -}}
+{{- $cfg = set $cfg "permissions" $perms -}}
+
+{{ $cfg | toPrettyJson }}

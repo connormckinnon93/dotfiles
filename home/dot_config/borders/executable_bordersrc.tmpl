@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# JankyBorders config - draws a border around the focused window so the active
+# AeroSpace tile is obvious. Started by AeroSpace (after-startup-command).
+# Docs: https://github.com/FelixKratz/JankyBorders
+#
+# Ensure brew's bin is reachable (AeroSpace/launchd launch with a minimal PATH),
+# using whichever Homebrew prefix exists (Apple Silicon /opt/homebrew or Intel).
+export PATH="{{ template "brew-prefix" . }}/bin:$PATH"
+
+options=(
+	style=round                  # match Ghostty's rounded corners
+	width=5.0
+	hidpi=off
+	active_color=0xffcba6f7      # catppuccin mocha mauve. Unfocused = no
+	inactive_color=0x00000000    # border (fully transparent).
+)
+
+borders "${options[@]}"

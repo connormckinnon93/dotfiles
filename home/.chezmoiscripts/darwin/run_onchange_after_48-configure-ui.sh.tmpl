@@ -1,0 +1,14 @@
+{{ if not .headless -}}
+#!/bin/bash
+#
+# Miscellaneous window / UI behavior. Applies to newly launched apps.
+#
+set -eufo pipefail
+
+# Snappier UI: no window open/close animations.
+defaults write -g NSAutomaticWindowAnimationsEnabled -int 0
+# Save dialogs default to local disk rather than iCloud.
+defaults write -g NSDocumentSaveNewDocumentsToCloud -int 0
+# Don't warn when opening apps downloaded from the internet (Gatekeeper quarantine).
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+{{ end -}}
