@@ -41,6 +41,13 @@
 .config/aerospace
 .config/borders
 .config/homebrew
+Library/Application Support/BraveSoftware
+{{ end }}
+{{/* GUI-only paths: skip on headless machines (no display, no GUI apps). The
+     brave-browser cask installs only on non-headless, so the managed extension
+     force-install list it reads is pointless there. Mirror the install gate. */}}
+{{ if .headless }}
+Library/Application Support/BraveSoftware
 {{ end }}
 {{/* Profile-specific ignores. .profile is "personal" or "work"; list paths to
      exclude on each machine class as personal/work configs diverge. */}}
