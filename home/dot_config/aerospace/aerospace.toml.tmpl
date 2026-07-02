@@ -5,6 +5,11 @@
 # First run needs Accessibility permission (System Settings > Privacy &
 # Security > Accessibility). No SIP changes required (unlike yabai).
 
+# Opt into the config-version 2 schema. Notably this makes `on-window-detected`
+# require an explicit `if` filter, and `persistent-workspaces` no longer inferred
+# from bindings (defaults to empty). See the migration guide in the docs above.
+config-version = 2
+
 # Start tiling automatically at login.
 start-at-login = true
 
@@ -31,8 +36,10 @@ automatically-unhide-macos-hidden-apps = false
 # Re-tile every newly detected window. Apps launched from Finder/Spotlight can
 # appear before AeroSpace lays them out (macOS Accessibility timing); forcing a
 # tiling pass on detect snaps them into the tree instead of waiting for the next
-# focus/workspace event. Catch-all (no `if` filter), so it runs for every window.
+# focus/workspace event. `if = 'true'` is a catch-all matching every window
+# (config-version 2 requires an explicit `if`; omitting it is an error).
 [[on-window-detected]]
+if = 'true'
 run = ['layout tiling']
 
 [key-mapping]
