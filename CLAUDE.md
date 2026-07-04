@@ -146,6 +146,26 @@ shaped output per secret reference — notably JSON for the AWS SSO `accounts`
 field. **When adding a new `onepasswordRead` call whose value must parse (JSON,
 etc.), extend the stub's `case` in the workflow accordingly.**
 
+## Workflow
+
+`main` is protected by a repository ruleset (`protect-main`): no direct pushes;
+changes land via pull request with all CI checks green (zero approvals required
+— solo repo). Auto-merge and head-branch auto-delete are enabled, so the loop
+is:
+
+```sh
+git switch -c <topic>
+git push -u origin <topic>
+gh pr create --fill
+gh pr merge --auto --merge
+```
+
+**Coupling to CI:** the ruleset's required status checks are the six CI *job
+names* (`macOS personal headed`, …, `prek hooks`). Renaming or adding a job in
+`ci.yml` requires updating the ruleset's `required_status_checks` to match —
+otherwise merges wait forever on a check that will never report (rename) or
+skip a job that should gate (add).
+
 ## Git hooks
 
 `.pre-commit-config.yaml` (repo root, outside chezmoi's view) defines
