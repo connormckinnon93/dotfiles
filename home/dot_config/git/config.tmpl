@@ -4,7 +4,12 @@
 [user]
     name = {{ .name }}
     email = {{ .email }}
+{{- /* Reading the key needs the 1Password CLI with an app session; headless
+       machines have neither (and signing is disabled below), so skip the read
+       there rather than failing the whole apply. */ -}}
+{{- if not .headless }}
     signingkey = {{ onepasswordRead .signingKeyRef | quote }}
+{{- end }}
 
 # Commit/tag signing via 1Password's SSH agent (op-ssh-sign).
 [gpg]

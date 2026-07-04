@@ -48,6 +48,10 @@ Library/Application Support/BraveSoftware
      force-install list it reads is pointless there. Mirror the install gate. */}}
 {{ if .headless }}
 Library/Application Support/BraveSoftware
+{{/* Rendered via onepasswordRead, which needs the 1Password CLI + app session —
+     neither exists on headless machines, and commit signing is disabled there
+     anyway (see dot_config/git/config.tmpl). */}}
+.config/git/allowed_signers
 {{ end }}
 {{/* Profile-specific ignores. .profile is "personal" or "work"; list paths to
      exclude on each machine class as personal/work configs diverge. */}}
