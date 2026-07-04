@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Install the prek-managed git hooks (.pre-commit-config.yaml at the repo root)
+# into the dotfiles source repo, so commit-time guardrails (secret scanning,
+# lint) exist on every machine without a manual step. run_once: `prek install`
+# is idempotent and the hook set lives in the config file, not the installed
+# stub, so config changes need no re-run.
+#
+set -eufo pipefail
+
+{{ template "brew-shellenv" "prek" }}
+
+# .chezmoi.sourceDir is the source *root* (home/, per .chezmoiroot); the git
+# repo and the hook config sit one level up.
+repo="{{ .chezmoi.sourceDir }}/.."
+
+# `chezmoi init <repo>` always produces a git checkout, but tolerate a bare
+# copy (e.g. a tarball) rather than failing the whole apply.
+git -C "$repo" rev-parse --git-dir >/dev/null 2>&1 || exit 0
+
+(cd "$repo" && prek install)
+{{- /* vim: set filetype=bash: */}}

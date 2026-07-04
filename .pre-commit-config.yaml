@@ -1,0 +1,53 @@
+# Git hooks, managed by prek (https://prek.j178.dev — drop-in pre-commit
+# replacement; this file is pre-commit's standard format). Installed into
+# .git/hooks automatically on `chezmoi apply` (run_once_after_80-install-git-hooks)
+# and enforced server-side by the `hooks` CI job.
+#
+# Lives at the repo root, outside chezmoi's view (.chezmoiroot = home/).
+#
+# Philosophy: commits must stay fast and work offline. Anything that needs the
+# network or 1Password (full template rendering, onepasswordRead, gitHubKeys)
+# belongs in CI (.github/workflows/ci.yml), not here.
+
+repos:
+  # Secret scanning. The repo is public and its rule is that only op://
+  # references get committed; the gap that rule doesn't cover is mechanical —
+  # `chezmoi add` / `re-add` on a *rendered* target would stage the real
+  # signing key or AWS identifiers. This closes it.
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      # *.tmpl files never reach the syntax checkers (type detection goes by
+      # extension), so only genuinely-JSON-named non-JSON files need excluding:
+      # modify_settings.json is a chezmoi modify-template; Zed's settings are
+      # JSONC (comments allowed).
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+        exclude: '^home/(dot_claude/modify_settings|dot_config/zed/settings)\.json$'
+
+  # GitHub Actions workflow linting (matrix expressions, shell in run blocks).
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+
+  # shellcheck on plain (non-template) shell scripts, via the Homebrew binary
+  # from the base package list (also preinstalled on ubuntu CI runners).
+  # Rendered *.sh.tmpl setup scripts are shellchecked per machine shape in CI.
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        language: system
+        entry: shellcheck
+        files: '\.sh$'

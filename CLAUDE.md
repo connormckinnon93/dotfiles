@@ -146,6 +146,18 @@ shaped output per secret reference — notably JSON for the AWS SSO `accounts`
 field. **When adding a new `onepasswordRead` call whose value must parse (JSON,
 etc.), extend the stub's `case` in the workflow accordingly.**
 
+## Git hooks
+
+`.pre-commit-config.yaml` (repo root, outside chezmoi's view) defines
+prek-managed hooks: gitleaks secret scanning (the repo is public — only `op://`
+references may be committed, and the hook guards against `chezmoi add`-ing a
+rendered file containing real secrets), pre-commit-hooks hygiene checks,
+actionlint, and shellcheck on plain `.sh` files (rendered `.sh.tmpl` scripts are
+CI's job). `run_once_after_80-install-git-hooks` installs the hooks into
+`.git/hooks` on `chezmoi apply`; the `hooks` CI job runs `prek run --all-files`
+as the server-side backstop. Rule: commits must stay fast and work offline —
+hooks must never need the network or 1Password (full rendering belongs in CI).
+
 ## Homebrew
 
 - `home/.install-homebrew.sh` — `read-source-state.pre` hook (registered in
