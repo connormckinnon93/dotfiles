@@ -12,12 +12,14 @@
 # to this file is needed. account_id may include dashes; they're stripped below.
 #
 # Rendered only on the "personal" profile (granted and the Cloudlab vault are
-# personal-only); work machines get just the [default] region block — no op read.
+# personal-only) and only on headed machines (onepasswordRead needs the
+# 1Password CLI with an app session, which headless boxes don't have). Work and
+# headless machines get just the [default] region block — no op read.
 
 [default]
 region = {{ .awsRegion }}
 output = json
-{{ if eq .profile "personal" -}}
+{{ if and (eq .profile "personal") (not .headless) -}}
 {{ $startUrl := onepasswordRead "op://Cloudlab/AWS SSO/start_url" -}}
 {{ range (onepasswordRead "op://Cloudlab/AWS SSO/accounts" | fromJson) }}
 [profile {{ .name }}]
