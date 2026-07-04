@@ -8,20 +8,6 @@
     url = "https://github.com/mattmc3/antidote.git"
     refreshPeriod = "168h"
 
-# yazi's Catppuccin Mocha theme (mauve accent, matching JankyBorders) plus the
-# tmTheme its syntect_theme points at (yazi doesn't use bat, so it needs its own
-# copy; bat/delta use the Catppuccin Mocha that bat bundles). theme.toml fully
-# colors yazi's chrome.
-[".config/yazi/theme.toml"]
-    type = "file"
-    url = "https://github.com/catppuccin/yazi/raw/main/themes/mocha/catppuccin-mocha-mauve.toml"
-    refreshPeriod = "720h"
-
-[".config/yazi/Catppuccin-mocha.tmTheme"]
-    type = "file"
-    url = "https://github.com/catppuccin/bat/raw/main/themes/Catppuccin%20Mocha.tmTheme"
-    refreshPeriod = "720h"
-
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...build-bat-cache).
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]

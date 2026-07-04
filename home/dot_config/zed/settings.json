@@ -5,7 +5,7 @@
 //
 // Docs: https://zed.dev/docs/configuring-zed
 {
-  // Catppuccin Mocha to match starship / JankyBorders / yazi / bat. Both the
+  // Catppuccin Mocha to match starship / JankyBorders / bat. Both the
   // color theme and file icons come from the extensions auto-installed below;
   // on a fresh machine they apply once Zed finishes installing them on launch.
   "theme": "Catppuccin Mocha",
