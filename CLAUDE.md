@@ -130,6 +130,22 @@ That is why this documentation lives at the repo root rather than beside the scr
 (A dot-prefixed file like `.notes.md` is ignored by chezmoi and would be safe, but is
 not auto-discovered by tooling.)
 
+## CI
+
+`.github/workflows/ci.yml` (repo root, outside chezmoi's view) renders the full
+source state for every supported machine shape on push/PR: a macOS matrix over
+`profile` × `headless` (real `chezmoi init` under a PTY, `apply --dry-run`,
+shellcheck of every rendered setup script) plus an ubuntu job for the
+non-interactive ephemeral path (asserts `ephemeral`/`headless` auto-detect true,
+then dry-runs — deliberately with **no** `op` binary, since headless shapes must
+render without 1Password).
+
+The macOS jobs stub the 1Password CLI with a fake `op` script. The stub answers
+`op signin --raw` (chezmoi's account mode calls it before reading) and returns
+shaped output per secret reference — notably JSON for the AWS SSO `accounts`
+field. **When adding a new `onepasswordRead` call whose value must parse (JSON,
+etc.), extend the stub's `case` in the workflow accordingly.**
+
 ## Homebrew
 
 - `home/.install-homebrew.sh` — `read-source-state.pre` hook (registered in

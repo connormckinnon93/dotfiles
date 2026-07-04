@@ -1,0 +1,144 @@
+# Render the full chezmoi state for every machine shape the repo claims to
+# support, so template errors that only bite on a shape we don't own (e.g. a
+# headless box without 1Password) fail here instead of on a fresh machine.
+#
+# Lives at the repo root, outside chezmoi's view (.chezmoiroot = home/), so it
+# is never applied to a machine.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The authorized_keys template calls gitHubKeys (GitHub API); authenticate so
+  # shared-runner rate limits can't flake the build.
+  GITHUB_TOKEN: ${{ github.token }}
+
+jobs:
+  macos:
+    name: macOS ${{ matrix.profile }} ${{ matrix.headless == 'true' && 'headless' || 'headed' }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [personal, work]
+        headless: ["true", "false"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install chezmoi and shellcheck
+        run: brew install chezmoi shellcheck
+
+      # Headed shapes render onepasswordRead (git signing key, AWS SSO). CI has
+      # no 1Password account, so stub the CLI: rendering is what's under test,
+      # not the secrets' values. chezmoi's account mode runs `op signin --raw`
+      # before reading, and the AWS SSO "accounts" field must parse as JSON, so
+      # those two get shaped responses. The stub also satisfies the op check in
+      # the .install-homebrew.sh read-source-state hook.
+      - name: Stub the 1Password CLI
+        run: |
+          mkdir -p "$HOME/stub-bin"
+          cat > "$HOME/stub-bin/op" <<'EOF'
+          #!/bin/sh
+          # `read` matched mid-string: chezmoi puts global flags first, as in
+          # `op --session <token> read --no-newline op://...`.
+          case " $* " in
+            *" signin "*) echo "ci-stub-session-token" ;;
+            *"AWS SSO/accounts"*) echo '[{"name": "ci-stub", "account_id": "123456789012", "role": "ci-stub-role"}]' ;;
+            *" read "*) echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5CIStubNotARealKey ci-stub" ;;
+            *) echo "op stub: unhandled invocation: $*" >&2; exit 1 ;;
+          esac
+          EOF
+          chmod +x "$HOME/stub-bin/op"
+          echo "$HOME/stub-bin" >> "$GITHUB_PATH"
+
+      # Run the real `chezmoi init` prompt path. The config template forces
+      # ephemeral+headless when stdin is not a TTY (see CLAUDE.md), so run it
+      # under a PTY to make the --promptBool flags take effect.
+      - name: chezmoi init (config template, under a PTY)
+        env:
+          PROFILE: ${{ matrix.profile }}
+          HEADLESS: ${{ matrix.headless }}
+        run: |
+          python3 - <<'EOF'
+          import os, pty, sys
+          sys.exit(pty.spawn([
+              "chezmoi", "init", "--source", os.environ["GITHUB_WORKSPACE"],
+              "--promptString", "Full name=CI Test",
+              "--promptString", "Email address=ci@example.invalid",
+              "--promptString", "AWS default region=us-east-1",
+              "--promptChoice", "Machine profile=" + os.environ["PROFILE"],
+              "--promptBool", "headless=" + os.environ["HEADLESS"],
+              "--promptBool", "ephemeral=false",
+          ]))
+          EOF
+
+      - name: Assert the init prompts landed
+        env:
+          PROFILE: ${{ matrix.profile }}
+          HEADLESS: ${{ matrix.headless }}
+        run: |
+          chezmoi --source "$GITHUB_WORKSPACE" data |
+            jq -e --arg p "$PROFILE" --arg h "$HEADLESS" \
+              '.profile == $p and (.headless | tostring) == $h and .ephemeral == false' >/dev/null
+
+      # Renders every managed file (including modify_ templates) without
+      # touching the runner. Externals are excluded: they are plain downloads,
+      # and skipping them keeps CI fast and network-flake-free.
+      - name: chezmoi apply --dry-run
+        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
+
+      # Render each setup script with this shape's data and lint it. Scripts
+      # gated off for the shape render as whitespace-only and are skipped.
+      - name: Render setup scripts and shellcheck
+        run: |
+          set -eu
+          out="$(mktemp -d)"
+          for f in home/.chezmoiscripts/darwin/*.sh.tmpl; do
+            name="$(basename "$f" .tmpl)"
+            chezmoi --source "$GITHUB_WORKSPACE" execute-template < "$f" > "$out/$name"
+            if grep -q '[^[:space:]]' "$out/$name"; then
+              echo "shellcheck: $name"
+              shellcheck "$out/$name"
+            else
+              echo "skip (gated off for this shape): $name"
+            fi
+          done
+          shellcheck home/.install-homebrew.sh
+
+  # The other machine class: non-interactive provisioning on Linux (the
+  # Codespaces/container path). No PTY, so the config template must
+  # auto-detect ephemeral+headless; no op stub, because headless shapes must
+  # render without 1Password at all — that is the regression this job guards.
+  linux-ephemeral:
+    name: Linux ephemeral (non-interactive)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install chezmoi
+        run: |
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: chezmoi init (no TTY)
+        run: |
+          chezmoi init --source "$GITHUB_WORKSPACE" \
+            --promptString "Full name=CI Test" \
+            --promptString "Email address=ci@example.invalid" \
+            --promptString "AWS default region=us-east-1" \
+            --promptChoice "Machine profile=personal"
+
+      - name: Assert ephemeral+headless were auto-detected
+        run: |
+          chezmoi --source "$GITHUB_WORKSPACE" data |
+            jq -e '.ephemeral == true and .headless == true' >/dev/null
+
+      - name: chezmoi apply --dry-run
+        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
