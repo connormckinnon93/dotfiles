@@ -186,3 +186,33 @@ hooks must never need the network or 1Password (full rendering belongs in CI).
   taps (with `brew trust`), brews, and casks via `brew bundle`.
 - `home/dot_config/homebrew/brew.env` — `HOMEBREW_*` environment settings.
 - `home/dot_config/zsh/exact_dot_zshrc.d/brew.zsh` — `eval "$(brew shellenv)"` for shells.
+
+## Claude Code config (`~/.claude`)
+
+`home/dot_claude/` maps to `~/.claude`. We manage a **curated** surface and leave
+everything else (transcripts, caches, per-machine state, secrets) alone. All of it
+is OS-agnostic, so nothing here is gated by profile/headless/ephemeral.
+
+The classification split, and why each mechanism:
+
+- `modify_settings.json` → `~/.claude/settings.json`. A **modify-template**, not an
+  owned file, *because Claude Code rewrites `settings.json` at runtime* (`/config`,
+  `/model`, permission "always allow", …). The template reads the current file on
+  stdin, pins our baseline keys, and leaves app-written keys untouched. It also holds
+  the pinned `hooks` block, whose `command` paths are built from `.chezmoi.homeDir`
+  (same pattern as `statusLine`).
+- `CLAUDE.md`, `references/`, `skills/`, `agents/`, `hooks/` → **owned files**, since
+  Claude Code does not rewrite them (auto-memory writes under `projects/`, not
+  `CLAUDE.md`). `hooks/executable_*.sh` carry the `executable_` prefix for the +x bit.
+
+**Curation model (important):** `.chezmoiignore` has no negation, so the curated
+surface is an *allowlist by omission* — chezmoi only manages files that exist in
+`home/dot_claude/`, and the `.claude/**` block in `home/.chezmoiignore.tmpl` blocks
+`chezmoi add` from scooping runtime/state/secret paths into the source tree. To add a
+new managed surface: drop the source file under `home/dot_claude/`; if it generates
+runtime siblings, add them to that ignore block. `~/.claude.json` (OAuth + machine
+state) stays fully ignored.
+
+**CI note:** `modify_settings.json` is a Go template, not JSON — it's in the
+`check-json` exclude in `.pre-commit-config.yaml`. Hook scripts are plain `.sh`,
+linted by the `prek`/`shellcheck` hooks; keep them network- and 1Password-free.
