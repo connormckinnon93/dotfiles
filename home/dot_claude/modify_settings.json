@@ -72,7 +72,10 @@
 {{- $hooksDir := printf "%s/.claude/hooks" .chezmoi.homeDir -}}
 {{- $preBash := dict "matcher" "Bash" "hooks" (list
       (dict "type" "command" "command" (printf "%s/block-dangerous-bash.sh" $hooksDir))) -}}
+{{- $stop := dict "hooks" (list
+      (dict "type" "command" "command" (printf "%s/tests-not-run.sh" $hooksDir))) -}}
 {{- $cfg = set $cfg "hooks" (dict
-      "PreToolUse" (list $preBash)) -}}
+      "PreToolUse" (list $preBash)
+      "Stop" (list $stop)) -}}
 
 {{ $cfg | toPrettyJson }}
