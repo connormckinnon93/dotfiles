@@ -63,4 +63,16 @@
 {{- $_ := set $perms "deny" (concat $deny $baseline | uniq | sortAlpha) -}}
 {{- $cfg = set $cfg "permissions" $perms -}}
 
+{{- /* Hooks are fully owned here, not merged: we are the sole author of user-scope
+       hooks, and replacing the whole key keeps re-apply idempotent (appending to
+       the event arrays would duplicate our entries every apply). Command paths
+       point at owned scripts in ~/.claude/hooks (see home/dot_claude/hooks/ and the
+       repo CLAUDE.md), addressed absolutely so they resolve when Claude Code runs
+       them non-interactively — same reasoning as statusLine. */ -}}
+{{- $hooksDir := printf "%s/.claude/hooks" .chezmoi.homeDir -}}
+{{- $preBash := dict "matcher" "Bash" "hooks" (list
+      (dict "type" "command" "command" (printf "%s/block-dangerous-bash.sh" $hooksDir))) -}}
+{{- $cfg = set $cfg "hooks" (dict
+      "PreToolUse" (list $preBash)) -}}
+
 {{ $cfg | toPrettyJson }}
