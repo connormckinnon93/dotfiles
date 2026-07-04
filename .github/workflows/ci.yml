@@ -23,17 +23,23 @@ env:
 jobs:
   macos:
     name: macOS ${{ matrix.profile }} ${{ matrix.headless == 'true' && 'headless' || 'headed' }}
-    runs-on: macos-latest
+    # Pinned rather than macos-latest: deterministic renders, and the -latest
+    # label emits migration notices whenever GitHub moves it (e.g. to macOS 26).
+    runs-on: macos-26
     strategy:
       fail-fast: false
       matrix:
         profile: [personal, work]
         headless: ["true", "false"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install chezmoi and shellcheck
-        run: brew install chezmoi shellcheck
+        # The runner image ships taps we don't use; untrusted ones make every
+        # brew call emit a tap-trust warning, so drop them first.
+        run: |
+          brew untap aws/tap 2>/dev/null || true
+          brew install chezmoi shellcheck
 
       # Headed shapes render onepasswordRead (git signing key, AWS SSO). CI has
       # no 1Password account, so stub the CLI: rendering is what's under test,
@@ -120,7 +126,7 @@ jobs:
     name: Linux ephemeral (non-interactive)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install chezmoi
         run: |
