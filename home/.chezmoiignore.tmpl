@@ -57,7 +57,10 @@ Library/Application Support/BraveSoftware
      exclude on each machine class as personal/work configs diverge. */}}
 {{ if eq .profile "work" }}
 {{/* personal-only paths to skip on work machines, e.g. .config/personal-app */}}
-{{/* Inbound SSH authorized by personal GitHub keys: don't grant that on work boxes. */}}
+{{/* Inbound SSH authorized by personal GitHub keys: don't grant that on work
+     boxes. On personal machines it applies everywhere — including ephemeral and
+     headless boxes, deliberately: being able to SSH into a throwaway VM or
+     server with the GitHub keys is exactly what authorized_keys is for. */}}
 .ssh/authorized_keys
 {{ end }}
 {{ if eq .profile "personal" }}
