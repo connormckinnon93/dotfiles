@@ -2,9 +2,9 @@
 #
 # carapace - multi-shell completion engine.
 #
-# Installed as a binary via chezmoiexternal. Bridged to other completion
-# systems so commands carapace doesn't cover fall back to native zsh,
-# bash-completion, and fish completions.
+# Installed via Homebrew (.chezmoiscripts install-packages). Bridged to other
+# completion systems so commands carapace doesn't cover fall back to native
+# zsh, bash-completion, and fish completions.
 #
 
 (( $+commands[carapace] )) || return

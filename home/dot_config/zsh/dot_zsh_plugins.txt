@@ -10,8 +10,9 @@ mattmc3/ez-compinit
 # completions (carapace itself is initialized in .zshrc.d/carapace.zsh).
 aloxaf/fzf-tab
 
-# Replace cat with bat (syntax highlighting) and colorize man pages. Needs the
-# bat binary (chezmoiexternal); use `rcat` for the real cat.
+# Replace cat with bat (syntax highlighting); use `rcat` for the real cat.
+# Needs the bat binary (Homebrew). Its man-page MANPAGER is deliberately
+# overridden later: .zshrc.d/editor.zsh routes man through nvim instead.
 fdellwing/zsh-bat
 
 # zsh-abbr - fish-style abbreviations that expand inline (e.g. gst -> git status).
