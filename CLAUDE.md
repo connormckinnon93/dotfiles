@@ -6,6 +6,19 @@ Managed with [chezmoi](https://chezmoi.io). `.chezmoiroot` points at `home/`, so
 
 macOS is the only supported target today; package installs assume Homebrew.
 
+## Working in this repo
+
+```sh
+chezmoi apply           # render source → ~ (add --dry-run to preview)
+chezmoi diff            # show pending changes to the target
+chezmoi cat ~/.claude/settings.json   # render one file (e.g. to test modify_settings.json)
+chezmoi edit <target>   # edit the source of a target file
+chezmoi add <target>    # start managing an existing file (respects .chezmoiignore)
+```
+
+Source lives in `home/`; never edit files under `~` directly — edit the source and
+apply.
+
 ## Machine profile
 
 `chezmoi init` prompts for a `profile` (`personal` or `work`, default `personal`),
