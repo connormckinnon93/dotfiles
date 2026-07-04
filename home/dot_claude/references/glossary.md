@@ -47,7 +47,7 @@ Keywords that are separated by `/` are synonyms. They carry nearly identical mea
 | Keyword | Meaning | Notes |
 | --- | --- | --- |
 | `ONLY` | Limits scope to something |   |
-| `ALL` [`<category>`] | Expands scope to include set |   | 
+| `ALL` [`<category>`] | Expands scope to include set |   |
 | `EXCEPT` | Removes from scope |   |
 | `LIMIT TO` | Sets boundaries on the extent |   |
 | `FOR` `<case>` | Scope to specific case |   |
