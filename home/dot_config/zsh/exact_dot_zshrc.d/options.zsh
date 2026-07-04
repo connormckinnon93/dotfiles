@@ -15,5 +15,13 @@ _comp_options+=(globdots)
 # Don't syntax-highlight pasted text.
 zle_highlight=('paste:none')
 
+# vi-style line editing, matching inputrc's readline setting. starship's
+# vimcmd_* symbols show the current mode; atuin binds its own viins/vicmd keys.
+# Must precede the bindkey calls below, which then land in the viins keymap.
+bindkey -v
+# Near-instant ESC (the 400ms default waits for multi-key sequences and makes
+# mode switches feel laggy; terminals send escape sequences atomically anyway).
+KEYTIMEOUT=1
+
 # Ctrl+Backspace deletes a whole word.
 bindkey '^H' backward-kill-word
