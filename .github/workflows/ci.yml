@@ -118,6 +118,32 @@ jobs:
           done
           shellcheck home/.install-homebrew.sh
 
+  # Server-side backstop for the prek-managed git hooks (.pre-commit-config.yaml):
+  # covers commits made with --no-verify, GitHub-UI edits, and machines where
+  # the hooks weren't installed.
+  hooks:
+    name: prek hooks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # gitleaks/actionlint are language: golang hooks that prek builds with a
+      # managed toolchain; cache the built environments across runs.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/prek
+          key: prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Install prek
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf \
+            https://github.com/j178/prek/releases/download/v0.4.8/prek-installer.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Run hooks on all files
+        run: prek run --all-files --show-diff-on-failure
+
   # The other machine class: non-interactive provisioning on Linux (the
   # Codespaces/container path). No PTY, so the config template must
   # auto-detect ephemeral+headless; no op stub, because headless shapes must
