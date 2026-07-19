@@ -208,6 +208,11 @@ nothing tracks a moving branch. Where each pin lives and how to bump it:
   respects. Bump by hand: `git ls-remote <repo> HEAD`.
 - **prek hook revs** (`.pre-commit-config.yaml`): frozen to commit SHAs with
   `# frozen: <tag>` comments. Bump with `prek auto-update --freeze`.
+- **nvim plugins** (`home/dot_config/nvim/lazy-lock.json`): lazy.nvim's
+  lockfile, chezmoi-owned, so a plain `chezmoi apply` reverts any update made
+  outside the loop. To update: `:Lazy update`, then
+  `chezmoi add ~/.config/nvim/lazy-lock.json` and commit. The update checker is
+  disabled in `lua/config/lazy.lua` to match (updates are deliberate).
 - **CI** (`.github/workflows/ci.yml`): actions are SHA-pinned with version
   comments; prek installs hash-pinned from PyPI (`.github/requirements.txt`,
   wheel hashes only); the chezmoi install script is fetched at a tagged ref,
