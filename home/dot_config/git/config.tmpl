@@ -1,16 +1,18 @@
 # Managed by chezmoi. Identity comes from `chezmoi init` prompts (kept out of
 # the public source).
+{{- /* Signing is personal+headed only. The key lives in the owner's personal
+       1Password: reading it needs the CLI with an app session (headless boxes
+       have neither), and a work machine must not depend on — or sign with —
+       the personal vault at all (the work boundary guarantee; see CLAUDE.md). */ -}}
+{{- $signing := and (eq .profile "personal") (not .headless) }}
 
 [user]
     name = {{ .name }}
     email = {{ .email }}
-{{- /* Reading the key needs the 1Password CLI with an app session; headless
-       machines have neither (and signing is disabled below), so skip the read
-       there rather than failing the whole apply. */ -}}
-{{- if not .headless }}
+{{- if $signing }}
     signingkey = {{ onepasswordRead .signingKeyRef | quote }}
 {{- end }}
-
+{{ if $signing }}
 # Commit/tag signing via 1Password's SSH agent (op-ssh-sign).
 [gpg]
     format = ssh
@@ -18,13 +20,17 @@
     program = {{ .opSshSign | quote }}
     allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
-    # Signing needs 1Password's op-ssh-sign, which requires the desktop app;
-    # disable on headless machines (no GUI) so commits don't fail.
-    gpgsign = {{ not .headless }}
+    gpgsign = true
     verbose = true
 [tag]
-    gpgsign = {{ not .headless }}
+    gpgsign = true
     sort = version:refname
+{{ else }}
+[commit]
+    verbose = true
+[tag]
+    sort = version:refname
+{{ end }}
 
 # Sensible defaults.
 [init]

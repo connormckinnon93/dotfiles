@@ -1,10 +1,12 @@
 # Managed by chezmoi.
 HashKnownHosts no
-
+{{ if eq .profile "personal" }}
 Host *
   # Authenticate via 1Password's SSH agent (key lives in 1Password, not on disk).
+  # Personal-only: a work machine must not route SSH through the personal vault
+  # (the work boundary guarantee; see CLAUDE.md).
   IdentityAgent "{{ .onePasswordAgent }}"
-
+{{ end }}
 Host github.com
   User git
 {{- /* vim: set filetype=sshconfig: */}}

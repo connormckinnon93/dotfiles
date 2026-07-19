@@ -32,6 +32,18 @@ if ! type brew >/dev/null 2>&1 \
   rm -f "$installer"
 fi
 
+# Only personal machines read 1Password: templates onepasswordRead solely on
+# profile=personal (work renders with no 1Password at all — the work boundary
+# guarantee; see CLAUDE.md). Detect work from the init-generated config and
+# skip everything op-related there. Missing/unreadable config falls through to
+# the personal path: op gets installed (harmless) and the account check below
+# still requires a readable config to fire.
+chezmoi_config="${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/chezmoi.toml"
+if [ -r "$chezmoi_config" ] \
+  && grep -Eq '^[[:space:]]*profile[[:space:]]*=[[:space:]]*"work"' "$chezmoi_config"; then
+  exit 0
+fi
+
 # 1Password CLI is required by templates using onepasswordRead, which chezmoi
 # evaluates at source-state read time — before any run_* script can install it.
 # (The 1password-cli cask is also in the brew bundle, but that runs too late.)
@@ -51,7 +63,6 @@ fi
 # 1Password (see .chezmoiignore.tmpl) and skip the check; so do contexts where
 # the init config or the op binary is missing — chezmoi's own errors are
 # clearer there. CI's op stub answers `op account list` (see ci.yml).
-chezmoi_config="${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/chezmoi.toml"
 if command -v op >/dev/null 2>&1 && [ -r "$chezmoi_config" ] \
   && grep -Eq '^[[:space:]]*headless[[:space:]]*=[[:space:]]*false' "$chezmoi_config" \
   && ! op account list 2>/dev/null | grep -q .; then

@@ -30,11 +30,22 @@ anything per machine class:
 - **Packages:** `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl`
   has `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat` profile-specific
   brews/casks/taps onto the base lists (base lists apply to both profiles). The personal
-  block adds the `granted` brew plus, nested under `{{ if not .headless }}`, the
-  gaming/desktop casks (steam, epic-games, …); the work block is an empty placeholder.
+  block adds `granted`, `1password-cli`, the `tailscale` daemon (headless) and, nested
+  under `{{ if not .headless }}`, every personal-account GUI app (1password, claude,
+  obsidian, tailscale-app, brave, docker-desktop, gaming); the work block is an empty
+  placeholder for employer tooling.
 - **Ignored files:** add a `{{ if eq .profile "work" }} … {{ end }}` block to
   `home/.chezmoiignore.tmpl` to drop personal-only configs on a work machine.
 - **Any other template:** reference `.profile` directly.
+
+**Work boundary guarantee:** `profile=work` renders with **no personal accounts** —
+no 1Password anywhere (op is neither installed by the pre-hook nor read by any
+template; git signing and the SSH `IdentityAgent` are personal-only), no personal
+tailnet, no personal-account casks, no inbound `authorized_keys`, and
+`allowed_signers` is ignored. CI's work-shape jobs regression-test that the render
+holds. **Preserve this when adding templates:** nothing reachable under
+`eq .profile "work"` may call `onepasswordRead` or reference a personal account;
+put such things in a personal block or the work ignore block.
 
 Set it non-interactively by re-running init, keyed by the **prompt string** (not the
 data key): `chezmoi init --promptChoice "Machine profile=work"`.

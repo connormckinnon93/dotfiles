@@ -62,6 +62,9 @@ Library/Application Support/BraveSoftware
      headless boxes, deliberately: being able to SSH into a throwaway VM or
      server with the GitHub keys is exactly what authorized_keys is for. */}}
 .ssh/authorized_keys
+{{/* Rendered via onepasswordRead of the personal signing key; signing is
+     personal-only (work boundary guarantee — work renders with no 1Password). */}}
+.config/git/allowed_signers
 {{ end }}
 {{ if eq .profile "personal" }}
 {{/* work-only paths to skip on personal machines */}}
