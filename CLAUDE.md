@@ -2,7 +2,8 @@
 
 Managed with [chezmoi](https://chezmoi.io). `.chezmoiroot` points at `home/`, so
 `home/` is the source root and its contents map to `~`. Anything at the repo root
-(this file, `README.md`, `zdotdir/`) is outside chezmoi's view and is never applied.
+(this file, `README.md`, `.github/`, `.pre-commit-config.yaml`) is outside
+chezmoi's view and is never applied.
 
 macOS is the only supported target today; package installs assume Homebrew.
 
@@ -89,7 +90,8 @@ home/.chezmoiscripts/darwin/
 ├── run_onchange_after_48-configure-ui.sh.tmpl              # window anims, save-to-disk
 ├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
 ├── run_onchange_after_60-configure-spaces.sh.tmpl          # spans-displays (aerospace)
-└── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
+├── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
+└── run_once_after_80-install-git-hooks.sh.tmpl             # prek install (git hooks)
 ```
 
 The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
@@ -129,7 +131,7 @@ Practical rule: **keep a given before/after group entirely within one directory.
 long as all OS-specific scripts stay in their OS directory (and we don't split a group
 across top-level + subdir), the numeric prefixes order exactly as written. Today all
 scripts are in `darwin/`, so ordering is simply all `before_` (`05` → `10`) then all
-`after_` (`20` → `30` → `40` … → `70`).
+`after_` (`20` → `30` → `40` … → `80`).
 
 To re-verify rule changes, drop throwaway `run_onchange_before_/after_` scripts that
 `echo` to a log into a temp source dir and `chezmoi apply --source … --destination …`
