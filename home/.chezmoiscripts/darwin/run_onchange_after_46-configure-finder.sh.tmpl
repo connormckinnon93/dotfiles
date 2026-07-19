@@ -5,7 +5,7 @@
 #
 set -eufo pipefail
 
-trap 'killall Finder' EXIT
+trap 'killall Finder >/dev/null 2>&1 || true' EXIT
 
 # Always show file extensions (global domain).
 defaults write -g AppleShowAllExtensions -int 1
