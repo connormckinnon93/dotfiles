@@ -41,6 +41,29 @@ without 1Password and skip the check.)
 - **Secrets** — never in the repo: only `op://` references, resolved at apply
   time by the 1Password CLI
 
+## Recovery
+
+If a machine dies, config restore is the Install command above — but it sits at
+the end of a dependency chain worth knowing before you need it:
+
+1. **1Password** first. The SSH key (auth *and* commit signing) lives only in
+   the 1Password vault — never on disk — so account recovery (another signed-in
+   device, or the Emergency Kit, which is kept offline outside this repo) is
+   the root of everything.
+2. **GitHub** next: SSH access comes from the vault key via the 1Password
+   agent.
+3. **This repo**: `chezmoi init --apply connormckinnon93` (see the 1Password
+   prerequisite above).
+4. Everything else: sign in to Tailscale, `gh auth login`, and app accounts as
+   prompted.
+
+**What a restore does *not* bring back** — this repo manages config, not state.
+Lost with the machine unless separately backed up: atuin shell history
+(`auto_sync = false` is deliberate — history stays local), Claude Code
+transcripts/projects, Obsidian vaults, browser profiles, Docker volumes, and
+`~/.config/zsh/.zshrc.local`. Anything on that list you'd miss needs a machine
+backup (e.g. Time Machine) — chezmoi won't save it.
+
 ## How it works
 
 - `main` is protected; changes land by PR with all CI checks green, then
