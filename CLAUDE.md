@@ -102,7 +102,8 @@ home/.chezmoiscripts/darwin/
 ├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
 ├── run_onchange_after_60-configure-spaces.sh.tmpl          # spans-displays (aerospace)
 ├── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
-└── run_once_after_80-install-git-hooks.sh.tmpl             # prek install (git hooks)
+├── run_once_after_80-install-git-hooks.sh.tmpl             # prek install (git hooks)
+└── run_after_90-check-security-posture.sh.tmpl             # warn-only FileVault/firewall/lock check
 ```
 
 The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
@@ -142,7 +143,7 @@ Practical rule: **keep a given before/after group entirely within one directory.
 long as all OS-specific scripts stay in their OS directory (and we don't split a group
 across top-level + subdir), the numeric prefixes order exactly as written. Today all
 scripts are in `darwin/`, so ordering is simply all `before_` (`05` → `10`) then all
-`after_` (`20` → `30` → `40` … → `80`).
+`after_` (`20` → `30` → `40` … → `90`).
 
 To re-verify rule changes, drop throwaway `run_onchange_before_/after_` scripts that
 `echo` to a log into a temp source dir and `chezmoi apply --source … --destination …`
