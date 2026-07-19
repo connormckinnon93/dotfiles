@@ -11,14 +11,14 @@ on:
     branches: [main]
   pull_request:
 
+# Everything here only reads the repo; say so explicitly rather than inheriting
+# the repo-default token permissions.
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  # The authorized_keys template calls gitHubKeys (GitHub API); authenticate so
-  # shared-runner rate limits can't flake the build.
-  GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   macos:
@@ -98,6 +98,11 @@ jobs:
       # touching the runner. Externals are excluded: they are plain downloads,
       # and skipping them keeps CI fast and network-flake-free.
       - name: chezmoi apply --dry-run
+        # The authorized_keys template calls gitHubKeys (GitHub API);
+        # authenticate so shared-runner rate limits can't flake the render.
+        # Scoped to this step only — the render is the sole API consumer.
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
 
       # Render each setup script with this shape's data and lint it. Scripts
@@ -173,4 +178,8 @@ jobs:
             jq -e '.ephemeral == true and .headless == true' >/dev/null
 
       - name: chezmoi apply --dry-run
+        # personal profile → authorized_keys renders here too; authenticate the
+        # gitHubKeys API call, scoped to this step only.
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
