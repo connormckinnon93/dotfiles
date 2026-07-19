@@ -7,5 +7,6 @@ update_check = false
 enter_accept = false
 
 # Don't record commands matching these regexes (secrets). Space-prefixed
-# commands are also skipped (HIST_IGNORE_SPACE). Enable/extend as needed:
-# history_filter = ["(?i)(password|secret|token|api[_-]?key)"]
+# commands are also skipped (HIST_IGNORE_SPACE). History is local-only and
+# kept forever, so a pasted secret would otherwise persist indefinitely.
+history_filter = ["(?i)(password|secret|token|api[_-]?key)"]

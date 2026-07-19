@@ -10,6 +10,13 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Monthly: PR runs skip externals (--exclude below), so the pinned URLs +
+    # sha256 checksums in .chezmoiexternal.toml.tmpl are otherwise exercised
+    # only by a fresh machine. This catches URL rot / upstream re-tagging as a
+    # CI failure instead. Job names are unchanged, so the ruleset's required
+    # checks are unaffected.
+    - cron: "17 9 3 * *"
 
 # Everything here only reads the repo; say so explicitly rather than inheriting
 # the repo-default token permissions.
@@ -22,7 +29,7 @@ concurrency:
 
 jobs:
   macos:
-    name: macOS ${{ matrix.profile }} ${{ matrix.headless == 'true' && 'headless' || 'headed' }}
+    name: macOS ${{ matrix.profile }} ${{ matrix.headless == 'true' && 'headless' || 'headed' }}${{ matrix.ephemeral == 'true' && ' ephemeral' || '' }}
     # Pinned rather than macos-latest: deterministic renders, and the -latest
     # label emits migration notices whenever GitHub moves it (e.g. to macOS 26).
     runs-on: macos-26
@@ -31,6 +38,14 @@ jobs:
       matrix:
         profile: [personal, work]
         headless: ["true", "false"]
+        ephemeral: ["false"]
+        include:
+          # One ephemeral shape so the {{ if .ephemeral }} package blocks don't
+          # ship unlinted on macOS. NOT in the ruleset's required checks (the
+          # six required job names are unchanged); add it there to make it gate.
+          - profile: personal
+            headless: "false"
+            ephemeral: "true"
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
@@ -72,6 +87,7 @@ jobs:
         env:
           PROFILE: ${{ matrix.profile }}
           HEADLESS: ${{ matrix.headless }}
+          EPHEMERAL: ${{ matrix.ephemeral }}
         run: |
           python3 - <<'EOF'
           import os, pty, sys
@@ -82,7 +98,7 @@ jobs:
               "--promptString", "AWS default region=us-east-1",
               "--promptChoice", "Machine profile=" + os.environ["PROFILE"],
               "--promptBool", "headless=" + os.environ["HEADLESS"],
-              "--promptBool", "ephemeral=false",
+              "--promptBool", "ephemeral=" + os.environ["EPHEMERAL"],
           ]))
           EOF
 
@@ -90,21 +106,23 @@ jobs:
         env:
           PROFILE: ${{ matrix.profile }}
           HEADLESS: ${{ matrix.headless }}
+          EPHEMERAL: ${{ matrix.ephemeral }}
         run: |
           chezmoi --source "$GITHUB_WORKSPACE" data |
-            jq -e --arg p "$PROFILE" --arg h "$HEADLESS" \
-              '.profile == $p and (.headless | tostring) == $h and .ephemeral == false' >/dev/null
+            jq -e --arg p "$PROFILE" --arg h "$HEADLESS" --arg e "$EPHEMERAL" \
+              '.profile == $p and (.headless | tostring) == $h and (.ephemeral | tostring) == $e' >/dev/null
 
       # Renders every managed file (including modify_ templates) without
-      # touching the runner. Externals are excluded: they are plain downloads,
-      # and skipping them keeps CI fast and network-flake-free.
+      # touching the runner. Externals are excluded on push/PR (plain downloads;
+      # skipping keeps those runs fast and network-flake-free) but exercised on
+      # the monthly scheduled run so the pinned URLs + checksums stay verified.
       - name: chezmoi apply --dry-run
         # The authorized_keys template calls gitHubKeys (GitHub API);
         # authenticate so shared-runner rate limits can't flake the render.
         # Scoped to this step only — the render is the sole API consumer.
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
+        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run ${{ github.event_name == 'schedule' && '' || '--exclude externals' }}
 
       # Render each setup script with this shape's data and lint it. Scripts
       # gated off for the shape render as whitespace-only and are skipped.
@@ -188,7 +206,8 @@ jobs:
 
       - name: chezmoi apply --dry-run
         # personal profile → authorized_keys renders here too; authenticate the
-        # gitHubKeys API call, scoped to this step only.
+        # gitHubKeys API call, scoped to this step only. Externals run on the
+        # monthly schedule only, as in the macOS jobs.
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run --exclude externals
+        run: chezmoi --source "$GITHUB_WORKSPACE" apply --dry-run ${{ github.event_name == 'schedule' && '' || '--exclude externals' }}
