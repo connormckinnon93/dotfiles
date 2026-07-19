@@ -191,6 +191,37 @@ CI's job). `run_once_after_80-install-git-hooks` installs the hooks into
 as the server-side backstop. Rule: commits must stay fast and work offline —
 hooks must never need the network or 1Password (full rendering belongs in CI).
 
+## Supply-chain pins
+
+Every third-party artifact that executes on our machines (or in CI) is pinned —
+nothing tracks a moving branch. Where each pin lives and how to bump it:
+
+- **chezmoi externals** (`home/.chezmoiexternal.toml.tmpl`): antidote is cloned at
+  a release tag with no `refreshPeriod` (bump = new tag, then
+  `rm -rf ~/.config/zsh/.antidote && chezmoi apply` — a tag clone has no pull
+  path); file externals (bat syntax, fonts) use tag-versioned URLs plus
+  `checksum.sha256`, bumped together.
+- **zsh plugins** (`home/dot_config/zsh/dot_zsh_plugins.txt`): every bundle
+  carries a `pin:<full 40-char commit SHA>` annotation, which `antidote update`
+  respects. Bump by hand: `git ls-remote <repo> HEAD`.
+- **prek hook revs** (`.pre-commit-config.yaml`): frozen to commit SHAs with
+  `# frozen: <tag>` comments. Bump with `prek auto-update --freeze`.
+- **CI** (`.github/workflows/ci.yml`): actions are SHA-pinned with version
+  comments; prek installs hash-pinned from PyPI (`.github/requirements.txt`,
+  wheel hashes only); the chezmoi install script is fetched at a tagged ref,
+  sha256-verified, and installs a pinned release (the script itself verifies
+  the binary against the release checksums).
+- **Homebrew bootstrap** (`home/.install-homebrew.sh`): the installer is pinned
+  to a Homebrew/install commit and sha256-verified before executing (that repo
+  tags no releases).
+- **Deliberately unpinned**: `brew bundle` contents follow Homebrew's channel
+  (pinning formulae fights brew — updates are a `brew upgrade` decision, not a
+  repo pin), and mise runtimes are minor-pinned in
+  `home/dot_config/mise/config.toml`.
+
+Dependabot (`.github/dependabot.yml`) auto-bumps only the actions SHAs and the
+pip hash-pin; every other pin is manual, per the notes at each site.
+
 ## Homebrew
 
 - `home/.install-homebrew.sh` — `read-source-state.pre` hook (registered in

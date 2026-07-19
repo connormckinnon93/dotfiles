@@ -1,27 +1,41 @@
 # chezmoi externals: only things Homebrew doesn't manage (the zsh plugin
 # manager, bat's antidote syntax def, fonts). CLI tool *binaries* are
 # installed via Homebrew on macOS (see .chezmoiscripts/...).
+#
+# Everything here is pinned — git clones to a release tag, plain files to a
+# tag-versioned URL plus sha256 — so no external can change out from under us
+# (see "Supply-chain pins" in the repo-root CLAUDE.md). To update: bump the
+# tag and checksum together.
 
 # Antidote - the ZSH plugin manager (cloned into $ZDOTDIR/.antidote).
+# Pinned to a release tag; no refreshPeriod, so chezmoi never auto-pulls.
+# A tag clone is detached (no pull path), so to move versions: bump the tag,
+# then `rm -rf ~/.config/zsh/.antidote && chezmoi apply`.
 [".config/zsh/.antidote"]
     type = "git-repo"
     url = "https://github.com/mattmc3/antidote.git"
-    refreshPeriod = "168h"
+    clone.args = ["--branch", "v2.1.0", "--depth", "1"]
 
 # antidote's bat syntax for highlighting .zsh_plugins.txt files.
 # Picked up after `bat cache --build` (run by .chezmoiscripts/...build-bat-cache).
+# Same tag as the antidote clone above; bump the two together.
 [".config/bat/syntaxes/zsh_plugins.sublime-syntax"]
     type = "file"
-    url = "https://github.com/getantidote/antidote/raw/main/misc/zsh_plugins.sublime-syntax"
-    refreshPeriod = "720h"
+    url = "https://github.com/mattmc3/antidote/raw/v2.1.0/misc/zsh_plugins.sublime-syntax"
+    checksum.sha256 = "0bf15a409703def710ba8e8dd7a7d58ef3aa19a2fcd737ce7896f2fa55a65573"
 
 # JetBrainsMono Nerd Font (Mono variant: single-width glyphs for terminals).
 # Individual .ttf files pulled directly, so no 128MB family-zip download.
-{{- $fontBase := "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures" }}
+{{- $fontBase := "https://github.com/ryanoasis/nerd-fonts/raw/v3.4.0/patched-fonts/JetBrainsMono/Ligatures" }}
+{{- $fontShas := dict
+      "Regular"    "f01031f40e48dc29e1112e6b0b0450a2c6cd097f3f35cfff05c55cb311f8034c"
+      "Bold"       "5bdd4a873f3cd32f882d2c55545089123926e27707d5880fc9eaf84eb01b6686"
+      "Italic"     "ccd88b36d325e6a905edc8dd3f2522718d9690d9bed3fbb4684c7e746c34f846"
+      "BoldItalic" "d931df2928b3216892d35980cddcad9edade1b9c9cd2e09a6c2937139f474742" }}
 {{- range (list "Regular" "Bold" "Italic" "BoldItalic") }}
 ["{{ $.fontDir }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"]
     type = "file"
     url = "{{ $fontBase }}/{{ . }}/JetBrainsMonoNerdFontMono-{{ . }}.ttf"
-    refreshPeriod = "8760h"
+    checksum.sha256 = "{{ index $fontShas . }}"
 {{- end }}
 {{- /* vim: set filetype=toml: */}}

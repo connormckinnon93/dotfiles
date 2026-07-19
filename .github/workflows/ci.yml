@@ -32,7 +32,7 @@ jobs:
         profile: [personal, work]
         headless: ["true", "false"]
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install chezmoi and shellcheck
         # The runner image ships taps we don't use; untrusted ones make every
@@ -130,21 +130,22 @@ jobs:
     name: prek hooks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       # gitleaks/actionlint are language: golang hooks that prek builds with a
       # managed toolchain; cache the built environments across runs.
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/prek
           key: prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
+      # Hash-pinned from PyPI (wheel hashes only, so pip can never fall back
+      # to building an unpinned sdist). Dependabot bumps the pin+hashes.
       - name: Install prek
         run: |
-          curl --proto '=https' --tlsv1.2 -LsSf \
-            https://github.com/j178/prek/releases/download/v0.4.8/prek-installer.sh | sh
+          python3 -m pip install --user --require-hashes --no-deps \
+            -r .github/requirements.txt
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Run hooks on all files
         run: prek run --all-files --show-diff-on-failure
@@ -157,11 +158,18 @@ jobs:
     name: Linux ephemeral (non-interactive)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
+      # Pinned two ways: the install script is fetched at a tagged ref and
+      # checksum-verified before it runs, and it installs a pinned chezmoi
+      # release (the script verifies the binary against the release's
+      # checksums.txt itself). Bump tag + sha256 together.
       - name: Install chezmoi
         run: |
-          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+          curl -fsSL -o /tmp/chezmoi-install.sh \
+            https://raw.githubusercontent.com/twpayne/chezmoi/v2.71.0/assets/scripts/install.sh
+          echo "f9f83cce19397e1a2dedbc382e4e9db843c605e130e1eeabf42406c5520c5f9a  /tmp/chezmoi-install.sh" | sha256sum -c -
+          sh /tmp/chezmoi-install.sh -b "$HOME/.local/bin" -t v2.71.0
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: chezmoi init (no TTY)

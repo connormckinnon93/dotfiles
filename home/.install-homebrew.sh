@@ -10,10 +10,26 @@
 
 # Install Homebrew if absent (type check covers an already-on-PATH brew; the
 # prefix checks cover a brew installed earlier this run but not yet on PATH).
+# The installer is pinned to a reviewed Homebrew/install commit and verified
+# by sha256 before it runs (that repo tags no releases, so a commit is the
+# pin). To bump: pick the new commit (`git ls-remote
+# https://github.com/Homebrew/install.git HEAD`), download install.sh at that
+# ref, and update both values together. shasum ships with stock macOS.
+HOMEBREW_INSTALL_REF="fea42d9aedd20a82bea800a6898dcde19401ab1f"
+HOMEBREW_INSTALL_SHA256="99287f194a8b3c9e6b0203a11a5fa54518be57209343e6bb954dec4635796d9d"
 if ! type brew >/dev/null 2>&1 \
   && [ ! -x /opt/homebrew/bin/brew ] && [ ! -x /usr/local/bin/brew ]; then
   echo "Installing Homebrew..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  installer="$(mktemp)"
+  curl -fsSL "https://raw.githubusercontent.com/Homebrew/install/${HOMEBREW_INSTALL_REF}/install.sh" \
+    -o "$installer"
+  if ! echo "${HOMEBREW_INSTALL_SHA256}  ${installer}" | shasum -a 256 -c - >/dev/null 2>&1; then
+    echo "Homebrew installer checksum mismatch (expected ${HOMEBREW_INSTALL_SHA256}); aborting." >&2
+    rm -f "$installer"
+    exit 1
+  fi
+  NONINTERACTIVE=1 /bin/bash "$installer"
+  rm -f "$installer"
 fi
 
 # 1Password CLI is required by templates using onepasswordRead, which chezmoi
