@@ -7,7 +7,7 @@
 #
 set -eufo pipefail
 
-trap 'killall Dock' EXIT
+trap 'killall Dock >/dev/null 2>&1 || true' EXIT
 
 defaults write com.apple.dock autohide -int 1
 defaults write com.apple.dock show-recents -int 0

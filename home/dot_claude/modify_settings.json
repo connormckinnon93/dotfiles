@@ -47,13 +47,18 @@
 
 {{- /* Secret/credential read deny-list. Unioned with any existing deny entries
        so app/user additions survive; sorted + de-duped for a stable diff. These
-       match rendered targets in $HOME, not their chezmoi source. */ -}}
+       match rendered targets in $HOME, not their chezmoi source. Covers token
+       stores (gh OAuth) and shell-history stores (atuin db, HISTFILE) as well
+       as classic credential files. */ -}}
 {{- $baseline := list
       "Read(./.env)"
       "Read(./.env.*)"
       "Read(./secrets/**)"
       "Read(~/.aws/**)"
+      "Read(~/.config/gh/hosts.yml)"
+      "Read(~/.config/zsh/.zsh_history)"
       "Read(~/.git-credentials)"
+      "Read(~/.local/share/atuin/**)"
       "Read(~/.netrc)"
       "Read(~/.npmrc)"
       "Read(~/.pypirc)"

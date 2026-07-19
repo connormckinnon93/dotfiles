@@ -1,0 +1,15 @@
+# Keeps the machine-updatable supply-chain pins fresh: the SHA-pinned actions
+# in ci.yml and the hash-pinned prek in .github/requirements.txt. The other
+# pins (chezmoi externals, .zsh_plugins.txt, .pre-commit-config.yaml revs,
+# installer checksums) have no Dependabot ecosystem and are bumped by hand —
+# see "Supply-chain pins" in CLAUDE.md.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /.github
+    schedule:
+      interval: weekly

@@ -2,7 +2,8 @@
 
 Managed with [chezmoi](https://chezmoi.io). `.chezmoiroot` points at `home/`, so
 `home/` is the source root and its contents map to `~`. Anything at the repo root
-(this file, `README.md`, `zdotdir/`) is outside chezmoi's view and is never applied.
+(this file, `README.md`, `.github/`, `.pre-commit-config.yaml`) is outside
+chezmoi's view and is never applied.
 
 macOS is the only supported target today; package installs assume Homebrew.
 
@@ -29,11 +30,22 @@ anything per machine class:
 - **Packages:** `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl`
   has `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat` profile-specific
   brews/casks/taps onto the base lists (base lists apply to both profiles). The personal
-  block adds the `granted` brew plus, nested under `{{ if not .headless }}`, the
-  gaming/desktop casks (steam, epic-games, …); the work block is an empty placeholder.
+  block adds `granted`, `1password-cli`, the `tailscale` daemon (headless) and, nested
+  under `{{ if not .headless }}`, every personal-account GUI app (1password, claude,
+  obsidian, tailscale-app, brave, docker-desktop, gaming); the work block is an empty
+  placeholder for employer tooling.
 - **Ignored files:** add a `{{ if eq .profile "work" }} … {{ end }}` block to
   `home/.chezmoiignore.tmpl` to drop personal-only configs on a work machine.
 - **Any other template:** reference `.profile` directly.
+
+**Work boundary guarantee:** `profile=work` renders with **no personal accounts** —
+no 1Password anywhere (op is neither installed by the pre-hook nor read by any
+template; git signing and the SSH `IdentityAgent` are personal-only), no personal
+tailnet, no personal-account casks, no inbound `authorized_keys`, and
+`allowed_signers` is ignored. CI's work-shape jobs regression-test that the render
+holds. **Preserve this when adding templates:** nothing reachable under
+`eq .profile "work"` may call `onepasswordRead` or reference a personal account;
+put such things in a personal block or the work ignore block.
 
 Set it non-interactively by re-running init, keyed by the **prompt string** (not the
 data key): `chezmoi init --promptChoice "Machine profile=work"`.
@@ -89,7 +101,9 @@ home/.chezmoiscripts/darwin/
 ├── run_onchange_after_48-configure-ui.sh.tmpl              # window anims, save-to-disk
 ├── run_onchange_after_50-configure-dock-icons.sh.tmpl      # dockutil: strip default icons
 ├── run_onchange_after_60-configure-spaces.sh.tmpl          # spans-displays (aerospace)
-└── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
+├── run_onchange_after_70-configure-notification-center.sh.tmpl  # disable Notification Center
+├── run_once_after_80-install-git-hooks.sh.tmpl             # prek install (git hooks)
+└── run_after_90-check-security-posture.sh.tmpl             # warn-only FileVault/firewall/lock check
 ```
 
 The `40`–`70` `configure-*` scripts apply macOS `defaults`/system settings. They
@@ -129,7 +143,7 @@ Practical rule: **keep a given before/after group entirely within one directory.
 long as all OS-specific scripts stay in their OS directory (and we don't split a group
 across top-level + subdir), the numeric prefixes order exactly as written. Today all
 scripts are in `darwin/`, so ordering is simply all `before_` (`05` → `10`) then all
-`after_` (`20` → `30` → `40` … → `70`).
+`after_` (`20` → `30` → `40` … → `90`).
 
 To re-verify rule changes, drop throwaway `run_onchange_before_/after_` scripts that
 `echo` to a log into a temp source dir and `chezmoi apply --source … --destination …`
@@ -190,6 +204,42 @@ CI's job). `run_once_after_80-install-git-hooks` installs the hooks into
 `.git/hooks` on `chezmoi apply`; the `hooks` CI job runs `prek run --all-files`
 as the server-side backstop. Rule: commits must stay fast and work offline —
 hooks must never need the network or 1Password (full rendering belongs in CI).
+
+## Supply-chain pins
+
+Every third-party artifact that executes on our machines (or in CI) is pinned —
+nothing tracks a moving branch. Where each pin lives and how to bump it:
+
+- **chezmoi externals** (`home/.chezmoiexternal.toml.tmpl`): antidote is cloned at
+  a release tag with no `refreshPeriod` (bump = new tag, then
+  `rm -rf ~/.config/zsh/.antidote && chezmoi apply` — a tag clone has no pull
+  path); file externals (bat syntax, fonts) use tag-versioned URLs plus
+  `checksum.sha256`, bumped together.
+- **zsh plugins** (`home/dot_config/zsh/dot_zsh_plugins.txt`): every bundle
+  carries a `pin:<full 40-char commit SHA>` annotation, which `antidote update`
+  respects. Bump by hand: `git ls-remote <repo> HEAD`.
+- **prek hook revs** (`.pre-commit-config.yaml`): frozen to commit SHAs with
+  `# frozen: <tag>` comments. Bump with `prek auto-update --freeze`.
+- **nvim plugins** (`home/dot_config/nvim/lazy-lock.json`): lazy.nvim's
+  lockfile, chezmoi-owned, so a plain `chezmoi apply` reverts any update made
+  outside the loop. To update: `:Lazy update`, then
+  `chezmoi add ~/.config/nvim/lazy-lock.json` and commit. The update checker is
+  disabled in `lua/config/lazy.lua` to match (updates are deliberate).
+- **CI** (`.github/workflows/ci.yml`): actions are SHA-pinned with version
+  comments; prek installs hash-pinned from PyPI (`.github/requirements.txt`,
+  wheel hashes only); the chezmoi install script is fetched at a tagged ref,
+  sha256-verified, and installs a pinned release (the script itself verifies
+  the binary against the release checksums).
+- **Homebrew bootstrap** (`home/.install-homebrew.sh`): the installer is pinned
+  to a Homebrew/install commit and sha256-verified before executing (that repo
+  tags no releases).
+- **Deliberately unpinned**: `brew bundle` contents follow Homebrew's channel
+  (pinning formulae fights brew — updates are a `brew upgrade` decision, not a
+  repo pin), and mise runtimes are minor-pinned in
+  `home/dot_config/mise/config.toml`.
+
+Dependabot (`.github/dependabot.yml`) auto-bumps only the actions SHAs and the
+pip hash-pin; every other pin is manual, per the notes at each site.
 
 ## Homebrew
 

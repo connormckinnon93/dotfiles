@@ -40,23 +40,45 @@ set -eufo pipefail
       "yq"
       "zellij"
       "zoxide" -}}
-{{- /* Base casks: universal, headless-safe casks only (e.g. CLI casks). GUI
-       apps live in the not-headless block below. */ -}}
-{{- $casks := list
-      "1password-cli" -}}
+{{- /* Base casks: universal, headless-safe, profile-neutral casks only. GUI
+       apps live in the not-headless block below; personal-account apps live in
+       the personal block. */ -}}
+{{- $casks := list -}}
 {{- /* Taps start empty and accumulate per-perspective below; the aerospace and
        borders taps are only needed on headed machines (not-headless block). */ -}}
 {{- $taps := list -}}
-{{- /* Profile-specific packages. .profile is "personal" or "work". */ -}}
+{{- /* Profile-specific packages. .profile is "personal" or "work".
+
+       Boundary guarantee (see CLAUDE.md): profile=work renders with NO
+       personal accounts — anything tied to the owner's 1Password, tailnet,
+       or personal app accounts belongs in the personal block, not the
+       shared blocks below. */ -}}
 {{- if eq .profile "personal" -}}
-{{- /* granted/assume (AWS SSO helper) is personal-only; awscli stays in base. */ -}}
+{{- /* granted/assume (AWS SSO helper) is personal-only; awscli stays in base.
+       1password-cli is headless-safe and needed wherever templates
+       onepasswordRead. */ -}}
 {{-   $brews = concat $brews (list "granted") -}}
-{{- /* Gaming/personal GUI apps need a display too (personal AND not headless). */ -}}
+{{-   $casks = concat $casks (list "1password-cli") -}}
+{{- /* Personal GUI apps (need a display too): gaming, plus every app that
+       signs into a personal account — 1Password, Claude, Obsidian, the
+       personal tailnet — and docker-desktop (needs a paid license at most
+       employers, so it must not auto-install on a work machine). */ -}}
 {{-   if not .headless -}}
 {{-     $casks = concat $casks (list
+            "1password"
             "balenaetcher"
+            "brave-browser"
+            "claude"
+            "claude-code@latest"
+            "docker-desktop"
             "epic-games"
-            "steam") -}}
+            "obsidian"
+            "steam"
+            "tailscale-app") -}}
+{{-   end -}}
+{{- /* Personal headless boxes join the personal tailnet via the CLI/daemon. */ -}}
+{{-   if .headless -}}
+{{-     $brews = concat $brews (list "tailscale") -}}
 {{-   end -}}
 {{- else if eq .profile "work" -}}
 {{-   $brews = concat $brews (list) -}}
@@ -75,32 +97,26 @@ set -eufo pipefail
 {{-   $casks = concat $casks (list) -}}
 {{-   $taps = concat $taps (list) -}}
 {{- end -}}
-{{- /* GUI packages, skipped on headless machines (no display): GUI casks and
-       their taps, plus GUI-only brews. CLI tools stay in the base list. */ -}}
+{{- /* GUI packages, skipped on headless machines (no display): profile-neutral
+       GUI casks and their taps, plus GUI-only brews. CLI tools stay in the
+       base list; personal-account GUI apps live in the personal block. */ -}}
 {{- if not .headless -}}
 {{-   $brews = concat $brews (list
           "borders"
           "dockutil") -}}
 {{-   $casks = concat $casks (list
-          "1password"
           "aerospace"
-          "brave-browser"
-          "claude"
-          "claude-code@latest"
-          "docker-desktop"
           "ghostty"
           "notunes"
-          "obsidian"
-          "tailscale-app"
           "zed") -}}
 {{-   $taps = concat $taps (list
           "FelixKratz/formulae"
           "nikitabobko/tap") -}}
 {{- end -}}
-{{- /* Headless-only extras: CLI counterparts of GUI tools (e.g. the tailscale
-       CLI/daemon instead of the GUI tailscale-app). */ -}}
+{{- /* Headless-only extras: CLI counterparts of GUI tools would go here.
+       (tailscale lives in the personal block — it joins the personal tailnet.) */ -}}
 {{- if .headless -}}
-{{-   $brews = concat $brews (list "tailscale") -}}
+{{-   $brews = concat $brews (list) -}}
 {{-   $casks = concat $casks (list) -}}
 {{-   $taps = concat $taps (list) -}}
 {{- end -}}

@@ -1,0 +1,32 @@
+{{ if and (not .headless) (not .ephemeral) -}}
+#!/bin/bash
+#
+# Security posture assert: read-only, warn-only. Never changes settings, never
+# fails the apply, needs no sudo — so it can't fight an MDM profile. Exists
+# because the rest of this repo assumes a protected endpoint (45-configure-power
+# keeps the machine awake for remote sessions; authorized_keys accepts inbound
+# SSH) and nothing else would ever surface drift. Headed+stable shapes only:
+# headless servers legitimately run FileVault off (unattended boot), and
+# throwaway VMs don't matter. `run_after_` (not run_once_): re-checks on every
+# apply, prints nothing when all is well.
+#
+set -uo pipefail
+
+warn() { echo "posture: WARNING: $*" >&2; }
+
+if ! fdesetup status 2>/dev/null | grep -q "FileVault is On"; then
+  warn "FileVault is off — the disk is unencrypted (System Settings > Privacy & Security > FileVault)"
+fi
+
+if ! /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null | grep -qi "enabled"; then
+  warn "application firewall is disabled (System Settings > Network > Firewall)"
+fi
+
+# Output format varies across macOS versions; warn only on an explicit "off" so
+# unknown formats stay silent rather than nagging falsely.
+if sysadminctl -screenLock status 2>&1 | grep -qi "screenLock is off"; then
+  warn "screen lock is off — this machine is kept awake on AC (45-configure-power)"
+fi
+
+exit 0
+{{ end -}}

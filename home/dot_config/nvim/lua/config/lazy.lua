@@ -31,10 +31,13 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
   install = { colorscheme = { "catppuccin", "habamax" } },
+  -- No periodic update checker: plugin versions are pinned by lazy-lock.json,
+  -- which chezmoi owns (see "Supply-chain pins" in the repo CLAUDE.md).
+  -- Updates are deliberate: :Lazy update, then chezmoi add the lockfile.
   checker = {
-    enabled = true, -- check for plugin updates periodically
-    notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+    enabled = false,
+    notify = false,
+  },
   performance = {
     rtp = {
       -- disable some rtp plugins

@@ -2,25 +2,30 @@
 #
 # .zsh_plugins.txt - antidote plugin list. Docs: https://antidote.sh/
 #
+# Every bundle carries a `pin:` annotation (full commit SHA): these repos are
+# sourced into every interactive shell, so nothing tracks a moving branch.
+# `antidote update` respects pins; to update a plugin, replace its SHA
+# (`git ls-remote <repo> HEAD`) and start a new shell.
+#
 
 # Completion system - ez-compinit manages compinit timing and caching.
-mattmc3/ez-compinit
+mattmc3/ez-compinit pin:5c9b6da88a463573e26e6846ff164026640ef2f6
 
 # Fuzzy Tab-completion UI. Needs the fzf binary; sits on top of carapace's
 # completions (carapace itself is initialized in .zshrc.d/carapace.zsh).
-aloxaf/fzf-tab
+aloxaf/fzf-tab pin:24105b15714bfec37989ed5c5b6e60f572253019
 
 # Replace cat with bat (syntax highlighting); use `rcat` for the real cat.
 # Needs the bat binary (Homebrew). Its man-page MANPAGER is deliberately
 # overridden later: .zshrc.d/editor.zsh routes man through nvim instead.
-fdellwing/zsh-bat
+fdellwing/zsh-bat pin:467337613c1c220c0d01d69b19d2892935f43e9f
 
 # zsh-abbr - fish-style abbreviations that expand inline (e.g. gst -> git status).
-olets/zsh-abbr
+olets/zsh-abbr pin:889f4772c12b9dbe4965bbd56f2572af0a28fa3b
 
 # Inline "as you type" suggestions (config in .zstyles). Loads after fzf-tab
 # and before syntax highlighting.
-zsh-users/zsh-autosuggestions
+zsh-users/zsh-autosuggestions pin:85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 
 # Syntax highlighting. Sourced last among the ZLE widgets.
-zdharma-continuum/fast-syntax-highlighting
+zdharma-continuum/fast-syntax-highlighting pin:3d574ccf48804b10dca52625df13da5edae7f553

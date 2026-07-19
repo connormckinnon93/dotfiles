@@ -6,5 +6,6 @@
 #
 set -eufo pipefail
 
-defaults write com.apple.spaces spans-displays -bool true && killall SystemUIServer
+defaults write com.apple.spaces spans-displays -bool true
+killall SystemUIServer >/dev/null 2>&1 || true
 {{ end -}}

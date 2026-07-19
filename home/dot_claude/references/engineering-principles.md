@@ -24,21 +24,25 @@ Mechanism: **md** = always-loaded `CLAUDE.md` rule · **skill** = on-demand
 procedure · **agent** = isolated review lens · **hook** = deterministic enforcement
 · **none** = modern Claude already does this reliably; encoding it wastes context.
 
+**Status:** the Mechanism column is a roadmap, not an inventory. Today the only
+built artifact is the `block-dangerous-bash` hook; every named skill/agent/hook
+below is marked *(planned)* and does not exist yet — don't invoke them.
+
 | # | Directive | Source | Mechanism |
 |---|---|---|---|
-| 1 | Never mix structural and behavioral change in one commit; a pure refactor ships with tests unchanged and green. | Tidy First | md + skill (`tidy-first`) |
+| 1 | Never mix structural and behavioral change in one commit; a pure refactor ships with tests unchanged and green. | Tidy First | md + skill (`tidy-first`, planned) |
 | 2 | Domain/business logic never imports I/O, framework, or vendor SDKs. | Clean Architecture | md (names the rule) + hook where a linter exists |
 | 3 | Prefer deep modules; don't extract a helper unless it removes real duplication or names a domain concept. Three-line ceremony functions are a smell. | Ousterhout over Clean Code | md |
 | 4 | Comment the *why* and the contract (invariants, preconditions, units, incident/ticket links); never narrate the *what*. | Ousterhout, Pragmatic | md |
 | 5 | No silent fallbacks: never swallow exceptions or default-and-continue past a violated assumption; fail loudly at the boundary. | Pragmatic ("crash early"), Clean Code | md |
-| 6 | Slice work into independently shippable, human-reviewable PRs; if a diff exceeds one sitting, re-slice. | Accelerate, Tidy First | md + skill (`slicing-prs`) |
-| 7 | Start a non-trivial feature as the thinnest end-to-end path, reviewed before flesh-out. | Pragmatic (tracer bullet) | skill (`tracer-bullet`) |
-| 8 | Behavior changes ship with tests; run the relevant suite before reporting done. | Clean Code, Accelerate | hook (`tests-not-run`, soft) + md |
+| 6 | Slice work into independently shippable, human-reviewable PRs; if a diff exceeds one sitting, re-slice. | Accelerate, Tidy First | md + skill (`slicing-prs`, planned) |
+| 7 | Start a non-trivial feature as the thinnest end-to-end path, reviewed before flesh-out. | Pragmatic (tracer bullet) | skill (`tracer-bullet`, planned) |
+| 8 | Behavior changes ship with tests; run the relevant suite before reporting done. | Clean Code, Accelerate | hook (`tests-not-run`, soft, planned) + md |
 | 9 | Bounded boy-scout rule: improve only files already being touched, as a separate commit; never expand scope. | Clean Code ∩ Tidy First | md |
-| 10 | DRY = one home per piece of *knowledge*; don't merge coincidentally-similar code, don't duplicate a business rule. | Pragmatic | md + agent (`dry-lens`) |
-| 11 | Review substantial changes for dependency direction, boundary erosion, and speculative abstraction (one-impl interfaces, unused extension points). | Clean Architecture ∩ YAGNI | agent (`architecture-review`) |
+| 10 | DRY = one home per piece of *knowledge*; don't merge coincidentally-similar code, don't duplicate a business rule. | Pragmatic | md + agent (`dry-lens`, planned) |
+| 11 | Review substantial changes for dependency direction, boundary erosion, and speculative abstraction (one-impl interfaces, unused extension points). | Clean Architecture ∩ YAGNI | agent (`architecture-review`, planned) |
 | 12 | Keep the repo layout screaming the domain; ban `Manager`/`Helper`/`Impl`-style names. | Clean Architecture, Clean Code | md |
-| 13 | Automate any check a reviewer has flagged twice; review comments are bug reports against the toolchain. | Pragmatic, Accelerate | skill (`harvest-review-comments`) |
+| 13 | Automate any check a reviewer has flagged twice; review comments are bug reports against the toolchain. | Pragmatic, Accelerate | skill (`harvest-review-comments`, planned) |
 | 14 | Use delivery metrics (lead time, deploy freq, CFR) as team-level trend lines only; never surface them to the agent as objectives. | Accelerate + Goodhart | none (a rule for the human) |
 | 15 | Meaningful names, delete dead code, one abstraction level per function, guard clauses. | Clean Code's surviving core | none (Claude does this reliably) |
 

@@ -1,0 +1,22 @@
+# prek for the `hooks` CI job (.github/workflows/ci.yml), hash-pinned from
+# PyPI. Wheel hashes only — no sdist hash — so pip installed with
+# --require-hashes --no-deps can never fall back to building from source.
+# Linux wheels cover current ubuntu runners; mac/win included so a runner
+# change doesn't break the pin. Dependabot (pip, /.github) bumps this.
+prek==0.4.8 \
+    --hash=sha256:1f8f8cdc65836b571824c965daebb81b449f7e4a43894c58621f5708d5a185ed \
+    --hash=sha256:bce1798e96d9e3a6e6abf435da7107e81452f69edb3ca7c6f90a457355ea46e2 \
+    --hash=sha256:ab3a52db17254d701c3cebb7eea58c8230aa7c1959aacfd5b5f25de18edb15d1 \
+    --hash=sha256:b3fcfd620523bbc3f51a21d7cd63449f659b9e2cf3582de12dd5949e23227b8f \
+    --hash=sha256:42e65bc8425e9d7f1691a13ca1da2e07807d1ba76c35740833354b945131689e \
+    --hash=sha256:f578492a8e0c9bc6b4bf6dfbba8716f647d4cd0769bf10ad6cf336e3096fd392 \
+    --hash=sha256:d4335f9d5beb123a3884a7fe34f57c9f0828f4fbb7666beab4298833459b104f \
+    --hash=sha256:18a8747df9c602e052881d3efb14dd7f7d62a59bd7277ae5171c9e7661d59d84 \
+    --hash=sha256:4db639db481d5f854eff9b3d2108889e613b8c15868bcf6bdd777c7cee577436 \
+    --hash=sha256:c3890a6f92316d2cf44eb50584e8d2b23a596dd70487022e61186a71a2ac0900 \
+    --hash=sha256:fc7e15c24c591a37c6ffce5b25a021b16c299ac2649f183d812b67d665cd6551 \
+    --hash=sha256:36fe721704ff0c7624c1167639e23a5fe658bfd38c314f487219c9afd1eeb733 \
+    --hash=sha256:162e544abc394a8124f3a4ad68efee116bad09440e679dbd1675177335c2a432 \
+    --hash=sha256:2602e46c8c5da7dfa69f60fcf88c2b57132ac623f49fb08bfb3094298c5f07e3 \
+    --hash=sha256:7cb22da60bee41b89c4978c0bea7126a3c0ccc003dae6748cf29b53947815edc \
+    --hash=sha256:da70057f577b15d4bd121bf9dd29ee205fd4b4d75a0cafba062e84d7e8b4378b

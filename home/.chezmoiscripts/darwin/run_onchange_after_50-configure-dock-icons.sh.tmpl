@@ -10,7 +10,7 @@ set -eufo pipefail
 # Ensure brew (hence brew-installed dockutil) is on PATH.
 {{ template "brew-shellenv" "dockutil" }}
 
-trap 'killall Dock' EXIT
+trap 'killall Dock >/dev/null 2>&1 || true' EXIT
 
 declare -a remove_labels=(
 	Launchpad
