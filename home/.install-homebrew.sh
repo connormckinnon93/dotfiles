@@ -43,3 +43,25 @@ if ! command -v op >/dev/null 2>&1; then
   echo "Installing 1Password CLI..."
   brew install --cask 1password-cli
 fi
+
+# The op *binary* is not enough: on headed shapes the templates onepasswordRead
+# (git signing key, AWS SSO) at render time, which needs a signed-in account.
+# On a fresh machine that fails as a cryptic `op signin` template error, so
+# fail fast here with instructions instead. Headless shapes render without
+# 1Password (see .chezmoiignore.tmpl) and skip the check; so do contexts where
+# the init config or the op binary is missing — chezmoi's own errors are
+# clearer there. CI's op stub answers `op account list` (see ci.yml).
+chezmoi_config="${XDG_CONFIG_HOME:-$HOME/.config}/chezmoi/chezmoi.toml"
+if command -v op >/dev/null 2>&1 && [ -r "$chezmoi_config" ] \
+  && grep -Eq '^[[:space:]]*headless[[:space:]]*=[[:space:]]*false' "$chezmoi_config" \
+  && ! op account list 2>/dev/null | grep -q .; then
+  cat >&2 <<'EOF'
+1Password has no signed-in account, so templates that read op:// references
+(git signing key, AWS SSO) cannot render on this headed machine. To fix:
+  1. brew install --cask 1password    # if the app is not installed yet
+  2. open 1Password, sign in, and enable
+     Settings -> Developer -> "Integrate with 1Password CLI"
+  3. re-run chezmoi
+EOF
+  exit 1
+fi

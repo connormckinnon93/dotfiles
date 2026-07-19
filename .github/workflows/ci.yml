@@ -56,6 +56,7 @@ jobs:
           # `op --session <token> read --no-newline op://...`.
           case " $* " in
             *" signin "*) echo "ci-stub-session-token" ;;
+            *" account list "*) echo "ci-stub-account" ;;
             *"AWS SSO/accounts"*) echo '[{"name": "ci-stub", "account_id": "123456789012", "role": "ci-stub-role"}]' ;;
             *" read "*) echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5CIStubNotARealKey ci-stub" ;;
             *) echo "op stub: unhandled invocation: $*" >&2; exit 1 ;;
