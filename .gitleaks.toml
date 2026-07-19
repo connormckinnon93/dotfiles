@@ -1,0 +1,23 @@
+# gitleaks config — picked up automatically (repo root) by both the prek hook
+# and the CI backstop. Extends the default ruleset; the custom rules below
+# cover this repo's actual leak model, which defaults can't see: a
+# `chezmoi add`/`re-add` of a *rendered* target would stage identifiers that
+# are deliberately kept in 1Password (see home/private_dot_aws/config.tmpl) —
+# AWS account IDs and the SSO start URL. Identifiers, not classic secrets, so
+# the default rules pass them silently. Path-scoped to home/ so stub values in
+# CI and docs elsewhere can't false-positive.
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "aws-sso-account-id-rendered"
+description = "Rendered AWS SSO account id (12 digits in the granted/aws-config INI shape) — a real render was chezmoi add-ed"
+regex = '''(?i)(?:sso_)?account[_-]?id\s*=\s*['"]?\d{12}'''
+path = '''home/'''
+
+[[rules]]
+id = "aws-sso-start-url-rendered"
+description = "Rendered AWS SSO start URL — a real render was chezmoi add-ed"
+regex = '''https://[a-z0-9-]+\.awsapps\.com/start'''
+path = '''home/'''
