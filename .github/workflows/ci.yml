@@ -47,7 +47,7 @@ jobs:
             headless: "false"
             ephemeral: "true"
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install chezmoi and shellcheck
         # The runner image ships taps we don't use; untrusted ones make every
@@ -149,7 +149,7 @@ jobs:
     name: prek hooks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # gitleaks/actionlint are language: golang hooks that prek builds with a
       # managed toolchain; cache the built environments across runs.
@@ -177,7 +177,7 @@ jobs:
     name: Linux ephemeral (non-interactive)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Pinned two ways: the install script is fetched at a tagged ref and
       # checksum-verified before it runs, and it installs a pinned chezmoi
