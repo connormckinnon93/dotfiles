@@ -45,3 +45,9 @@ macos-option-as-alt = true
 keybind = global:cmd+backquote=toggle_quick_terminal
 # Make the tab muscle-memory create a (tileable) window instead of a native tab.
 keybind = cmd+t=new_window
+# Free Alt-Left/Right for the app inside (Zellij pane focus). Ghostty's defaults
+# translate them to `esc:b` / `esc:f` for shell word-motion, which Zellij reads
+# as Alt-b (unbound) / Alt-f (ToggleFloatingPanes). Zsh word-motion still works
+# via emacs-style Ctrl-Left/Right and Meta-b / Meta-f.
+keybind = alt+left=unbind
+keybind = alt+right=unbind
