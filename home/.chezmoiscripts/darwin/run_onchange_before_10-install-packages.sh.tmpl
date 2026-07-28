@@ -68,7 +68,6 @@ set -eufo pipefail
             "balenaetcher"
             "brave-browser"
             "claude"
-            "claude-code@latest"
             "docker-desktop"
             "epic-games"
             "obsidian"
@@ -80,9 +79,29 @@ set -eufo pipefail
 {{-     $brews = concat $brews (list "tailscale") -}}
 {{-   end -}}
 {{- else if eq .profile "work" -}}
-{{-   $brews = concat $brews (list) -}}
+{{- /* Wealthsimple dev tooling. Container runtime is colima + the docker CLI
+       stack (docker-desktop is personal-only for licensing). postgres/redis
+       cover common local-dev dependencies; temporal is the WS workflow engine
+       and needs its tap. direnv/lefthook/yarn/gitleaks are dev-workflow tools
+       used at WS but not on personal machines. wealthsimple/tap is WS's
+       internal Homebrew tap for company-provided formulae. */ -}}
+{{-   $brews = concat $brews (list
+          "colima"
+          "direnv"
+          "docker"
+          "docker-buildx"
+          "docker-compose"
+          "docker-credential-helper"
+          "gitleaks"
+          "lefthook"
+          "postgresql@16"
+          "redis"
+          "temporal"
+          "yarn") -}}
 {{-   $casks = concat $casks (list) -}}
-{{-   $taps = concat $taps (list) -}}
+{{-   $taps = concat $taps (list
+          "temporalio/brew"
+          "wealthsimple/tap") -}}
 {{- end -}}
 {{- /* Stable-only packages, skipped on ephemeral machines (VMs/containers/CI). */ -}}
 {{- if not .ephemeral -}}
@@ -111,6 +130,7 @@ set -eufo pipefail
           "1password"
           "1password-cli"
           "aerospace"
+          "claude-code@latest"
           "ghostty"
           "notunes"
           "zed") -}}
