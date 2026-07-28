@@ -1,12 +1,26 @@
 // zellij - terminal multiplexer. KDL config. Docs: https://zellij.dev/documentation/
 // Launched manually (`zellij`, or `zellij attach`); no shell auto-start.
-// Default keybindings are Ctrl-based modes and don't collide with AeroSpace's
-// alt bindings.
+//
+// Primary interaction is via Ctrl-based modes (Ctrl-p pane, Ctrl-t tab, ...).
+// Zellij also ships modeless Alt-based "quicknav" bindings; three of them
+// collide with AeroSpace, which intercepts at the WM layer and always wins:
+//   Alt-h/j/k/l   (Zellij: focus pane      | AeroSpace: focus window)
+//   Alt-=/Alt-+   (Zellij: resize increase | AeroSpace: resize +50)
+//   Alt--         (Zellij: resize decrease | AeroSpace: resize -50)
+// We unbind those in Zellij so the config matches reality. Modeless pane
+// focus is still available via Alt-Arrow (AeroSpace doesn't claim arrows).
 
 // Catppuccin Mocha (bundled with zellij).
 theme "catppuccin-mocha"
 
 default_shell "zsh"
+
+keybinds {
+    shared {
+        unbind "Alt h" "Alt j" "Alt k" "Alt l"
+        unbind "Alt =" "Alt +" "Alt -"
+    }
+}
 
 {{ if eq .chezmoi.os "darwin" -}}
 // macOS: copy yanked text to the system clipboard. Elsewhere (Linux) the line is
