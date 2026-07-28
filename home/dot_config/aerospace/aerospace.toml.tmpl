@@ -101,9 +101,9 @@ alt-shift-7 = 'move-node-to-workspace 7'
 alt-shift-8 = 'move-node-to-workspace 8'
 alt-shift-9 = 'move-node-to-workspace 9'
 
-# Jump back to previous workspace; move current workspace to the next monitor.
-alt-tab = 'workspace-back-and-forth'
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# Cycle workspaces (wraps). Moving a workspace to another monitor lives in service mode (`m`).
+alt-tab = 'workspace --wrap-around next'
+alt-shift-tab = 'workspace --wrap-around prev'
 
 # Reload this config after editing.
 alt-shift-c = 'reload-config'
@@ -116,6 +116,7 @@ esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']   # reset layout
 f = ['layout floating tiling', 'mode main']   # toggle floating
 backspace = ['close-all-windows-but-current', 'mode main']
+m = ['move-workspace-to-monitor --wrap-around next', 'mode main']  # move workspace to next monitor
 
 # Join the focused window into a neighbor (build nested containers).
 alt-shift-h = ['join-with left', 'mode main']
