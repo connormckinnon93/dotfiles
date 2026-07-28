@@ -49,27 +49,25 @@ set -eufo pipefail
 {{- $taps := list -}}
 {{- /* Profile-specific packages. .profile is "personal" or "work".
 
-       Boundary guarantee (see CLAUDE.md): profile=work renders with NO
-       personal accounts — anything tied to the owner's 1Password, tailnet,
-       or personal app accounts belongs in the personal block, not the
-       shared blocks below. */ -}}
+       Boundary guarantee (see CLAUDE.md): profile=work must not sign into any
+       personal account. 1Password itself is allowed on work (signed into the
+       work vault) — the personal vault is what's barred. Anything tied to the
+       owner's personal 1Password login, personal tailnet, or personal app
+       accounts belongs in the personal block, not the shared blocks below. */ -}}
 {{- if eq .profile "personal" -}}
 {{- /* granted/assume (AWS SSO helper) is personal-only; awscli stays in base.
-       1password-cli is headless-safe and needed wherever templates
-       onepasswordRead. */ -}}
+       1Password (app + CLI) is not personal-only anymore — see the headed
+       block below. */ -}}
 {{-   $brews = concat $brews (list "granted") -}}
-{{-   $casks = concat $casks (list "1password-cli") -}}
-{{- /* Personal GUI apps (need a display too): gaming, plus every app that
-       signs into a personal account — 1Password, Claude, Obsidian, the
-       personal tailnet — and docker-desktop (needs a paid license at most
-       employers, so it must not auto-install on a work machine). */ -}}
+{{- /* Personal GUI apps (need a display too): gaming, personal-account apps
+       (Claude, Obsidian, personal tailnet), and docker-desktop (needs a paid
+       license at most employers, so it must not auto-install on a work
+       machine). */ -}}
 {{-   if not .headless -}}
 {{-     $casks = concat $casks (list
-            "1password"
             "balenaetcher"
             "brave-browser"
             "claude"
-            "claude-code@latest"
             "docker-desktop"
             "epic-games"
             "obsidian"
@@ -81,9 +79,29 @@ set -eufo pipefail
 {{-     $brews = concat $brews (list "tailscale") -}}
 {{-   end -}}
 {{- else if eq .profile "work" -}}
-{{-   $brews = concat $brews (list) -}}
+{{- /* Wealthsimple dev tooling. Container runtime is colima + the docker CLI
+       stack (docker-desktop is personal-only for licensing). postgres/redis
+       cover common local-dev dependencies; temporal is the WS workflow engine
+       and needs its tap. direnv/lefthook/yarn/gitleaks are dev-workflow tools
+       used at WS but not on personal machines. wealthsimple/tap is WS's
+       internal Homebrew tap for company-provided formulae. */ -}}
+{{-   $brews = concat $brews (list
+          "colima"
+          "direnv"
+          "docker"
+          "docker-buildx"
+          "docker-compose"
+          "docker-credential-helper"
+          "gitleaks"
+          "lefthook"
+          "postgresql@16"
+          "redis"
+          "temporal"
+          "yarn") -}}
 {{-   $casks = concat $casks (list) -}}
-{{-   $taps = concat $taps (list) -}}
+{{-   $taps = concat $taps (list
+          "temporalio/brew"
+          "wealthsimple/tap") -}}
 {{- end -}}
 {{- /* Stable-only packages, skipped on ephemeral machines (VMs/containers/CI). */ -}}
 {{- if not .ephemeral -}}
@@ -99,13 +117,20 @@ set -eufo pipefail
 {{- end -}}
 {{- /* GUI packages, skipped on headless machines (no display): profile-neutral
        GUI casks and their taps, plus GUI-only brews. CLI tools stay in the
-       base list; personal-account GUI apps live in the personal block. */ -}}
+       base list; personal-account GUI apps live in the personal block.
+       1Password (app + CLI) lives here so both personal and work headed
+       machines get it — templates onepasswordRead the git signing key on any
+       headed shape, and the SSH agent socket path is a per-app Group Container
+       ID (same value regardless of which vault the app is signed into). */ -}}
 {{- if not .headless -}}
 {{-   $brews = concat $brews (list
           "borders"
           "dockutil") -}}
 {{-   $casks = concat $casks (list
+          "1password"
+          "1password-cli"
           "aerospace"
+          "claude-code@latest"
           "ghostty"
           "notunes"
           "zed") -}}

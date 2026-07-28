@@ -20,9 +20,9 @@
   // left edge stays put as you toggle them; terminal stays at the bottom and
   // secondary (your primary terminal is ghostty + zellij). Flip "right" ->
   // "left" on any of these to move it.
-  "project_panel": { "dock": "right" },
-  "outline_panel": { "dock": "right" },
-  "git_panel": { "dock": "right" },
+  "project_panel": { "dock": "left" },
+  "outline_panel": { "dock": "left" },
+  "git_panel": { "dock": "left" },
   "terminal": { "dock": "bottom" },
 
   // Declarative extension management: Zed installs/uninstalls to match this on

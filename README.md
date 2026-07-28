@@ -49,11 +49,13 @@ the end of a dependency chain worth knowing before you need it:
 1. **1Password** first. The SSH key (auth *and* commit signing) lives only in
    the 1Password vault — never on disk — so account recovery (another signed-in
    device, or the Emergency Kit, which is kept offline outside this repo) is
-   the root of everything.
+   the root of everything. On a work machine, the same applies to the work
+   1Password account.
 2. **GitHub** next: SSH access comes from the vault key via the 1Password
    agent.
 3. **This repo**: `chezmoi init --apply connormckinnon93` (see the 1Password
-   prerequisite above).
+   prerequisite above). `init` will prompt for the `op://` reference to the
+   git SSH signing key — on a work machine, supply the work-vault path.
 4. Everything else: sign in to Tailscale, `gh auth login`, and app accounts as
    prompted.
 
@@ -69,7 +71,8 @@ backup (e.g. Time Machine) — chezmoi won't save it.
 - `main` is protected; changes land by PR with all CI checks green, then
   auto-merge.
 - CI renders the full source state for every machine shape (profile × headless
-  on macOS, plus a non-interactive Linux ephemeral job with no 1Password) and
+  on macOS, plus a non-interactive Linux ephemeral job that renders without
+  1Password — regression-testing that headless shapes stay op-free) and
   shellchecks every rendered script.
 - [prek](https://github.com/j178/prek)-managed git hooks run gitleaks,
   actionlint, shellcheck, and hygiene checks locally; installed automatically on

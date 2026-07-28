@@ -1,10 +1,11 @@
 # Managed by chezmoi. Identity comes from `chezmoi init` prompts (kept out of
 # the public source).
-{{- /* Signing is personal+headed only. The key lives in the owner's personal
-       1Password: reading it needs the CLI with an app session (headless boxes
-       have neither), and a work machine must not depend on — or sign with —
-       the personal vault at all (the work boundary guarantee; see CLAUDE.md). */ -}}
-{{- $signing := and (eq .profile "personal") (not .headless) }}
+{{- /* Signing is headed-only. The key lives in 1Password (personal vault on
+       personal machines, work vault on work), and reading it needs the CLI with
+       an app session, which headless boxes lack. The work boundary bans the
+       *personal* vault on work, not 1Password itself — .signingKeyRef is
+       prompted per-machine so each profile references its own vault. */ -}}
+{{- $signing := not .headless }}
 
 [user]
     name = {{ .name }}
@@ -63,9 +64,15 @@
     process = git-lfs filter-process
     required = true
 
-# Always use SSH for GitHub (rewrite https remotes to ssh).
+{{ if $signing -}}
+# Always use SSH for GitHub (rewrite https remotes to ssh) — headed only, since
+# SSH auth relies on the 1Password agent that lives inside the same $signing
+# gate above. On headless boxes the agent is absent, so leave HTTPS clones as-is
+# (they otherwise fail with `Permission denied (publickey)`, breaking anything
+# that clones GitHub repos: antidote, nvim lazy, mise plugins, brew taps, …).
 [url "git@github.com:"]
     insteadOf = https://github.com/
+{{ end -}}
 
 # delta as the diff/pager, themed Catppuccin Mocha. The feature block below is
 # vendored from catppuccin/delta; its syntax-theme reuses bat's built tmTheme.
