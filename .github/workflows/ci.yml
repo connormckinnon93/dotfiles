@@ -97,7 +97,6 @@ jobs:
               "--promptString", "Email address=ci@example.invalid",
               "--promptString", "AWS default region=us-east-1",
               "--promptString", "1Password reference for git SSH signing key (op://Vault/Item/field)=op://Private/SSH Key/public key",
-              "--promptString", "1Password account shorthand for renders (empty if only one signed in)=",
               "--promptString", "Path to the dotfiles working copy=" + os.environ["GITHUB_WORKSPACE"],
               "--promptChoice", "Machine profile=" + os.environ["PROFILE"],
               "--promptBool", "headless=" + os.environ["HEADLESS"],
@@ -201,7 +200,6 @@ jobs:
             --promptString "Email address=ci@example.invalid" \
             --promptString "AWS default region=us-east-1" \
             --promptString "1Password reference for git SSH signing key (op://Vault/Item/field)=op://Private/SSH Key/public key" \
-            --promptString "1Password account shorthand for renders (empty if only one signed in)=" \
             --promptString "Path to the dotfiles working copy=$GITHUB_WORKSPACE" \
             --promptChoice "Machine profile=personal"
 

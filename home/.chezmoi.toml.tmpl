@@ -4,22 +4,18 @@
 {{- $profile := promptChoiceOnce . "profile" "Machine profile" (list "personal" "work") "personal" -}}
 {{- /* Path to the git SSH signing key inside 1Password. Prompted per-machine
        so personal and work each point at their own vault. Default is the
-       personal path; on a work machine, supply the work-vault reference. */ -}}
+       personal path; on a work machine, supply the work-vault reference.
+       Multi-account 1Password sessions are disambiguated by exporting
+       `OP_ACCOUNT` in the shell env — the `op` CLI honors it, so no template
+       plumbing is needed here. */ -}}
 {{- $signingKeyRef := promptStringOnce . "signingKeyRef" "1Password reference for git SSH signing key (op://Vault/Item/field)" "op://Private/SSH Key/public key" -}}
-{{- /* Optional: which 1Password account to read secrets from. Empty is fine
-       when only one account is signed into `op` — the CLI picks it by default.
-       When multiple accounts are signed in (e.g. personal + work on a work
-       laptop), set this to the shorthand (`my.1password.com`,
-       `wealthsimple.1password.com`, …) that owns `.signingKeyRef`; every
-       `onepasswordRead` call passes it through so renders don't hit the
-       "multiple accounts found" error. */ -}}
-{{- $opAccount := promptStringOnce . "opAccount" "1Password account shorthand for renders (empty if only one signed in)" "" -}}
 {{- /* Path to the dotfiles working copy — the source `chezmoi apply` reads
-       templates from. Defaults to the convention (~/code/dotfiles); override
-       per machine if the checkout lives elsewhere. Rendered both at top level
-       (chezmoi uses it) and under [data] (`promptStringOnce` finds it on
-       re-init and skips the prompt). */ -}}
-{{- $sourceDir := promptStringOnce . "sourceDir" "Path to the dotfiles working copy" (joinPath .chezmoi.homeDir "code" "dotfiles") -}}
+       templates from. Defaults to whatever chezmoi already detected as the
+       source dir at init time (matches reality whether you pre-cloned to
+       ~/code/dotfiles or let `chezmoi init` clone to the default location).
+       Rendered both at top level (chezmoi uses it) and under [data]
+       (`promptStringOnce` finds it on re-init and skips the prompt). */ -}}
+{{- $sourceDir := promptStringOnce . "sourceDir" "Path to the dotfiles working copy" .chezmoi.sourceDir -}}
 {{- /* Ephemeral machines (cloud/VM/container/CI) get a leaner setup; headless
        machines have no display (skip GUI apps). Auto-detect common throwaway,
        headless environments; otherwise prompt when interactive, and assume both
@@ -41,8 +37,9 @@
 {{- end -}}
 # chezmoi configuration (generated at `chezmoi init` from this template).
 
-# Where `chezmoi apply` reads templates from. Prompted at init time; default is
-# ~/code/dotfiles. Chezmoi resolves the effective source as this + .chezmoiroot.
+# Where `chezmoi apply` reads templates from. Prompted at init time; defaults
+# to whatever chezmoi already detected as the source dir on that run. Chezmoi
+# resolves the effective source as this + .chezmoiroot.
 sourceDir = {{ $sourceDir | quote }}
 
 [data]
@@ -61,10 +58,6 @@ sourceDir = {{ $sourceDir | quote }}
     # (onepasswordRead .signingKeyRef); only the reference is stored here.
     # Prompted at init time (see the $signingKeyRef promptStringOnce above).
     signingKeyRef = {{ $signingKeyRef | quote }}
-    # 1Password account shorthand to disambiguate `onepasswordRead` when
-    # multiple accounts are signed in (empty = auto). See the promptStringOnce
-    # above for the full rationale; templates pass this through when non-empty.
-    opAccount = {{ $opAccount | quote }}
     # Same value as the top-level sourceDir above; kept in [data] so
     # `promptStringOnce` finds it on re-init and doesn't prompt again.
     sourceDir = {{ $sourceDir | quote }}

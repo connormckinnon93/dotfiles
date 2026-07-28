@@ -1,2 +1,2 @@
-{{ .email }} namespaces="git" {{ if .opAccount }}{{ onepasswordRead .signingKeyRef .opAccount }}{{ else }}{{ onepasswordRead .signingKeyRef }}{{ end }}
+{{ .email }} namespaces="git" {{ onepasswordRead .signingKeyRef }}
 {{- /* vim: set filetype=conf: */}}

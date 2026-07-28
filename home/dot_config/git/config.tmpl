@@ -11,7 +11,7 @@
     name = {{ .name }}
     email = {{ .email }}
 {{- if $signing }}
-    signingkey = {{ if .opAccount }}{{ onepasswordRead .signingKeyRef .opAccount | quote }}{{ else }}{{ onepasswordRead .signingKeyRef | quote }}{{ end }}
+    signingkey = {{ onepasswordRead .signingKeyRef | quote }}
 {{- end }}
 {{ if $signing }}
 # Commit/tag signing via 1Password's SSH agent (op-ssh-sign).

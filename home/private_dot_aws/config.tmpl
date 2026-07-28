@@ -20,16 +20,8 @@
 region = {{ .awsRegion }}
 output = json
 {{ if and (eq .profile "personal") (not .headless) -}}
-{{ $startUrl := "" -}}
-{{ $accounts := "" -}}
-{{ if .opAccount -}}
-{{   $startUrl = onepasswordRead "op://Cloudlab/AWS SSO/start_url" .opAccount -}}
-{{   $accounts = onepasswordRead "op://Cloudlab/AWS SSO/accounts" .opAccount -}}
-{{ else -}}
-{{   $startUrl = onepasswordRead "op://Cloudlab/AWS SSO/start_url" -}}
-{{   $accounts = onepasswordRead "op://Cloudlab/AWS SSO/accounts" -}}
-{{ end -}}
-{{ range ($accounts | fromJson) }}
+{{ $startUrl := onepasswordRead "op://Cloudlab/AWS SSO/start_url" -}}
+{{ range (onepasswordRead "op://Cloudlab/AWS SSO/accounts" | fromJson) }}
 [profile {{ .name }}]
 granted_sso_start_url      = {{ $startUrl }}
 granted_sso_region         = us-east-1
