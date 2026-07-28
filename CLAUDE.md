@@ -30,22 +30,28 @@ anything per machine class:
 - **Packages:** `home/.chezmoiscripts/darwin/run_onchange_before_10-install-packages.sh.tmpl`
   has `{{ if eq .profile "personal" }}` / `"work"` blocks that `concat` profile-specific
   brews/casks/taps onto the base lists (base lists apply to both profiles). The personal
-  block adds `granted`, `1password-cli`, the `tailscale` daemon (headless) and, nested
-  under `{{ if not .headless }}`, every personal-account GUI app (1password, claude,
-  obsidian, tailscale-app, brave, docker-desktop, gaming); the work block is an empty
-  placeholder for employer tooling.
+  block adds `granted`, the `tailscale` daemon (headless) and, nested under
+  `{{ if not .headless }}`, personal-account GUI apps (claude, obsidian, tailscale-app,
+  brave, docker-desktop, gaming); the work block is an empty placeholder for employer
+  tooling. 1Password (app + CLI) lives in the shared `{{ if not .headless }}` block
+  because both profiles use it — personal signs into the personal vault, work into the
+  work vault, and templates resolve `op://` references at render time on either.
 - **Ignored files:** add a `{{ if eq .profile "work" }} … {{ end }}` block to
   `home/.chezmoiignore.tmpl` to drop personal-only configs on a work machine.
 - **Any other template:** reference `.profile` directly.
 
 **Work boundary guarantee:** `profile=work` renders with **no personal accounts** —
-no 1Password anywhere (op is neither installed by the pre-hook nor read by any
-template; git signing and the SSH `IdentityAgent` are personal-only), no personal
-tailnet, no personal-account casks, no inbound `authorized_keys`, and
-`allowed_signers` is ignored. CI's work-shape jobs regression-test that the render
-holds. **Preserve this when adding templates:** nothing reachable under
-`eq .profile "work"` may call `onepasswordRead` or reference a personal account;
-put such things in a personal block or the work ignore block.
+no personal-vault 1Password references (the work machine signs into the work 1Password
+vault and templates onepasswordRead against that, never against the personal vault),
+no personal tailnet, no personal-account casks, and no inbound `authorized_keys`.
+`.signingKeyRef` is prompted per-machine so each profile points at its own vault; on
+work, always supply a work-vault reference. Signing and the SSH `IdentityAgent` are
+gated on `not .headless` (headed = 1Password app present), not on profile. CI's
+work-shape jobs regression-test that the render holds. **Preserve this when adding
+templates:** nothing reachable under `eq .profile "work"` may hard-code an `op://`
+path into the personal vault (`Private/`, `Cloudlab/`, …) or reference a personal
+account; use `.signingKeyRef` or add a work-vault reference, and put personal-only
+integrations in the personal block.
 
 Set it non-interactively by re-running init, keyed by the **prompt string** (not the
 data key): `chezmoi init --promptChoice "Machine profile=work"`.

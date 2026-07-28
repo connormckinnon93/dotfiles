@@ -1,10 +1,12 @@
 # Managed by chezmoi.
 HashKnownHosts no
-{{ if eq .profile "personal" }}
+{{ if not .headless }}
 Host *
   # Authenticate via 1Password's SSH agent (key lives in 1Password, not on disk).
-  # Personal-only: a work machine must not route SSH through the personal vault
-  # (the work boundary guarantee; see CLAUDE.md).
+  # Headed-only: headless boxes have no 1Password app to run the agent. The
+  # socket path is a per-app Group Container ID, so the same value works whether
+  # 1Password is signed into the personal or the work vault. The work boundary
+  # bans the *personal* vault on work, not 1Password itself (see CLAUDE.md).
   IdentityAgent "{{ .onePasswordAgent }}"
 {{ end }}
 Host github.com
