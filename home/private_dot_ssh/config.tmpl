@@ -11,4 +11,36 @@ Host *
 {{ end }}
 Host github.com
   User git
+{{ if eq .profile "personal" }}
+# Personal homelab — profile-gated so a work machine renders none of these
+# (work boundary: no personal hosts/accounts, see CLAUDE.md).
+Host git.catinthehack.ca
+  HostName 192.168.20.40
+  Port 2222
+  User git
+
+Host forge
+  HostName 192.168.20.40
+  User cm
+
+Host pve
+  HostName 192.168.20.5
+  User cm
+
+Host edge
+  HostName 192.168.20.20
+  User cm
+
+Host paas
+  HostName 192.168.20.30
+  User cm
+
+Host identity
+  HostName 192.168.20.50
+  User cm
+
+Host nas
+  HostName 192.168.20.15
+  User cm
+{{ end }}
 {{- /* vim: set filetype=sshconfig: */}}
